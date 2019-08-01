@@ -99,21 +99,22 @@ To instantiate a reference object in C#, you must use the new keyword.
 You create a reference as shown in the previous example and then
 point the reference at an object allocated on the heap using the new
 keyword:
-objSomething = new Something(); // This creates a Something
-object on the heap
-Using Type Inference
+`objSomething = new Something(); // This creates a Something`
+`object on the heap`
+### Using Type Inference
 Type inference makes use of the var keyword. The syntax for declaring
 the variable changes by using the var keyword instead of the real type.
 The compiler “infers” what the type of the variable is by what the
 variable is initialized to. For example:
-var someNumber = 0;
+`var someNumber = 0;`
 becomes:
-int someNumber = 0;
+`int someNumber = 0;`
 Even though someNumber is never declared as being an int , the
 compiler figures this out and someNumber is an int for as long as it is in
 scope. Once compiled, the two preceding statements are equal.
-Here is a short program to demonstrate (code file
-VariablesSample/Program.cs ):
+Here is a short program to demonstrate (code file VariablesSample/Program.cs ):
+
+```csharp
 using System;
 namespace Wrox
 {
@@ -133,34 +134,35 @@ Console.WriteLine(\$"isRabbit is of type {isRabbitType}");
 }
 }
 }
+```
 The output from this program is as follows:
-name is of type System.String
-age is of type System.Int32
-isRabbit is of type System.Boolean
+`name is of type System.String`
+`age is of type System.Int32`
+`isRabbit is of type System.Boolean`
 There are a few rules that you need to follow:
-The variable must be initialized. Otherwise, the compiler doesn’t
-have anything from which to infer the type.
-The initializer cannot be null.
-The initializer must be an expression.
-You can’t set the initializer to an object unless you create a new
-object in the initializer.
+- The variable must be initialized. Otherwise, the compiler doesn’t have anything from which to infer the type.
+- The initializer cannot be null.
+- The initializer must be an expression.
+- You can’t set the initializer to an object unless you create a new object in the initializer.
 Chapter 3, “Objects and Types,” examines these rules more closely in
 the discussion of anonymous types.
 After the variable has been declared and the type inferred, the
 variable’s type cannot be changed. When established, the variable’s
 type strong typing rules that any assignment to this variable must
 follow the inferred type.
-Understanding Variable Scope
+
+### Understanding Variable Scope
 The scope of a variable is the region of code from which the variable
 can be accessed. In general, the scope is determined by the following
 rules:
-A field (also known as a member variable) of a class is in scope for
+- A field (also known as a member variable) of a class is in scope for
 as long as a local variable of this type is in scope.
-A local variable is in scope until a closing brace indicates the end
+- A local variable is in scope until a closing brace indicates the end
 of the block statement or method in which it was declared.
-A local variable that is declared in a for , while , or similar statement
+- A local variable that is declared in a for , while , or similar statement
 is in scope in the body of that loop.
-Scope Clashes for Local Variables
+
+#### Scope Clashes for Local Variables
 It’s common in a large program to use the same variable name for
 different variables in different parts of the program. This is fine as
 long as the variables are scoped to completely different parts of the
@@ -175,7 +177,6 @@ int x = 30;
 ```
 
 Consider the following code sample (code file `VariableScopeSample/Program.cs` ):
-
 ```csharp
 using System;
 namespace VariableScopeSample
@@ -219,19 +220,19 @@ return 0;
 }
 ```
 If you try to compile this, you’ll get an error like the following:
-error CS0136: A local variable named 'j' cannot be declared
-in
-this scope because that name is used in an enclosing local
-scope
-to define a local or parameter
-This occurs because the variable j , which is defined before the start of
+`error CS0136: A local variable named 'j' cannot be declared in`
+`this scope because that name is used in an enclosing local scope`
+`to define a local or parameter`
+
+This occurs because the variable `j` , which is defined before the start of
 the for loop, is still in scope within the for loop and won’t go out of
 scope until the Main method has finished executing. Although the
-second j (the illegal one) is in the loop’s scope, that scope is nested
+second `j` (the illegal one) is in the loop’s scope, that scope is nested
 within the Main method’s scope. The compiler has no way to
 distinguish between these two variables, so it won’t allow the second
 one to be declared.
-Scope Clashes for Fields and Local Variables
+
+#### Scope Clashes for Fields and Local Variables
 In certain circumstances, however, you can distinguish between two
 identifiers with the same name (although not the same fully qualified
 name) and the same scope, and in this case the compiler allows you to
@@ -240,20 +241,22 @@ distinction between variables that are declared at the type level (fields)
 and variables that are declared within methods (local variables).
 Consider the following code snippet (code file
 VariableScopeSample3/Program.cs ):
+```csharp
 using System;
 namespace Wrox
 {
-class Program
-{
-static int j = 20;
-static void Main()
-{
-int j = 30;
-Console.WriteLine(j);
-return;
+    class Program
+    {
+        static int j = 20;
+        static void Main()
+        {
+            int j = 30;
+            Console.WriteLine(j);
+            return;
+        }
+    }
 }
-}
-}
+```
 This code will compile even though you have two variables named j in
 scope within the Main method: the j that was defined at the class level
 and doesn’t go out of scope until the class Program is destroyed (when
@@ -267,6 +270,7 @@ syntax object.fieldname . In the previous example, you are accessing a
 static field (you find out what this means in the next section) from a
 static method, so you can’t use an instance of the class; you just use
 the name of the class itself:
+```csharp
 // ...
 static void Main()
 {
@@ -275,40 +279,43 @@ Console.WriteLine(j);
 Console.WriteLine(Program.j);
 }
 // ...
+```
 If you are accessing an instance field (a field that belongs to a specific
 instance of the class), you need to use the this keyword instead.
-Working with Constants
+
+#### Working with Constants
 As the name implies, a constant is a variable whose value cannot be
 changed throughout its lifetime. Prefixing a variable with the const
 keyword when it is declared and initialized designates that variable as 
 a constant:
-const int a = 100; // This value cannot be changed.
+`const int a = 100; // This value cannot be changed.`
 Constants have the following characteristics:
-They must be initialized when they are declared. After a value has
+- They must be initialized when they are declared. After a value has
 been assigned, it can never be overwritten.
-The value of a constant must be computable at compile time.
+- The value of a constant must be computable at compile time.
 Therefore, you can’t initialize a constant with a value taken from a
 variable. If you need to do this, you must use a read-only field (this
 is explained in Chapter 3).
-Constants are always implicitly static. However, notice that you
+- Constants are always implicitly static. However, notice that you
 don’t have to (and, in fact, are not permitted to) include the static
 modifier in the constant declaration.
 At least three advantages exist for using constants in your programs:
-Constants make your programs easier to read by replacing magic
+- Constants make your programs easier to read by replacing magic
 numbers and strings with readable names whose values are easy to
 understand.
-Constants make your programs easier to modify. For example,
+- Constants make your programs easier to modify. For example,
 assume that you have a SalesTax constant in one of your C#
 programs, and that constant is assigned a value of 6 percent. If the
 sales tax rate changes later, you can modify the behavior of all tax
 calculations simply by assigning a new value to the constant; you
 don’t have to hunt through your code for the value .06 and change
 each one, hoping you will find all of them.
-Constants help prevent mistakes in your programs. If you attempt
+- Constants help prevent mistakes in your programs. If you attempt
 to assign another value to a constant somewhere in your program
 other than at the point where the constant is declared, the compiler
 flags the error.
-USING PREDEFINED DATA TYPES
+
+## USING PREDEFINED DATA TYPES
 Now that you have seen how to declare variables and constants, let’s
 take a closer look at the data types available in C#. As you will see, C#
 is much stricter about the types available and their definitions than
@@ -316,8 +323,8 @@ some other languages.
 Value Types and Reference Types
 Before examining the data types in C#, it is important to understand
 that C# distinguishes between two categories of data type:
-Value types
-Reference types
+- Value types
+- Reference types
 The next few sections look in detail at the syntax for value and
 reference types. Conceptually, the difference is that a value type stores
 its value directly, whereas a reference type stores a reference to the
@@ -329,12 +336,16 @@ whether a type is a value type or a reference type because of the
 different effect each assignment has. For example, int is a value type,
 which means that the following statement results in two locations in
 memory storing the value 20 :
+```csharp
 // i and j are both of type int
 i = 20;
 j = i;
+```
 However, consider the following example. For this code, assume you
 have defined a class called Vector and that Vector is a reference type
 and has an int member variable called Value :
+
+```csharp
 Vector x, y;
 x = new Vector();
 x.Value = 30; // Value is a field defined in Vector class
@@ -342,6 +353,7 @@ y = x;
 Console.WriteLine(y.Value);
 y.Value = 50;
 Console.WriteLine(x.Value);
+```
 The crucial point to understand is that after executing this code, there
 is only one Vector object: x and y both point to the memory location
 that contains this object. Because x and y are variables of a reference
@@ -352,12 +364,12 @@ as shown. Because x and y refer to the same object, changes made to x
 will affect y and vice versa. Hence, the code will display 30 and then 50 .
 If a variable is a reference, it is possible to indicate that it does not
 refer to any object by setting its value to null :
-y = null;
+`y = null;`
 If a reference is set to null , then it is not possible to call any nonstatic
 member functions or fields against it; doing so would cause an
 exception to be thrown at runtime.
 
-#NOTE
+# NOTE
 Non-nullable reference types are planned for C# 8. Variables of
 these types require initialization with non-null. Reference types
 that allow null explicitly require declaration as a nullable
@@ -384,11 +396,12 @@ served by keeping primitive types (such as int and bool ) as value
 types, and larger types that contain many fields (as is usually the case
 with classes) as reference types. If you want to define your own type as
 a value type, you should declare it as a struct.
-NOTE
+# NOTE
 The layout of primitive data types typically aligns with native
 layouts. This makes it possible to share the same memory between
 managed and native code.
-.NET Types
+
+## .NET Types
 The C# keywords for data types—such as int , short , and string —are
 mapped from the compiler to .NET data types. For example, when you
 declare an int in C#, you are actually declaring an instance of a .NET
@@ -397,7 +410,7 @@ profound significance: It means that you can treat all the primitive
 data types syntactically, as if they are classes that support certain
 methods. For example, to convert an int i to a string , you can write
 the following:
-string s = i.ToString();
+`string s = i.ToString();`
 It should be emphasized that behind this syntactical convenience, the
 types really are stored as primitive types, so absolutely no
 performance cost is associated with the idea that the primitive types
@@ -407,7 +420,7 @@ types in C#. Each type is listed, along with its definition and the name
 of the corresponding .NET type. C# has 15 predefined types, 13 value
 types, and 2 ( string and object ) reference types.
 
-Predefined Value Types
+## Predefined Value Types
 The built-in .NET value types represent primitives, such as integer and
 floating-point numbers, character, and Boolean types.
 Integer Types
