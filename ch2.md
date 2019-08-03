@@ -482,18 +482,18 @@ use cases—for example, to work with hexadecimal or octal values, or to
 separate different bits needed for a protocol (as shown in the next
 section).
 
-#NOTE
+# NOTE
 Digit separators are new with C# 7. C# 7.0 doesn’t allow leading
 digit separators, having the separator before the value (and after
 the prefix). Leading digit separators can be used with C# 7.2.
 
-Working with Binary Values
+#### Working with Binary Values
 Besides offering digit separators, C# 7 also makes it easier to assign
 binary values to integer types. If you prefix the variable value with the
 0b literal, it’s only allowed to use 0 and 1. Only binary values are
 allowed to assign to the variable, as you can see in the following code
 snippet (code file UsingNumbers/Program.cs ):
-uint binary1 = 0b1111_1110_1101_1100_1011_1010_1001_1000;
+`uint binary1 = 0b1111_1110_1101_1100_1011_1010_1001_1000;`
 This preceding code snippet uses an unsigned int with 32 bits
 available. Digit separators help a lot with readability in binary values.
 This snippet makes a separation every four bits. Remember, you can
@@ -502,21 +502,24 @@ uint hex1 = 0xfedcba98;
 Using the separator every three bits helps when you’re working with
 the octal notation, where characters are used between 0 (000 binary)
 and 7 (111 binary).
-uint binary2 = 0b111_110_101_100_011_010_001_000;
+`uint binary2 = 0b111_110_101_100_011_010_001_000;`
 The following example shows how to define values that could be used
 in a binary protocol where two bits define the rightmost part, six bits
 are in the next section, and the last two sections have four bits to
 complete 16 bits:
-ushort binary3 = 0b1111_0000_101010_11;
+`ushort binary3 = 0b1111_0000_101010_11;`
 Remember to use the correct integer type for the number of bits
 needed: ushort for 16, uint for 32, and ulong for 64 bits.
-NOTE
+
+# NOTE
 Read Chapter 6, “Operators and Casts,” and Chapter 11, “Special
 Collections,” for additional information on working with binary
 data.
-NOTE
+
+# NOTE
 Binary literals are new with C# 7.
-Floating-Point Types
+
+#### Floating-Point Types
 Although C# provides a plethora of integer data types, it supports
 floating-point types as well.
 The float data type is for smaller floating-point values, for which less
