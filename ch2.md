@@ -522,73 +522,83 @@ Binary literals are new with C# 7.
 #### Floating-Point Types
 Although C# provides a plethora of integer data types, it supports
 floating-point types as well.
-The float data type is for smaller floating-point values, for which less
-precision is required. The double data type is bulkier than the float
+The `float` data type is for smaller floating-point values, for which less
+precision is required. The double data type is bulkier than the `float`
 data type but offers twice the precision (15 digits).
 If you hard-code a non-integer number (such as 12.3), the compiler
 will normally assume that you want the number interpreted as a
-double . To specify that the value is a float , append the character F (or
-f ) to it:
-float f = 12.3F;
-The Decimal Type
-The decimal type represents higher-precision floating-point numbers,
+double . To specify that the value is a `float` , append the character `F` (or
+`f` ) to it:
+`float f = 12.3F;`
+#### The Decimal Type
+The `decimal` type represents higher-precision floating-point numbers,
 as shown in the following table.
+
+
 One of the great things about the .NET and C# data types is the
-provision of a dedicated decimal type for financial calculations. How
+provision of a dedicated `decimal` type for financial calculations. How
 you use the 28 digits that the decimal type provides is up to you. In
 other words, you can track smaller dollar amounts with greater
 accuracy for cents or larger dollar amounts with more rounding in the
-fractional portion. Bear in mind, however, that decimal is not
+fractional portion. Bear in mind, however, that `decimal` is not
 implemented under the hood as a primitive type, so using decimal has
 a performance effect on your calculations.
+
 To specify that your number is a decimal type rather than a double , a
-float ,
-or an integer, you can append the M (or m ) character to the value,
+`float` ,or an integer, you can append the `M` (or `m` ) character to the value,
 as shown here:
-decimal d = 12.30M;
-The Boolean Type
-The C# bool type is used to contain Boolean values of either true or
-false .
-You cannot implicitly convert bool values to and from integer values. If
-a variable (or a function return type) is declared as a bool , you can
-only use values of true and false . You get an error if you try to use
-zero for false and a nonzero value for true .
-The Character Type
-For storing the value of a single character, C# supports the char data
+`decimal d = 12.30M;`
+
+#### The Boolean Type
+The C# bool type is used to contain Boolean values of either `true` or `false`.
+
+
+You cannot implicitly convert `bool` values to and from integer values. If
+a variable (or a function return type) is declared as a `bool` , you can
+only use values of `true` and `false` . You get an error if you try to use
+zero for `false` and a nonzero value for `true` .
+
+#### The Character Type
+For storing the value of a single character, C# supports the `char` data
 type.
-Literals of type char are signified by being enclosed in single quotation
+
+
+Literals of type `char` are signified by being enclosed in single quotation
 marks—for example, 'A'. If you try to enclose a character in double
 quotation marks, the compiler treats the character as a string and
 throws an error.
 As well as representing chars as character literals, you can represent
-them with four-digit hex Unicode values (for example, '\u0041' ), as
-integer values with a cast (for example, (char)65 ), or as hexadecimal
-values (for example, '\x0041' ). You can also represent them with an
+them with four-digit hex Unicode values (for example, `'\u0041'` ), as
+integer values with a cast (for example, `(char)65` ), or as hexadecimal
+values (for example, `'\x0041'` ). You can also represent them with an
 escape sequence, as shown in the following table.
-Literals for Numbers
+
+#### Literals for Numbers
 The following table summarizes the literals that can be used for
 numbers. The table repeats the literals from the preceding sections so
 they’re all collected in one place.
-Predefined Reference Types
-C# supports two predefined reference types, object and string ,
+
+### Predefined Reference Types
+C# supports two predefined reference types, `object` and `string` ,
 described in the following table.
-NAME .NET TYPE DESCRIPTION
-object System.Object The root type. All other types (including value
-types) are derived from object .
-string System.String Unicode character string
-The object Type
+|NAME |.NET TYPE |DESCRIPTION
+|---|---|---|
+|object |System.Object| The root type. All other types (including valuetypes) are derived from object .
+|string |ystem.String |Unicode character string
+
+#### The object Type
 Many programming languages and class hierarchies provide a root
 type, from which all other objects in the hierarchy are derived. C# and
 .NET are no exception. In C#, the object type is the ultimate parent
 type from which all other intrinsic and user-defined types are derived.
 This means that you can use the object type for two purposes:
-You can use an object reference to bind to an object of any
+- You can use an `object` reference to bind to an object of any
 particular subtype. For example, in Chapter 6, “Operators and
 Casts,” you see how you can use the object type to box a value
 object on the stack to move it to the heap; object references are
 also useful in reflection, when code must manipulate objects whose
 specific types are unknown.
-The object type implements a number of basic, general-purpose
+- The `object` type implements a number of basic, general-purpose
 methods, which include Equals , GetHashCode , GetType , and
 ToString . Responsible user-defined classes might need to provide
 replacement implementations of some of these methods using an
