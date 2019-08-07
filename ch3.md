@@ -1244,18 +1244,19 @@ When you return a value type from a property, the caller receives a
 copy. Setting properties of this value type changes only the copy; the
 original value doesn’t change. This can be confusing to the developer
 who’s accessing the property. That’s why a guideline for structs defines
-that value types should be immutable. Of course, this guideline is not
-valid for all value types because int , short , double ... are not
-immutable, and the ValueTuple is also not immutable. However, most
+that `value types should be immutable`. Of course, this guideline is not
+valid for all value types because `int` , `short` , `double` ... are not
+immutable, and the `ValueTuple` is also not immutable. However, most
 struct types are implemented as immutable.
+
 When you use C# 7.2, the readonly modifier can be applied to a struct,
 and thus the compiler guarantees for immutability of the struct. The
 previously defined type Dimensions can be declared readonly when you
 use C# 7.2 because it contains only a constructor that changes its
 members. The properties only contain a get accessor, thus change is
 not possible (code file ReadOnlyStructSample/Dimensions.cs ):
-public readonly struct Dimensions
 ```c#
+public readonly struct Dimensions
 {
     public double Length { get; }
     public double Width { get; }
@@ -1273,43 +1274,47 @@ object is created. With this modifier, the compiler can generate
 optimized code to not copy the contents of a struct when it is passed
 along; instead the compiler uses references because it can never
 change.
-Structs and Inheritance
+
+### Structs and Inheritance
 Structs are not designed for inheritance. This means it is not possible
 to inherit from a struct. The only exception to this is that structs, in
 common with every other type in C#, derive ultimately from the class
-System.Object . Hence, structs also have access to the methods of
-System.Object , and it is even possible to override them in structs; an
-obvious example would be overriding the ToString method. The actual
+`System.Object` . Hence, structs also have access to the methods of
+`System.Object` , and it is even possible to override them in structs; an
+obvious example would be overriding the `ToString` method. The actual
 inheritance chain for structs is that each struct derives from the class,
-System.ValueType , which in turn derives from System.Object .
-ValueType does not add any new members to Object but provides
+`System.ValueType` , which in turn derives from `System.Object` .
+`ValueType` does not add any new members to `Object` but provides
 override implementations of some members of the base class that are
 more suitable for structs. **NOTE** that you cannot supply a different base
-class for a struct: Every struct is derived from ValueType .
+class for a struct: Every `struct` is derived from `ValueType` .
+
 **NOTE**
-Inheritance from System.ValueType only happens with structs
+Inheritance from System.`ValueType` only happens with structs
 when they are used as objects. Structs that cannot be used as
-objects are ref struct s. These types have been available since C#
+objects are ref `struct` s. These types have been available since C#
 7.2. This feature is explained later in this chapter in the section
 “ref structs.”
+
 **NOTE**
-
-
 To compare structural values, it’s a good practice to implement
-the interface IEquatable<T> . This interface is discussed in Chapter
+the `interface` `IEquatable<T>` . This interface is discussed in Chapter
 6.
-Constructors for Structs
+
+### Constructors for Structs
 You can define constructors for structs in a similar way as you do it for
 classes.
 That said, the default constructor, which initializes all fields to zero
 values, is always present implicitly, even if you supply other
 constructors that take parameters. You can’t create custom default
 constructors for structs.
+```c#
 public Dimensions(double length, double width)
 {
-Length = length;
-Width = width;
+    Length = length;
+    Width = width;
 }
+```
 Incidentally, you can supply a Close or Dispose method for a struct in
 the same way you do for a class. The Dispose method is discussed in
 detail in Chapter 17.
