@@ -73,8 +73,8 @@ Chapter 2, “Core C#”) ::
 Null coalescing operator ??
 Null-conditional operator ?. ?[]
 Name of an identifier nameof()
-NOTE
-Note that four specific operators ( sizeof , * , -> , and & ) are
+**NOTE**
+**NOTE** that four specific operators ( sizeof , * , -> , and & ) are
 available only in unsafe code (code that bypasses C#’s type-safety
 checking), which is discussed in Chapter 17, “Managed and
 Unmanaged Memory.”
@@ -115,7 +115,7 @@ SHORTCUT OPERATOR EQUIVALENT TO
 x++, ++x x = x + 1
 x– –, – –x x = x – 1
 x += y x = x + y
-x -= y x = x—y
+x -= y x = x——y
 x *= y x = x * y
 x /= y x = x / y
 x %= y x = x % y
@@ -128,7 +128,7 @@ x |= y x = x | y
 You may be wondering why there are two examples each for the ++
 increment and the – – decrement operators. Placing the operator
 before the expression is known as a prefix; placing the operator after
-the expression is known as a postfix. Note that there is a difference in
+the expression is known as a postfix. **NOTE** that there is a difference in
 the way they behave.
 The increment and decrement operators can act both as entire
 expressions and within expressions. When used by themselves, the
@@ -137,7 +137,7 @@ corresponds to the statement x = x + 1 . When used within larger
 expressions, the prefix operator increments the value of x before the
 expression is evaluated; in other words, x is incremented and the new
 value is used in the expression. Conversely, the postfix operator
-increments the value of x after the expression is evaluated—the
+increments the value of x after the expression is evaluated——the
 expression is evaluated using the original value of x . The following
 example uses the increment operator ( ++ ) as an example to
 demonstrate the difference between the prefix and postfix behavior
@@ -190,7 +190,7 @@ string s = x + " ";
 s += (x == 1 ? "man": "men");
 Console.WriteLine(s);
 This code displays 1 man if x is equal to one but displays the correct
-plural form for any other number. Note, however, that if your output
+plural form for any other number. **NOTE**, however, that if your output
 
 
 needs to be localized to different languages, you have to write more
@@ -245,11 +245,11 @@ Console.WriteLine(b);
 In this case, no exception is raised, but you lose data because the byte
 type cannot hold a value of 256, the overflowing bits are discarded,
 and your b variable holds a value of zero (0).
-Note that unchecked is the default behavior. The only time you are
+**NOTE** that unchecked is the default behavior. The only time you are
 likely to need to explicitly use the unchecked keyword is when you need
 a few unchecked lines of code inside a larger block that you have
 explicitly marked as checked .
-NOTE
+**NOTE**
 By default, overflow and underflow are not checked because
 enforcing checks has a performance impact. When you use
 checked as the default setting with your project, the result of every
@@ -335,7 +335,7 @@ o2 as string; // s2 = null
 The as operator allows you to perform a safe type conversion in a
 single step without the need to first test the type using the is operator
 and then perform the conversion.
-NOTE
+**NOTE**
 The is and as operators are shown with inheritance in Chapter 4,
 “Object Orientation with C#.” Also check Chapter 13, “Functional
 Programming with C#” for more information on pattern
@@ -348,7 +348,7 @@ type using the sizeof operator (code file OperatorsSample/Program.cs ):
 Console.WriteLine(sizeof(int));
 This displays the number 4 because an int is 4 bytes long.
 You can also use the sizeof operator with structs if the struct contains
-only value types—for example, the Point class as shown here (code file
+only value types——for example, the Point class as shown here (code file
 OperatorsSample/Point.cs ):
 public struct Point
 {
@@ -360,7 +360,7 @@ Y = y;
 public int X { get; }
 public int Y { get; }
 }
-NOTE
+**NOTE**
 You cannot use sizeof with classes.
 Using sizeof with custom types, you need to write the code within an
 unsafe code block (code file OperatorsSample/Program.cs ):
@@ -368,7 +368,7 @@ unsafe
 {
 Console.WriteLine(sizeof(Point));
 }
-NOTE
+**NOTE**
 By default, unsafe code is not allowed. You need to specify the
 AllowUnsafeBlocks in the csproj project file. Chapter 17 looks at
 unsafe code in more detail.
@@ -396,7 +396,7 @@ change the name of the parameter, you can easily miss changing the
 string passed to the ArgumentNullException constructor.
 if (o == null) throw new ArgumentNullException("o");
 Using the nameof operator for the name of a variable is just one use
-case. You can also use it to get the name of a property—for example,
+case. You can also use it to get the name of a property——for example,
 for firing a change event (using the interface INotifyPropertyChanged )
 in a property set accessor and passing the name of a property.
 public string FirstName
@@ -436,7 +436,7 @@ is passed to the indexer to retrieve this element:
 var dict = new Dictionary<string, int>();
 dict["first"] = 1;
 int x = dict["first"];
-NOTE
+**NOTE**
 Later in this chapter in the “Implementing Custom Index
 Operators” section, you can read how to create index operators in
 
@@ -492,13 +492,13 @@ else
 {
 Console.WriteLine("a < b");
 }
-NOTE
+**NOTE**
 The possibility of a null value means that you cannot freely
 combine nullable and non-nullable types in an expression. This is
 discussed in the section “Type Conversions” later in this chapter.
-NOTE
-When you use the C# keyword ? with the type declaration—for
-example, int? —the compiler resolves this to use the generic type
+**NOTE**
+When you use the C# keyword ? with the type declaration——for
+example, int? ——the compiler resolves this to use the generic type
 Nullable<int>. The C# compiler converts the shorthand notation
 to the generic type to reduce typing needs.
 The Null Coalescing Operator
@@ -506,7 +506,7 @@ The null coalescing operator (??) provides a shorthand mechanism to
 cater to the possibility of null values when working with nullable and
 
 
-reference types. The operator is placed between two operands—the
+reference types. The operator is placed between two operands——the
 first operand must be a nullable type or reference type, and the second
 operand must be of the same type as the first or of a type that is
 implicitly convertible to the type of the first operand. The null
@@ -608,7 +608,7 @@ containing multiple operators).
 GROUP OPERATORS
 Primary . ?. () [] ?[] x++ x–– new typeof sizeof
 checked unchecked
-Unary + —! &DiacriticalTilde; ++x ––x and
+Unary + ——! &DiacriticalTilde; ++x ––x and
 casts
 Multiplication/division * / %
 
@@ -669,7 +669,7 @@ a ? b: c ? d: e
 is evaluated as
 a = b: (c ? d: e)
 because it is right-associative.
-NOTE
+**NOTE**
 In complex expressions, avoid relying on operator precedence to
 produce the correct result. Using parentheses to specify the order
 in which you want operators applied clarifies your code and
@@ -690,7 +690,7 @@ are covered in this section.
 
 First, let’s start with simple calculations using binary operators. The
 method SimpleCalculations first declares and initializes the variables
-binary1 and binary2 with binary values—using the binary literal and
+binary1 and binary2 with binary values——using the binary literal and
 digit separators. Using the & operator, the two values are combined
 with the binary ADD operator and written to the variable binaryAnd .
 Following, the | operator is used to create the binaryOr variable, the ^
@@ -741,7 +741,7 @@ string.Join('_',
 Enumerable.Range(0, number.Length / 4)
 .Select(i => number.Substring(i * 4, 4)).ToArray());
 }
-NOTE
+**NOTE**
 The AddSeparators method makes use of LINQ. LINQ is discussed
 in detail in Chapter 12, “Language Integrated Query.”
 The method DisplayBits , which is invoked from the previously shown
@@ -790,7 +790,7 @@ NOT
 Shifting Bits
 As you’ve already seen in the previous sample, shifting three bits to the
 left is a multiplication by 8. A shift by one bit is a multiplication by 2.
-This is a lot faster than invoking the multiply operator— in case you
+This is a lot faster than invoking the multiply operator—— in case you
 need to multiply by 2, 4, 8, 16, 32, and so on.
 The following code snippet sets one bit in the variable s1 , and in the
 for loop the bit always shifts by one bit (code file
@@ -863,7 +863,7 @@ Signed and Unsigned Numbers
 One important thing to remember working with binaries is that using
 signed types such as int , long , short , the leftmost bit is used to
 represent the sign. When you use an int , the highest number available
-is 2147483647—the positive number of 31 bits or 0x7FFF FFFF. With
+is 2147483647——the positive number of 31 bits or 0x7FFF FFFF. With
 an uint , the highest number available is 4294967295 or 0xFFFF FFFF.
 This represents the positive number of 32 bits. With the int , the other
 half of the number range is used for negative numbers.
@@ -892,9 +892,9 @@ DisplayNumber($"added {i + 1}", maxNumber);
 Console.WriteLine();
 //...
 }
-With the output of the application, you can see all the bits—except for
-the sign bit—are set to achieve the maximum integer value. The output
-shows the same value in different formats—binary, decimal, and
+With the output of the application, you can see all the bits——except for
+the sign bit——are set to achieve the maximum integer value. The output
+shows the same value in different formats——binary, decimal, and
 hexadecimal. Adding 1 to the first output results in an overflow of the
 int type setting the sign bit, and all other bits are 0. This is the highest
 negative value for the int type. After this result, two more increments
@@ -928,7 +928,7 @@ DisplayNumber($"subtracted {i + 1}", zero);
 }
 Console.WriteLine();
 With the output, you can see 0 is represented with all the bits not set.
-Doing a decrement results in decimal -1 , which is all the bits set—
+Doing a decrement results in decimal -1 , which is all the bits set——
 including the sign bit:
 zero
 bin: 0000_0000_0000_0000_0000_0000_0000_0000,
@@ -978,7 +978,7 @@ language interoperability. As you would expect from a language
 compiled into IL, C# is also strongly typed. Among other things, this
 means that data types are not always seamlessly interchangeable. This
 section looks at conversions between primitive types.
-NOTE
+**NOTE**
 C# also supports conversions between different reference types
 and allows you to define how data types that you create behave
 when converted to and from other types. Both of these topics are
@@ -1005,7 +1005,7 @@ contain only 8 bits of data, so adding 2 bytes together could very easily
 result in a value that cannot be stored in a single byte . If you want to
 store this result in a byte variable, you have to convert it back to a
 byte . The following sections discuss two conversion mechanisms
-supported by C#—implicit and explicit.
+supported by C#——implicit and explicit.
 Implicit Conversions
 Conversion between types can normally be achieved automatically
 (implicitly) only if you can guarantee that the value is not changed in
@@ -1042,7 +1042,7 @@ ulong float, double, decimal, BigInteger
 float double, BigInteger
 char ushort, int, uint, long, ulong, float, double, decimal,
 BigInteger
-NOTE
+**NOTE**
 is a struct that contains a number of any size. You can
 initialize it from smaller types, pass a number array to create one
 big number, or parse a string for a huge number. This type
@@ -1081,19 +1081,19 @@ Explicit Conversions
 Many conversions cannot be implicitly made between types, and the
 compiler returns an error if any are attempted. The following are some
 of the conversions that cannot be made implicitly:
-int to short —Data loss is possible.
-int to uint —Data loss is possible.
+int to short ——Data loss is possible.
+int to uint ——Data loss is possible.
 uint
-to int —Data loss is possible.
+to int ——Data loss is possible.
 float
-to int —Everything is lost after the decimal point.
-Any numeric type to char —Data loss is possible.
-to any numeric type—The decimal type is internally
+to int ——Everything is lost after the decimal point.
+Any numeric type to char ——Data loss is possible.
+to any numeric type——The decimal type is internally
 structured differently from both integers and floating-point
 numbers.
 decimal
 int?
-to int —The nullable type may have the value null .
+to int ——The nullable type may have the value null .
 However, you can explicitly carry out such conversions using casts.
 When you cast one type to another, you deliberately force the compiler
 to make the conversion. A cast looks like this:
@@ -1106,7 +1106,7 @@ int i = (int)val; // A valid cast. The maximum int is
 You indicate the type to which you are casting by placing its name in
 parentheses before the value to be converted. If you are familiar with
 C, this is the typical syntax for casts. If you are familiar with the C++
-special cast keywords such as static_cast , note that these do not exist
+special cast keywords such as static_cast , **NOTE** that these do not exist
 in C#; you have to use the older C-type syntax.
 Casting can be a dangerous operation to undertake. Even a simple cast
 from a long to an int can cause problems if the value of the original
@@ -1138,11 +1138,11 @@ int approximatePrice = (int)(price + 0.5);
 This gives the price rounded to the nearest dollar. However, in this
 
 
-conversion, data is lost—namely, everything after the decimal point.
+conversion, data is lost——namely, everything after the decimal point.
 Therefore, such a conversion should never be used if you want to
 continue to do more calculations using this modified price value.
 However, it is useful if you want to output the approximate value of a
-completed or partially completed calculation—if you don’t want to
+completed or partially completed calculation——if you don’t want to
 bother the user with a lot of figures after the decimal point.
 This example shows what happens if you convert an unsigned integer
 into a char :
@@ -1169,7 +1169,7 @@ id.ApproxPrice = (int)(Prices[0] + 0.5);
 To convert a nullable type to a non-nullable type or another nullable
 type where data loss may occur, you must use an explicit cast. This is
 true even when converting between elements with the same basic
-underlying type—for example, int? to int or float? to float . This is
+underlying type——for example, int? to int or float? to float . This is
 because the nullable type may have the value null , which cannot be
 represented by the non-nullable type. As long as an explicit cast
 between two equivalent non-nullable types is possible, so is the
@@ -1183,7 +1183,7 @@ int b = (int)a; // Will throw exception
 Using explicit casts and a bit of care and attention, you can convert
 any instance of a simple value type to almost any other. However,
 there are limitations on what you can do with explicit type conversions
-—as far as value types are concerned, you can only convert to and from
+——as far as value types are concerned, you can only convert to and from
 the numeric and char types and enum types. You cannot directly cast
 Booleans to any other type or vice versa.
 If you need to convert between numeric and string, you can use
@@ -1200,14 +1200,14 @@ string s = "100";
 int i = int.Parse(s);
 Console.WriteLine(i + 50); // Add 50 to prove it is really an
 int
-Note that Parse registers an error by throwing an exception if it is
+**NOTE** that Parse registers an error by throwing an exception if it is
 unable to convert the string (for example, if you try to convert the
 string Hello to an integer). Again, exceptions are covered in Chapter
 14.
 Boxing and Unboxing
-In Chapter 2 you learned that all types—both the simple predefined
+In Chapter 2 you learned that all types——both the simple predefined
 types, such as int and char , and the complex types, such as classes and
-structs—derive from the object type. This means you can treat even
+structs——derive from the object type. This means you can treat even
 
 
 literal values as though they are objects:
@@ -1220,7 +1220,7 @@ capability to call methods on an int , if the int is nothing more than a
 C# achieves this through a bit of magic called boxing. Boxing and its
 counterpart, unboxing, enable you to convert value types to reference
 types and then back to value types. We include this in the section on
-casting because this is essentially what you are doing—you are casting
+casting because this is essentially what you are doing——you are casting
 your value to the object type. Boxing is the term used to describe the
 transformation of a value type to a reference type. Basically, the
 runtime creates a temporary reference-type box for the object on the
@@ -1240,7 +1240,7 @@ int
 A variable can be unboxed only if it has been boxed. If you execute the
 last line when myObject is not a boxed int , you get a runtime exception
 thrown at runtime.
-One word of warning: When unboxing, you have to be careful that the
+One word of **WARNING**: When unboxing, you have to be careful that the
 receiving value variable has enough room to store all the bytes in the
 value being unboxed. C#’s int s, for example, are only 32 bits long, so
 
@@ -1318,7 +1318,7 @@ value. In particular, if you intend instances of your class to be used as
 keys in a dictionary, you need to override this method to compare
 values. Otherwise, depending on how you override
 Object.GetHashCode , the dictionary class that contains your objects
-either will not work at all or will work very inefficiently. Note that
+either will not work at all or will work very inefficiently. **NOTE** that
 when overriding Equals , your override should never throw exceptions.
 Again, that’s because doing so can cause problems for dictionary
 classes and possibly some other .NET base classes that internally call
@@ -1478,7 +1478,7 @@ adds two numbers. The method takes two parameters, myInteger and
 myUnsignedInt , and returns their sum. Therefore, the compiler does
 the same thing it does for any method call: It looks for the best
 matching overload of the addition operator based on the parameter
-types—in this case, one that takes two integers. As with normal
+types——in this case, one that takes two integers. As with normal
 overloaded methods, the desired return type does not influence the
 compiler’s choice as to which version of a method it calls. As it
 happens, the overload called in the example takes two int parameters
@@ -1513,7 +1513,7 @@ which takes two Vector instances as its parameters.
 If the compiler finds an appropriate overload, it calls up the
 implementation of that operator. If it cannot find one, it checks
 whether there is any other overload for + that it can use as a best
-match—perhaps something with two parameters of other data types
+match——perhaps something with two parameters of other data types
 that can be implicitly converted to Vector instances. If the compiler
 cannot find a suitable overload, it raises a compilation error, just as it
 would if it could not find an appropriate overload for any other
@@ -1522,7 +1522,7 @@ Operator Overloading Example: The struct Vector
 This section demonstrates operator overloading through developing a
 struct named Vector that represents a three-dimensional
 mathematical vector. Don’t worry if mathematics is not your strong
-point—the vector example is very simple. As far as you are concerned
+point——the vector example is very simple. As far as you are concerned
 here, a 3D vector is just a set of three numbers ( double s) that tell you
 how far something is moving. The variables representing the numbers
 are called _ x , _ y , and _ z : the _ x tells you how far something moves
@@ -1533,7 +1533,7 @@ you would normally write as (3.0, 3.0, 1.0) , you’re moving 3 units
 east, 3 units north, and rising upward by 1 unit.
 You can add or multiply vectors by other vectors or by numbers.
 Incidentally, in this context, we use the term scalar, which is math-
-speak for a simple number—in C# terms that is just a double . The
+speak for a simple number——in C# terms that is just a double . The
 significance of addition should be clear. If you move first by the vector
 (3.0, 3.0, 1.0) then move by the vector (2.0, -4.0, -4.0) , the total
 amount you have moved can be determined by adding the two vectors.
@@ -1544,11 +1544,11 @@ Adding vectors means adding each component individually, so you get
 and b are the vectors and c is the resulting vector. You want to be
 able to use the Vector struct the same way.
 a
-NOTE
+**NOTE**
 The fact that this example is developed as a struct rather than a
 class is not significant with operator overloading. Operator
 overloading works in the same way for both structs and classes.
-Following is the definition for Vector —containing the read-only
+Following is the definition for Vector ——containing the read-only
 properties, constructors, and a ToString override so you can easily
 view the contents of a Vector , and, finally, that operator overload (code
 file OperatorOverloadingSample/Vector.cs ):
@@ -1591,7 +1591,7 @@ are often termed copy constructors because they effectively enable you
 
 
 to initialize a class or struct instance by copying another instance.
-Here is the interesting part of the Vector struct—the operator overload
+Here is the interesting part of the Vector struct——the operator overload
 that provides support for the addition operator:
 public static Vector operator +(Vector left, Vector right) =>
 new Vector(left.X + right.X, left.Y + right.Y, left.Z +
@@ -1690,7 +1690,7 @@ Next, you need to overload the multiplication operator to support
 vector multiplication. Mathematics provides a couple of ways to
 multiply vectors, but the one of interest here is known as the dot
 product or inner product, which actually returns a scalar as a result.
-That’s the reason for this example—to demonstrate that arithmetic
+That’s the reason for this example——to demonstrate that arithmetic
 operators don’t have to return the same type as the class in which they
 are defined.
 In mathematical terms, if you have two vectors (x, y, z) and (X, Y,
@@ -1741,7 +1741,7 @@ vect1 * vect3 = 14.5
 
 This shows that the operator overloads have given the correct results;
 but if you look at the test code closely, you might be surprised to notice
-that it actually used an operator that wasn’t overloaded—the addition
+that it actually used an operator that wasn’t overloaded——the addition
 assignment operator, += :
 Console.WriteLine($"vect3 += vect2 gives {vect3 += vect2}");
 Although += normally counts as a single operator, it can be broken
@@ -1759,7 +1759,7 @@ and !=
 and <
 >=
 and <=
-NOTE
+**NOTE**
 A .NET guideline defines that if the == operator returns true when
 comparing two objects, it should always return true. That’s why
 you should only overload the == operator on immutable types.
@@ -1805,7 +1805,7 @@ With a shallow comparison, the objects point to the same point in
 memory, whereas deep comparisons work with values and properties
 of the object to deem equality. You want to perform equality checks
 depending on the depth to help you decide what you want to verify.
-NOTE
+**NOTE**
 
 
 Don’t be tempted to overload the comparison operator by only
@@ -1821,7 +1821,7 @@ public static bool operator !=(Vector left, Vector right) =>
 !(left == right);
 Now override the Equals and GetHashCode methods. These methods
 should always be overridden when the == operator is overridden.
-Otherwise the compiler complains with a warning.
+Otherwise the compiler complains with a **WARNING**.
 public override bool Equals(object obj)
 {
 if (obj == null) return false;
@@ -1951,7 +1951,7 @@ You cannot overload the cast operator
 directly. User-defined casts (discussed
 in the last section of this chapter) allow
 you to define custom cast behavior.
-NOTE
+**NOTE**
 You might wonder what is the reason for overloading the true
 and false operators. There’s a good reason: what integer value is
 true or false is different based on the technology or framework
@@ -1971,7 +1971,7 @@ access the third element and pass the element to the variable x .
 int[] arr1 = {1, 2, 3};
 arr1[1] = 42;
 int x = arr1[2];
-NOTE
+**NOTE**
 Arrays are explained in Chapter 7.
 The CustomIndexerSample makes use of these namespaces:
 System
@@ -2108,15 +2108,15 @@ guidelines as for the predefined casts: if you know that the cast is
 
 always safe regardless of the value held by the source variable, then
 you define it as implicit . Conversely, if you know there is a risk of
-something going wrong for certain values—perhaps some loss of data
-or an exception being thrown—then you should define the cast as
+something going wrong for certain values——perhaps some loss of data
+or an exception being thrown——then you should define the cast as
 explicit .
-NOTE
+**NOTE**
 You should define any custom casts you write as explicit if there
 are any source data values for which the cast will fail or if there is
 any risk of an exception being thrown.
 The syntax for defining a cast is similar to that for overloading
-operators discussed earlier in this chapter. This is not a coincidence—a
+operators discussed earlier in this chapter. This is not a coincidence——a
 cast is regarded as an operator whose effect is to convert from the
 source type to the destination type. To illustrate the syntax, the
 following is taken from an example struct named Currency , which is
@@ -2128,12 +2128,12 @@ public static implicit operator float (Currency value)
 The return type of the operator defines the target type of the cast
 operation, and the single parameter is the source object for the
 conversion. The cast defined here allows you to implicitly convert the
-value of a Currency into a float . Note that if a conversion has been
+value of a Currency into a float . **NOTE** that if a conversion has been
 declared as implicit , the compiler permits its use either implicitly or
 explicitly. If it has been declared as explicit , the compiler only
 permits it to be used explicitly. In common with other operator
 overloads, casts must be declared as both public and static .
-NOTE
+**NOTE**
 C++ developers will notice that this is different from C++, in
 
 
@@ -2146,7 +2146,7 @@ provides the decimal type for this purpose, but it is possible you will
 still want to write your own struct or class to represent monetary
 values if you need to perform sophisticated financial processing and
 therefore want to implement specific methods on such a class.
-NOTE
+**NOTE**
 The syntax for casting is the same for structs and classes. This
 example happens to be for a struct, but it would work just as well
 if you declared Currency as a class.
@@ -2186,7 +2186,7 @@ The preceding cast is implicit. It is a sensible choice in this case
 because, as it should be clear from the definition of Currency , any value
 that can be stored in the currency can also be stored in a float . There
 is no way that anything should ever go wrong in this cast.
-NOTE
+**NOTE**
 There is a slight cheat here: In fact, when converting a uint to a
 float , there can be a loss in precision, but Microsoft has deemed
 this error sufficiently marginal to count the uint -to- float cast as
@@ -2222,7 +2222,7 @@ how you want your Currency struct to behave. Try writing a test
 harness and running the sample. Here is the Main method, which
 instantiates a Currency struct and attempts a few conversions. At the
 start of this code, you write out the value of balance in two different
-ways—this is needed to illustrate something later in the example (code
+ways——this is needed to illustrate something later in the example (code
 file CastingSample/Program.cs ):
 static void Main()
 {
@@ -2287,12 +2287,12 @@ numerical conversions instead.
 Luckily, Microsoft has written a class that does this: System.Convert .
 The System.Convert object contains a large number of static methods
 to perform various numerical conversions, and the one that we want is
-Convert.ToUInt16 . Note that the extra care taken by the System.Convert
+Convert.ToUInt16 . **NOTE** that the extra care taken by the System.Convert
 methods comes at a performance cost. You should use them only when
 necessary.
-Let’s examine the second problem—why the expected overflow
+Let’s examine the second problem——why the expected overflow
 exception wasn’t thrown. The issue here is this: The place where the
-overflow really occurs isn’t actually in the Main routine at all—it is
+overflow really occurs isn’t actually in the Main routine at all——it is
 inside the code for the cast operator, which is called from the Main
 method. The code in this method was not marked as checked .
 The solution is to ensure that the cast itself is computed in a checked
@@ -2307,11 +2307,11 @@ ushort cents = Convert.ToUInt16((value-dollars)*100);
 return new Currency(dollars, cents);
 }
 }
-Note that you use Convert.ToUInt16 to calculate the cents, as described
+**NOTE** that you use Convert.ToUInt16 to calculate the cents, as described
 earlier, but you do not use it for calculating the dollar part of the
 amount. System.Convert is not needed when calculating the dollar
 amount because truncating the float value is what you want there.
-NOTE
+**NOTE**
 The System.Convert methods also carry out their own overflow
 checking. Hence, for the particular case we are considering, there
 
@@ -2322,7 +2322,7 @@ explicit casting of value to dollars.
 You won’t see a new set of results with this new checked cast just yet
 because you have some more modifications to make to the
 CastingSample example later in this section.
-NOTE
+**NOTE**
 If you are defining a cast that will be used very often, and for
 which performance is at an absolute premium, you may prefer
 not to do any error checking. That is also a legitimate solution,
@@ -2330,7 +2330,7 @@ provided that the behavior of your cast and the lack of error
 checking are very clearly documented.
 Casts Between Classes
 The Currency example involves only classes that convert to or from
-float —one of the predefined data types. However, it is not necessary
+float ——one of the predefined data types. However, it is not necessary
 to involve any of the simple data types. It is perfectly legitimate to
 define casts to convert between instances of different structs or classes
 that you have defined. You need to be aware of a couple of restrictions,
@@ -2359,7 +2359,7 @@ public static explicit operator C(D value)
 //...
 }
 For each of these casts, you can choose where you place the definitions
-—inside the class definition of C or inside the class definition of D , but
+——inside the class definition of C or inside the class definition of D , but
 not anywhere else. C# requires you to put the definition of a cast
 inside either the source class (or struct) or the destination class (or
 struct). A side effect of this is that you cannot define a cast between
@@ -2432,7 +2432,7 @@ Boxing and Unboxing Casts
 The previous discussion focused on casting between base and derived
 classes where both participants were reference types. Similar
 principles apply when casting value types, although in this case it is
-not possible to simply copy references—some copying of data must
+not possible to simply copy references——some copying of data must
 occur.
 It is not, of course, possible to derive from structs or primitive value
 types. Casting between base and derived structs invariably means
@@ -2441,10 +2441,10 @@ casting between a primitive type or a struct and System.Object .
 System.ValueType , though it is hard to see why you would want to do
 this.)
 The cast from any struct (or primitive type) to object is always
-available as an implicit cast—because it is a cast from a derived type to
+available as an implicit cast——because it is a cast from a derived type to
 
 
-a base type—and is just the familiar process of boxing. For example,
+a base type——and is just the familiar process of boxing. For example,
 using the Currency struct:
 var balance = new Currency(40,0);
 object baseCopy = balance;
@@ -2478,7 +2478,7 @@ Currency derivedCopy2 = (Currency)baseObject; // Exception
 thrown
 This code works in a way similar to the code presented earlier for
 reference types. Casting derivedObject to Currency works fine because
-derivedObject actually refers to a boxed Currency instance—the cast is
+derivedObject actually refers to a boxed Currency instance——the cast is
 
 
 performed by copying the fields out of the boxed Currency object into a
@@ -2538,7 +2538,7 @@ achieve this:
 // Do not do this!
 public static implicit operator Currency (uint value) =>
 new Currency(value/100u, (ushort)(value%100));
-Note the u after the first 100 in this code to ensure that value/100u is
+**NOTE** the u after the first 100 in this code to ensure that value/100u is
 interpreted as a uint . If you had written value/100 , the compiler would
 have interpreted this as an int , not a uint .
 The comment Do not do this! is clearly noted in this code, and here is
@@ -2663,7 +2663,7 @@ overloads, but none of them takes a Currency struct. Therefore, the
 compiler starts fishing around to see what it can cast the Currency to in
 order to make it match up with one of the overloads of WriteLine . As it
 happens, one of the WriteLine overloads is designed to display uint s
-quickly and efficiently, and it takes a uint as a parameter—you have
+quickly and efficiently, and it takes a uint as a parameter——you have
 now supplied a cast that converts Currency implicitly to uint .
 
 

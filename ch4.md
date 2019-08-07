@@ -41,17 +41,17 @@ describes all the C# keywords related to inheritance.
 TYPES OF INHERITANCE
 Let’s start by reviewing some object-oriented (OO) terms and look at
 what C# does and does not support as far as inheritance is concerned.
-Single inheritance—With single inheritance, one class can
+Single inheritance——With single inheritance, one class can
 derive from one base class. This is a possible scenario with C#.
-Multiple inheritance—Multiple inheritance allows deriving
+Multiple inheritance——Multiple inheritance allows deriving
 from multiple base classes. C# does not support multiple
 inheritance with classes, but it allows multiple inheritance with
 interfaces.
-Multilevel inheritance—Multilevel inheritance allows
+Multilevel inheritance——Multilevel inheritance allows
 inheritance across a bigger hierarchy. Class B derives from class A ,
 and class C derives from class B . Here, class B is also known as
 intermediate base class. This is supported and often used with C#.
-Interface inheritance—Interface inheritance defines
+Interface inheritance——Interface inheritance defines
 inheritance with interfaces. Here, multiple inheritance is possible.
 Interfaces and interface inheritance is explained later in this
 
@@ -103,9 +103,9 @@ IInterface2
 {
 // members
 }
-NOTE
+**NOTE**
 In case a class and interfaces are used to derive from, the class
-always must come first—before interfaces.
+always must come first——before interfaces.
 For a struct, the syntax is as follows (it can only use interface
 inheritance):
 public struct MyDerivedStruct: IInterface1, IInterface2
@@ -123,8 +123,8 @@ class MyClass // implicitly derives from System.Object
 
 
 Let’s get into an example to define a base class Shape . Something that’s
-common with shapes—no matter whether they are rectangles or
-ellipses—is that they have position and size. For position and size,
+common with shapes——no matter whether they are rectangles or
+ellipses——is that they have position and size. For position and size,
 corresponding classes are defined that are contained within the Shape
 class. The Shape class defines read-only properties Position and Shape
 that are initialized using auto property initializers (code file
@@ -217,9 +217,9 @@ public int Height { get; set; }
 public override string ToString() => $"Width: {Width},
 Height: {Height}";
 }
-NOTE
+**NOTE**
 The members of the base class Object are explained in Chapter 3.
-NOTE
+**NOTE**
 When overriding methods of the base class, the signature (all
 parameter types and the method name) and the return type must
 match exactly. If this is not the case then you can create a new
@@ -295,7 +295,7 @@ the functionality of the base class and, by coincidence, adds a method
 that is also called MoveBy and that has the same name and signature as
 yours; however, it probably doesn’t do the same thing. This new
 method might be declared virtual or not.
-If you recompile the derived class you get a compiler warning because
+If you recompile the derived class you get a compiler **WARNING** because
 of a potential method clash. However, it can also happen easily that
 
 
@@ -313,10 +313,10 @@ didn’t exist earlier), the compiler assumes the MoveBy method from the
 derived class is a completely different method that doesn’t have any
 relation to the method of the base class; it just has the same name.
 This method is treated the same way as if it had a different name.
-Compiling the Ellipse class generates a compilation warning that
+Compiling the Ellipse class generates a compilation **WARNING** that
 reminds you to use the new keyword to hide a method. In practice, not
 using the new keyword has the same compilation result, but you avoid
-the compiler warning:
+the compiler **WARNING**:
 public class Ellipse: Shape
 {
 new public void Move(Position newPosition)
@@ -330,7 +330,7 @@ Instead of using the new keyword, you can also rename the method or
 override the method of the base class if it is declared virtual and serves
 the same purpose. However, in case other methods already invoke this
 method, a simple rename can lead to breaking other code.
-NOTE
+**NOTE**
 The new method modifier shouldn’t be used deliberately to hide
 
 
@@ -375,9 +375,9 @@ r.Move(new Position { X = 120, Y = 40 });
 Run the application to see output that is a result of the Move method in
 the Rectangle and the Shape classes:
 Rectangle moves to X: 120, Y: 40
-NOTE
+**NOTE**
 Using the base keyword, you can invoke any method of the base
-class—not just the method that is overridden.
+class——not just the method that is overridden.
 Abstract Classes and Methods
 C# allows both classes and methods to be declared as abstract. An
 abstract class cannot be instantiated, whereas an abstract method does
@@ -417,7 +417,7 @@ public override void Resize(int width, int height)
 {
 throw new NotImplementedException();
 }
-NOTE
+**NOTE**
 Exceptions are explained in detail in Chapter 14, “Errors and
 Exceptions.”
 Using the abstract Shape class and the derived Ellipse class, you can
@@ -595,7 +595,7 @@ public Rectangle()
 : base(width: 0, height: 0, x: 0, y: 0)
 {
 }
-NOTE
+**NOTE**
 Named arguments are discussed in Chapter 3.
 As you can see, this is a very neat and well-designed process. Each
 constructor handles initialization of the variables that are obviously its
@@ -604,7 +604,7 @@ and prepared for use. If you follow the same principles when you write
 your own constructors for your classes, even the most complex classes
 should be initialized smoothly and without any problems.
 MODIFIERS
-You have already encountered quite a number of so-called modifiers—
+You have already encountered quite a number of so-called modifiers——
 keywords that can be applied to a type or a member. Modifiers can
 indicate the visibility of a method, such as public or private , or the
 nature of an item, such as whether a method is virtual or abstract . C#
@@ -673,13 +673,13 @@ allowed only for derived types that are
 within the same assembly, but not from
 other assemblies. This access modifier is
 new with C# 7.2.
-NOTE
+**NOTE**
 
 
 public , protected , and private are logical access modifiers.
 internal is a physical access modifier whose boundary is an
 assembly.
-Note that type definitions can be internal or public, depending on
+**NOTE** that type definitions can be internal or public, depending on
 whether you want the type to be visible outside its containing
 assembly:
 public class MyClass
@@ -792,7 +792,7 @@ declare variables of a type of an interface.
 An interface has neither constructors (how can you construct
 something that you can’t instantiate?) nor fields (because that would
 imply some internal implementation). An interface is also not allowed
-to contain operator overloads—although this possibility is always
+to contain operator overloads——although this possibility is always
 discussed with the language design and might change at some time in
 the future.
 It’s also not permitted to declare modifiers on the members in an
@@ -826,7 +826,7 @@ it’s no problem for the compiler if a class has a Dispose method but
 doesn’t derive from IDisposable . The problem is that other code would
 have no way of recognizing that SomeClass has agreed to support the
 IDisposable features.
-NOTE
+**NOTE**
 is a relatively simple interface because it defines only
 one method. Most interfaces contain more members. The correct
 implementation of IDisposable is not really that simple; it’s
@@ -870,7 +870,7 @@ decimal Balance { get; }
 Notice the name of the interface, IBankAccount . It’s a best-practice
 convention to begin an interface name with the letter I, to indicate it’s
 an interface.
-NOTE
+**NOTE**
 Chapter 2, “Core C#,” points out that in most cases, .NET usage
 guidelines discourage the so-called Hungarian notation in which
 names are preceded by a letter that indicates the type of object
@@ -935,7 +935,7 @@ is abstract ). For this particular example, you don’t have any reason to
 make any of the interface functions virtual.
 To illustrate how different classes can implement the same interface,
 assume that the Planetary Bank of Jupiter also implements a class to
-represent one of its bank accounts—a Gold Account (code file
+represent one of its bank accounts——a Gold Account (code file
 UsingInterfaces/JupiterBank.cs ):
 namespace Wrox.ProCSharp.JupiterBank
 {
@@ -984,7 +984,7 @@ The main point to notice about this code is the way that you have
 declared both your reference variables as IBankAccount references.
 This means that they can point to any instance of any class that
 implements this interface. However, it also means that you can call
-only methods that are part of this interface through these references—
+only methods that are part of this interface through these references——
 if you want to call any methods implemented by a class that are not
 part of the interface, you need to cast the reference to the appropriate
 type. In the example code, you were able to call ToString (not
@@ -993,7 +993,7 @@ because ToString is a System.Object method, so the C# compiler
 knows that it will be supported by any class (put differently, the cast
 from any interface to System.Object is implicit). Chapter 6, “Operators
 and Casts,” covers the syntax for performing casts.
-Interface references can in all respects be treated as class references—
+Interface references can in all respects be treated as class references——
 but the power of an interface reference is that it can refer to any class
 
 
@@ -1003,7 +1003,7 @@ class:
 IBankAccount[] accounts = new IBankAccount[2];
 accounts[0] = new SaverAccount();
 accounts[1] = new GoldAccount();
-Note, however, that you would get a compiler error if you tried
+**NOTE**, however, that you would get a compiler error if you tried
 something like this:
 accounts[1] = new SomeOtherClass(); // SomeOtherClass does
 NOT implement
@@ -1034,17 +1034,17 @@ TransferTo method defined in ITransferBankAccount . Failure to
 
 
 implement all these methods results in a compilation error.
-Note that the TransferTo method uses an IBankAccount interface
+**NOTE** that the TransferTo method uses an IBankAccount interface
 reference for the destination account. This illustrates the usefulness of
 interfaces: When implementing and then invoking this method, you
 don’t need to know anything about what type of object you are
-transferring money to—all you need to know is that this object
+transferring money to——all you need to know is that this object
 implements IBankAccount .
 To illustrate ITransferBankAccount , assume that the Planetary Bank of
 Jupiter also offers a current account. Most of the implementation of
 the CurrentAccount class is identical to implementations of
 SaverAccount and GoldAccount (again, this is just to keep this example
-simple—that won’t normally be the case), so in the following code only
+simple——that won’t normally be the case), so in the following code only
 the differences are highlighted (code file
 UsingInterfaces/JupiterBank.cs ):
 public class CurrentAccount: ITransferBankAccount
@@ -1099,7 +1099,7 @@ Before concluding inheritance with interfaces and classes, we need to
 have a look at two important operators related to inheritance: the is
 and as operators.
 You’ve already seen that you can directly assign objects of a specific
-type to a base class or an interface—if the type has a direct relation in
+type to a base class or an interface——if the type has a direct relation in
 the hierarchy. For example, the SaverAccount created earlier can be
 directly assigned to an IBankAccount because the SaverAccount type
 implements the interface IBankAccount :
@@ -1124,7 +1124,7 @@ normal cases. You can read more about this in Chapter 14. This is
 where the is and as operators come into play.
 Instead of doing the cast directly, it’s a good idea to check whether the
 parameter implements the interface IBankAccount . The as operator
-works similar to the cast operator within the class hierarchy—it
+works similar to the cast operator within the class hierarchy——it
 returns a reference to the object. However, it never throws an
 InvalidCastException . Instead, this operator returns null in case the
 object is not of the type asked for. Here, it is a good idea to verify for
@@ -1152,7 +1152,7 @@ if (o is IBankAccount account)
 
 
 }
-NOTE
+**NOTE**
 Adding the variable declaration to the is operator is a new
 feature of C# 7. This is part of the pattern matching functionality
 that is discussed in detail in Chapter 13, “Functional

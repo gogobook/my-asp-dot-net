@@ -36,7 +36,7 @@ notation to declare, initialize, and use arrays. Behind the scenes, the
 Array class comes into play, which offers several methods to sort and
 filter the elements inside the array. Using an enumerator, you can
 iterate through all the elements of the array.
-NOTE
+**NOTE**
 For using multiple objects of different types, you can combine
 them using classes, structs, and tuples. Classes and structs are
 discussed in Chapter 3, “Objects and Types.” Tuples are covered in
@@ -59,13 +59,13 @@ heap must be allocated. You do this by initializing the variable of the
 array using the new operator, with the type and the number of
 elements inside the array. Here, you specify the size of the array:
 myArray = new int[4];
-NOTE
+**NOTE**
 Value types and reference types are covered in Chapter 3.
 With this declaration and initialization, the variable myArray
 references four integer values that are allocated on the managed heap
 (see Figure 7-1).
 FIGURE 7-1
-NOTE
+**NOTE**
 
 
 An array cannot be resized after its size is specified without
@@ -104,7 +104,7 @@ int[] myArray = new int[] {4, 7, 11, 2};
 int v1 = myArray[0]; // read first element
 int v2 = myArray[1]; // read second element
 myArray[3] = 44; // change fourth element
-NOTE
+**NOTE**
 If you use a wrong indexer value that is bigger than the length of
 the array, an exception of type IndexOutOfRangeException is
 thrown.
@@ -120,7 +120,7 @@ foreach (var val in myArray)
 {
 Console.WriteLine(val);
 }
-NOTE
+**NOTE**
 The foreach statement makes use of the IEnumerable and
 IEnumerator interfaces and traverses through the array from the
 first index to the last. This is discussed in detail later in this
@@ -152,7 +152,7 @@ However, be aware that if the elements in the array are reference
 types, memory must be allocated for every array element. If you use an
 item in the array for which no memory was allocated, a
 NullReferenceException is thrown.
-NOTE
+**NOTE**
 For information about errors and exceptions, see Chapter 14,
 “Errors and Exceptions.”
 You can allocate every element of the array by using an indexer
@@ -200,7 +200,7 @@ twodim[1, 2] = 6;
 twodim[2, 0] = 7;
 twodim[2, 1] = 8;
 twodim[2, 2] = 9;
-NOTE
+**NOTE**
 After declaring an array, you cannot change the rank.
 You can also initialize the two-dimensional array by using an array
 indexer if you know the values for the elements in advance. To
@@ -211,7 +211,7 @@ int[,] twodim = {
 {4, 5, 6},
 {7, 8, 9}
 };
-NOTE
+**NOTE**
 When using an array initializer, you must initialize every element
 of the array. It is not possible to defer the initialization of some
 
@@ -443,7 +443,7 @@ method, which also creates a shallow copy. However, there’s one
 important difference with Clone and Copy : Clone creates a new array;
 with Copy you have to pass an existing array with the same rank and
 enough elements.
-NOTE
+**NOTE**
 If you need a deep copy of an array containing reference types,
 
 
@@ -583,7 +583,7 @@ Ayrton Senna
 Damon Hill
 Graham Hill
 Niki Lauda
-NOTE
+**NOTE**
 The Array class also offers Sort methods that require a delegate as
 an argument. With this argument you can pass a method to do
 the comparison of two objects rather than relying on the
@@ -618,7 +618,7 @@ static void DisplayArray(object[] data)
 {
 //...
 }
-NOTE
+**NOTE**
 Array covariance is only possible with reference types, not with
 value types. In addition, array covariance has an issue that can
 only be resolved with runtime exceptions. If you assign a Person
@@ -640,7 +640,7 @@ GetEnumerator method returns an enumerator implementing the
 IEnumerator interface. The interface IEnumerator is then used by the
 foreach statement to iterate through the collection.
 FIGURE 7-7
-NOTE
+**NOTE**
 The GetEnumerator method is defined with the interface
 IEnumerable . The foreach statement doesn’t really need this
 interface implemented in the collection class. It’s enough to have a
@@ -660,7 +660,7 @@ IEnumerator
 The generic version of this interface IEnumerator<T> derives from the
 interface IDisposable and thus defines a Dispose method to clean up
 resources allocated by the enumerator.
-NOTE
+**NOTE**
 The IEnumerator interface also defines the Reset method for COM
 interoperability. Many .NET enumerators implement this by
 throwing an exception of type NotSupportedException .
@@ -711,7 +711,7 @@ yield return "World";
 }
 }
 }
-NOTE
+**NOTE**
 A method or property that contains yield statements is also
 known as an iterator block. An iterator block must be declared to
 return an IEnumerator or IEnumerable interface, or the generic
@@ -778,7 +778,7 @@ object System.Collections.IEnumerator.Current => current;
 void IDisposable.Dispose() { }
 }
 }
-NOTE
+**NOTE**
 Remember that the yield statement produces an enumerator, and
 not just a list filled with items. This enumerator is invoked by the
 foreach statement. As each item is accessed from the foreach , the
@@ -807,7 +807,7 @@ yield return names[i];
 }
 public IEnumerable<string> Reverse()
 {
-for (int i = 3; i >= 0; i—)
+for (int i = 3; i >= 0; i——)
 {
 yield return names[i];
 }
@@ -820,7 +820,7 @@ yield return names[i];
 }
 }
 }
-NOTE
+**NOTE**
 The default iteration supported by a class is the GetEnumerator
 method, which is defined to return IEnumerator . Named iterations
 return IEnumerable .
@@ -938,7 +938,7 @@ implemented explicitly, so it is necessary to cast the arrays and tuples
 to this interface on use. IStructuralEquatable is used to compare
 whether two tuples or arrays have the same content;
 IStructuralComparable is used to sort tuples or arrays.
-NOTE
+**NOTE**
 Tuples are discussed in Chapter 13.
 With the sample demonstrating IStructuralEquatable , the Person class
 implementing the interface IEquatable is used. IEquatable defines a
@@ -1002,8 +1002,8 @@ if (people1 != people2)
 Console.WriteLine("not the same reference");
 }
 Invoking the Equals method defined by the IStructuralEquatable
-interface—that is, the method with the first parameter of type object
-and the second parameter of type IEqualityComparer —you can define
+interface——that is, the method with the first parameter of type object
+and the second parameter of type IEqualityComparer ——you can define
 how the comparison should be done by passing an object that
 implements IEqualityComparer<T> . A default implementation of the
 IEqualityComparer is done by the EqualityComparer<T> class. This
@@ -1093,12 +1093,12 @@ Console.Write($"{span[i]}.");
 Console.WriteLine();
 }
 When you run the application, the content of span3 and span4 is shown
-—a subset of the arr2 and arr1:
+——a subset of the arr2 and arr1:
 content of span3
 9.11.13.
 content of span4
 6.8.10.12.
-NOTE
+**NOTE**
 is safe from crossing the boundaries. In cases when you’re
 creating spans that exceed the contained array length, an
 exception of type ArgumentOutOfRangeException is thrown. Read
@@ -1185,10 +1185,10 @@ Console.WriteLine();
 }
 
 
-NOTE
+**NOTE**
 How to implement implicit cast operators is discussed in Chapter
 6, “Operators and Casts.”
-NOTE
+**NOTE**
 Previous editions of this book demonstrated the use of
 ArraySegment<T> . Although ArraySegment<T> is still available, it has
 some shortcomings, and you can use the more flexible Span<T> as
@@ -1244,7 +1244,7 @@ $"and received {arr.Length}");
 The Rent method returns an array with at least the requested number
 of elements. The array returned could have more memory available.
 The shared pool keeps arrays with at least 16 elements. The element
-count of the arrays managed always duplicates—for example, 16, 32,
+count of the arrays managed always duplicates——for example, 16, 32,
 64, 128, 256, 512, 1024, 2048, 4096, 8192 elements and so on.
 When you run the application, you can see that larger arrays are
 
@@ -1312,7 +1312,7 @@ renting an array from the pool could read the data. Clearing the data,
 you avoid this, but you need more CPU time (code file:
 ArrayPoolSample/Program.cs ):
 ArrayPool<int>.Shared.Return(arr, clearArray: true);
-NOTE
+**NOTE**
 Information about the garbage collector and how to get
 information about memory addresses is in Chapter 17, “Managed
 and Unmanaged Memory.”

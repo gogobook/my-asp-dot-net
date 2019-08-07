@@ -28,17 +28,17 @@ C# refers to is the System.String .NET base class. String is a very
 powerful and versatile class, but it is by no means the only string-
 related class in the .NET armory. This chapter begins by reviewing
 the features of String and then looks at some nifty things you can
-do with strings using some of the other .NET classes—in particular
+do with strings using some of the other .NET classes——in particular
 those in the System.Text and System.Text.RegularExpressions
 namespaces. This chapter covers the following areas:
-Building strings—If you’re performing repeated
-modifications on a string—for example, to build a lengthy string
+Building strings——If you’re performing repeated
+modifications on a string——for example, to build a lengthy string
 prior to displaying it or passing it to some other method or
-application—the String class can be very inefficient. When you
+application——the String class can be very inefficient. When you
 find yourself in this kind of situation, another class,
 System.Text.StringBuilder , is more suitable because it has
 been designed exactly for this scenario.
-Formatting expressions—This chapter takes a closer look at
+Formatting expressions——This chapter takes a closer look at
 the formatting expressions that have been used in the
 Console.WriteLine method throughout the past few chapters.
 These formatting expressions are processed using two useful
@@ -47,7 +47,7 @@ these interfaces on your own classes, you can define your own
 formatting sequences so that Console.WriteLine and similar
 classes display the values of your classes in whatever way you
 specify.
-Regular expressions—.NET also offers some very
+Regular expressions——.NET also offers some very
 sophisticated classes that deal with cases in which you need to
 identify or extract substrings that satisfy certain fairly
 sophisticated criteria; for example, finding all occurrences
@@ -62,7 +62,7 @@ System.Text.RegularExpressions , are designed to perform this
 
 
 kind of processing.
-Spans—.NET Core offers the generic Span struct, which allows
+Spans——.NET Core offers the generic Span struct, which allows
 fast access to memory. Span<T > allows accessing slices of strings
 without copying the string.
 EXAMINING SYSTEM.STRING
@@ -81,7 +81,7 @@ string message2 = message1 + "!"; // returns "Hello, There!"
 C# also allows extraction of a particular character using an indexer-
 like syntax:
 string message = "Hello";
-char char4 = message[4]; // returns 'o'. Note the string is
+char char4 = message[4]; // returns 'o'. **NOTE** the string is
 zero-indexed
 This enables you to perform such common tasks as replacing
 characters, removing whitespace, and changing case. The following
@@ -141,16 +141,16 @@ Converts the string to uppercase.
 Trim
 Removes leading and trailing whitespace.
 Concat
-NOTE
+**NOTE**
 
 
-Please note that this table is not comprehensive; it is intended to
+Please **NOTE** that this table is not comprehensive; it is intended to
 give you an idea of the features offered by strings.
 Building Strings
 As you have seen, String is an extremely powerful class that
 implements a large number of very useful methods. However, the
 String class has a shortcoming that makes it very inefficient for
-making repeated modifications to a given string—it is an immutable
+making repeated modifications to a given string——it is an immutable
 data type, which means that after you initialize a string object, that
 string object can never change. The methods and operators that
 appear to modify the contents of a string actually create new strings,
@@ -162,20 +162,20 @@ greetingText += "We do hope you enjoy this book as much as we
 enjoyed writing it.";
 When this code executes, first an object of type System.String is
 created and initialized to hold the text Hello from all the people at
-Wrox Press . (Note that there’s a space after the period.) When this
+Wrox Press . (**NOTE** that there’s a space after the period.) When this
 happens, the .NET runtime allocates just enough memory in the string
 to hold this text (41 chars), and the variable greetingText is set to refer
 to this string instance.
 In the next line, syntactically it looks like more text is being added
 onto the string, but it is not. Instead, a new string instance is created
-with just enough memory allocated to store the combined text—that’s
+with just enough memory allocated to store the combined text——that’s
 104 characters in total. The original text, Hello from all the people
 at Wrox Press . , is copied into this new string instance along with the
 extra text: We do hope you enjoy this book as much as we enjoyed
 writing it. Then, the address stored in the variable greetingText is
 updated, so the variable correctly points to the new String object. The
-old String object is now unreferenced—there are no variables that
-refer to it—so it will be removed the next time the garbage collector
+old String object is now unreferenced——there are no variables that
+refer to it——so it will be removed the next time the garbage collector
 comes along to clean out any unused objects in your application.
 
 
@@ -208,7 +208,7 @@ char new1 = (char)(i+1);
 greetingText = greetingText.Replace(old1, new1);
 }
 Console.WriteLine($"Encoded:\n {greetingText}");
-NOTE
+**NOTE**
 Simply, this code does not change Z to A or z to a. These letters are
 encoded to [ and {, respectively.
 In this example, the Replace method works in a fairly intelligent way,
@@ -238,9 +238,9 @@ StringBuilder should allocate; but if you do not, the amount defaults
 to a value that varies according to the size of the string with which the
 StringBuilder instance is initialized. The StringBuilder class has two
 main properties:
-Length —Indicates
+Length ——Indicates
 the length of the string that it contains
-Capacity —Indicates
+Capacity ——Indicates
 the maximum length of the string in the
 memory allocation
 Any modifications to the string take place within the block of memory
@@ -264,7 +264,7 @@ new StringBuilder("Hello from all the people at Wrox Press.
 greetingBuilder.Append("We do hope you enjoy this book as
 much " +
 "as we enjoyed writing it");
-NOTE
+**NOTE**
 To use the StringBuilder class, you need a System.Text reference
 in your code.
 This code sets an initial capacity of 150 for the StringBuilder . It is
@@ -360,7 +360,7 @@ ToString
 Returns the current string cast to a System.String
 object (overridden from System.Object ).
 Several overloads of many of these methods exist.
-NOTE
+**NOTE**
 AppendFormat
 is the method that is ultimately called when you call
 
@@ -443,7 +443,7 @@ result of {0} + {1} is {2}
 
 
 
-NOTE
+**NOTE**
 The class FormattableString is defined in the System namespace
 but requires .NET 4.6. In case you would like to use the
 FormattableString with older .NET versions, you can create this
@@ -461,7 +461,7 @@ CultureInfo.InvariantCulture to the IFormatProvider parameter
 changes the string to use the invariant culture:
 private string Invariant(FormattableString s) =>
 s.ToString(CultureInfo.InvariantCulture);
-NOTE
+**NOTE**
 Chapter 27, “Localization,” discusses language-specific issues for
 format strings as well as cultures and invariant cultures.
 
@@ -530,12 +530,12 @@ specific.
 The DateTime type supports a lot of different standard format strings to
 
 
-have all date and time representations—for example, t for a short time
+have all date and time representations——for example, t for a short time
 format and T for a long time format, g and G to display date and time.
 All the other options are not discussed here, as you can find them in
 the MSDN documentation for the ToString method of the DateTime
 type.
-NOTE
+**NOTE**
 One thing that should be mentioned is building a custom format
 string for DateTime . A custom date and time format string can
 combine format specifiers, such as dd-MMM-yyyy:
@@ -720,7 +720,7 @@ sequence t - h -word boundary). However, regular expressions are much
 more sophisticated than that and include, for example, facilities to
 store portions of text that are found in a search operation. This section
 only scratches the surface of the power of regular expressions.
-NOTE
+**NOTE**
 For more on regular expressions, please see Andrew Watt’s
 Beginning Regular Expressions (John Wiley & Sons, 2005).
 Suppose your application needed to convert U.S. phone numbers to an
@@ -775,7 +775,7 @@ solid " +
 context of " +
 "the 2015 release, so you can get acclimated quickly and
 get back to work.";
-NOTE
+**NOTE**
 
 
 This code nicely illustrates the utility of verbatim strings that are
@@ -802,7 +802,7 @@ parameters some input text, a pattern, and a set of optional flags taken
 from the RegexOptions enumeration. In this case, you have specified
 that all searching should be case-insensitive. The other flag,
 ExplicitCapture , modifies how the match is collected in a way that, for
-your purposes, makes the search a bit more efficient—you see why this
+your purposes, makes the search a bit more efficient——you see why this
 is later in this chapter (although it does have other uses that we don’t
 explore here). Matches returns a reference to a MatchCollection object.
 A match is the technical term for the results of finding an instance of
@@ -897,7 +897,7 @@ MatchCollection myMatches = Regex.Matches(input, pattern,
 RegexOptions.IgnoreCase |
 RegexOptions.ExplicitCapture);
 Notice the @ character in front of the string. You want the \b to be
-passed to the .NET regular expressions engine at runtime—you don’t
+passed to the .NET regular expressions engine at runtime——you don’t
 want the backslash intercepted by a well-meaning C# compiler that
 thinks it’s an escape sequence in your source code.
 If you want to find words ending with the sequence ure , you write this:
@@ -1002,9 +1002,9 @@ write [0–9]+ or [\d]+ .
 The ^ has a different meaning used within square brackets. Used
 outside square brackets, it marks the beginning of input text. Within
 square brackets, it means any character except the following.
-NOTE
+**NOTE**
 The use of the + character specifies there must be at least one such
-digit, but there may be more than one—so this would match 9, 83,
+digit, but there may be more than one——so this would match 9, 83,
 854, and so on.
 Displaying Results
 In this section, you code the RegularExpressionsPlayground example to
@@ -1014,7 +1014,7 @@ out all the matches from a MatchCollection in a more detailed format.
 For each match, it displays the index of where the match was found in
 the input string, the string of the match, and a slightly longer string,
 which consists of the match plus up to 10 surrounding characters from
-the input text—up to five characters before the match and up to five
+the input text——up to five characters before the match and up to five
 afterward. (It is fewer than five characters if the match occurred within
 
 
@@ -1050,7 +1050,7 @@ charsToDisplay)}");
 }
 The bulk of the processing in this method is devoted to the logic of
 figuring out how many characters in the longer substring it can display
-without overrunning the beginning or end of the input text. Note that
+without overrunning the beginning or end of the input text. **NOTE** that
 you use another property on the Match object, Value , which contains
 the string identified for the match. Other than that,
 RegularExpressionsPlayground simply contains a number of methods
@@ -1105,7 +1105,7 @@ the program selects the ann from annals , as well as two separate
 sequences of an from bananas . The expression (an)+ identifies
 occurrences of an , anan , ananan , and so on, whereas the expression an+
 identifies occurrences of an , ann , annn , and so on.
-NOTE
+**NOTE**
 You might be wondering why with the preceding example (an)+
 selects anan from the word “banana” but doesn’t identify either of
 the two occurrences of an from the same word. The rule is that
@@ -1279,7 +1279,7 @@ ReadOnlySpan<char> slice = spanToText.Slice(ix, 13);
 string newString = new string(slice.ToArray());
 Console.WriteLine(newString);
 The newly allocated string from the slice contains Visual Studio.
-NOTE
+**NOTE**
 Spans with arrays are covered in Chapter 7. Read more about
 spans mapping to native memory and the ref keyword in Chapter
 17, “Managed and Unmanaged Memory.” The Web API returning

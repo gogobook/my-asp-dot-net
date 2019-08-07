@@ -69,7 +69,7 @@ the namespaces System.Collections and System.Collections.Generic .
 Using value types with non-generic collection classes results in boxing
 and unboxing when the value type is converted to a reference type, and
 vice versa.
-NOTE
+**NOTE**
 Boxing and unboxing are discussed in Chapter 6, “Operators and
 Casts.” Here is just a short refresher about these terms.
 Value types are stored on the stack, whereas reference types are stored
@@ -93,9 +93,9 @@ with the cast operator that is used to assign the first element of the
 ArrayList collection to the variable i1 , but it also happens inside the
 foreach statement where the variable i2 of type int is accessed:
 var list = new ArrayList();
-list.Add(44); // boxing — convert a value type to a reference
+list.Add(44); // boxing —— convert a value type to a reference
 type
-int i1 = (int)list[0]; // unboxing — convert a reference type
+int i1 = (int)list[0]; // unboxing —— convert a reference type
 to
 // a value type
 foreach (int i2 in list)
@@ -111,7 +111,7 @@ defined as int , so the int type is used inside the class that is generated
 dynamically from the Just-In-Time (JIT) compiler. Boxing and
 unboxing no longer happen:
 var list = new List<int>();
-list.Add(44); // no boxing — value types are stored in the
+list.Add(44); // no boxing —— value types are stored in the
 List<int>
 int i1 = list[0]; // no unboxing, no cast needed
 foreach (int i2 in list)
@@ -258,7 +258,7 @@ current = current.Next;
 }
 }
 }
-NOTE
+**NOTE**
 The yield statement creates a state machine for an enumerator.
 This statement is explained in Chapter 7, “Arrays.”
 Now you can use the LinkedList class with any type. The following
@@ -339,7 +339,7 @@ current = current.Next;
 }
 IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
-NOTE
+**NOTE**
 Enumerators and the interfaces IEnumerable and IEnumerator are
 discussed in Chapter 7.
 Using the generic LinkedList<T> , you can instantiate it with an int
@@ -368,7 +368,7 @@ foreach (string s in list3)
 {
 Console.WriteLine(s);
 }
-NOTE
+**NOTE**
 Every class that deals with the object type is a possible candidate
 for a generic implementation. Also, if classes make use of
 hierarchies, generics can be very helpful in making casting
@@ -434,7 +434,7 @@ doc = _documentQueue.Dequeue();
 }
 return doc;
 }
-NOTE
+**NOTE**
 The default keyword has multiple meanings depending on its
 context. The switch statement uses a default for defining the
 default case, and with generics default is used to initialize generic
@@ -484,7 +484,7 @@ DocumentManager/DocumentManager.cs ):
 public class DocumentManager<TDocument>
 where TDocument: IDocument
 {
-NOTE
+**NOTE**
 When adding a constraint to a generic type, it’s a good idea to
 have some information with the generic parameter name. The
 
@@ -542,7 +542,7 @@ where T1: T2
 With constraints it is also possible to specify that
 type T1 derives from a generic type T2 .
 where T: struct
-NOTE
+**NOTE**
 Constructor constraints can be defined only for the default
 constructor. It is not possible to define a constructor constraint
 for other constructors.
@@ -554,7 +554,7 @@ public class MyClass<T>
 where T: IFoo, new()
 {
 //...
-NOTE
+**NOTE**
 One important restriction of the where clause with C# is that it’s
 not possible to define operators that must be implemented by the
 generic type. Operators cannot be defined in interfaces. With the
@@ -601,7 +601,7 @@ public abstract T Sub(T x, T y);
 public class IntCalc: Calc<int>
 {
 public override int Add(int x, int y) => x + y;
-public override int Sub(int x, int y) => x — y;
+public override int Sub(int x, int y) => x —— y;
 }
 You can also create a partial specialization, such as deriving the
 StringQuery class from Query and defining only one of the generic
@@ -643,7 +643,7 @@ public interface IComparable<in T>
 {
 int CompareTo(T other);
 }
-NOTE
+**NOTE**
 Don't be confused by the in and out keywords used with the
 generic parameter. They are explained soon in the “Covariance
 and Contra-Variance” section.
@@ -720,7 +720,7 @@ int Count { get; }
 }
 The IIndex<T> interface is implemented with the RectangleCollection
 class. RectangleCollection defines Rectangle for generic type T :
-NOTE
+**NOTE**
 If a read-write indexer is used with the IIndex interface, the
 generic type T is passed to the method and retrieved from the
 method. This is not possible with covariance; the generic type
@@ -751,7 +751,7 @@ return data[index];
 }
 public int Count => data.Length;
 }
-NOTE
+**NOTE**
 The RectangleCollection.GetRectangles method makes use of the
 coalescing operator. If the variable coll is null , the right side of
 the operator is invoked to create a new instance of
@@ -915,7 +915,7 @@ of the nullable types have a null value, the result is null :
 int? x1 = GetNullableType();
 int? x2 = GetNullableType();
 int? x3 = x1 + x2;
-NOTE
+**NOTE**
 
 
 The GetNullableType method, which is called here, is just a
@@ -1184,7 +1184,7 @@ generic methods allow type-independent methods. Interfaces, structs,
 and delegates can be created in a generic way as well. Generics make
 new programming styles possible. You’ve seen how algorithms,
 particularly actions and predicates, can be implemented to be used
-with different classes—and all are type safe. Generic delegates make it
+with different classes——and all are type safe. Generic delegates make it
 possible to decouple algorithms from collections.
 You will see more features and uses of generics throughout this book.
 Chapter 8 introduces delegates that are often implemented as

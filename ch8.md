@@ -52,7 +52,7 @@ you do not know at compile time what this second method is. That
 information is available only at runtime and hence needs to be passed
 in as a parameter to the first method. That might sound confusing, but
 it should become clearer with a couple of examples:
-Threads and tasks—It is possible in C# to tell the computer to
+Threads and tasks——It is possible in C# to tell the computer to
 
 
 start a new sequence of execution in parallel with what it is
@@ -64,7 +64,7 @@ sequence; that is, you must supply the details of a method in which
 execution can start. In other words, the constructor of the Thread
 class takes a parameter that defines the method to be invoked by
 the thread.
-Generic library classes—Many libraries contain code to
+Generic library classes——Many libraries contain code to
 perform various standard tasks. It is usually possible for these
 libraries to be self-contained, in the sense that you know when you
 write to the library exactly how the task must be performed.
@@ -80,7 +80,7 @@ client code that hands your class the array of objects must also tell
 your class how to do this comparison for the particular objects it
 wants sorted. The client code has to pass your class details of an
 appropriate method that can be called to do the comparison.
-Events—The general idea here is that often you have code that
+Events——The general idea here is that often you have code that
 needs to be informed when some event takes place. GUI
 programming is full of situations like this. When the event is
 raised, the runtime needs to know what method should be
@@ -99,13 +99,13 @@ be associated with a class instance before they can be called. Because
 of these problems, the .NET Framework does not syntactically permit
 this direct approach. Instead, if you want to pass methods around, you
 wrap the details of the method in a new kind of object: a delegate.
-Delegates, quite simply, are a special type of object—special in the
+Delegates, quite simply, are a special type of object——special in the
 sense that, whereas all the objects defined up to now contain data, a
 delegate contains the address of a method, or the address of multiple
 methods.
 Declaring Delegates
 When you want to use a class in C#, you do so in two stages. First, you
-need to define the class—that is, you need to tell the compiler what
+need to define the class——that is, you need to tell the compiler what
 fields and methods make up the class. Then (unless you are using only
 static methods), you instantiate an object of that class. With delegates
 it is the same process. You start by declaring the delegates you want to
@@ -121,7 +121,7 @@ takes one int parameter and returns void . The crucial point to
 understand about delegates is that they are type-safe. When you define
 the delegate, you provide full details about the signature and the
 return type of the method that it represents.
-NOTE
+**NOTE**
 One good way to understand delegates is to think of a delegate as
 
 
@@ -138,13 +138,13 @@ The syntax is similar to that for a method definition, except there is no
 method body and the definition is prefixed with the keyword delegate .
 Because what you are doing here is basically defining a new class, you
 can define a delegate in any of the same places that you would define a
-class—that is to say, either inside another class, outside of any class, or
+class——that is to say, either inside another class, outside of any class, or
 in a namespace as a top-level object. Depending on how visible you
 want your definition to be, and the scope of the delegate, you can apply
-any of the normal access modifiers to delegate definitions— public ,
+any of the normal access modifiers to delegate definitions—— public ,
 private , protected , and so on:
 public delegate string GetAString();
-NOTE
+**NOTE**
 We really mean what we say when we describe defining a
 delegate as defining a new class. Delegates are implemented as
 classes derived from the class System.MulticastDelegate , which is
@@ -157,7 +157,7 @@ programming as easy as possible.
 
 After you have defined a delegate, you can create an instance of it so
 that you can use it to store details about a particular method.
-NOTE
+**NOTE**
 There is an unfortunate problem with terminology here. When
 you are talking about classes, there are two distinct terms: class,
 which indicates the broader definition, and object, which means
@@ -222,7 +222,7 @@ creates an instance of the delegate type GetAString and passes the
 address of the method with the object x to the constructor.
 
 
-NOTE
+**NOTE**
 Be aware that you can’t type the brackets to the method name as
 x.ToString() and pass it to the delegate variable. This would be
 an invocation of the method. The invocation of the ToString
@@ -237,13 +237,13 @@ they ensure that the signature of the method being called is correct.
 However, interestingly, they don’t care what type of object the method
 is being called against or even whether the method is a static method
 or an instance method.
-NOTE
+**NOTE**
 An instance of a given delegate can refer to any instance or static
 method on any object of any type, provided that the signature of
 the method matches the signature of the delegate.
 To demonstrate this, the following example expands the previous code
 snippet so that it uses the firstStringMethod delegate to call a couple
-of other methods on another object—an instance method and a static
+of other methods on another object——an instance method and a static
 method. For this, you use the Currency struct. The Currency struct has
 its own overload of ToString and a static method with the same
 signature to GetCurrencyUnit . This way, the same delegate variable can
@@ -268,7 +268,7 @@ public static explicit operator Currency (float value)
 checked
 {
 uint dollars = (uint)value;
-ushort cents = (ushort)((value—dollars) * 100);
+ushort cents = (ushort)((value——dollars) * 100);
 return new Currency(dollars, cents);
 }
 }
@@ -316,7 +316,7 @@ Unfortunately, the nature of delegates requires a fairly complex
 example before you can really appreciate their usefulness. The next
 section presents two delegate examples. The first one simply uses
 delegates to call a couple of different operations. It illustrates how to
-pass delegates to methods and how you can use arrays of delegates—
+pass delegates to methods and how you can use arrays of delegates——
 although arguably it still doesn’t do much that you couldn’t do a lot
 more simply without delegates. The second, much more complex,
 example presents a BubbleSorter class, which implements a method to
@@ -377,7 +377,7 @@ some into an array is no problem). Each element of the array is
 initialized to refer to a different operation implemented by the
 MathOperations class. Then, you loop through the array, applying each
 operation to three different values. This illustrates one way of using
-delegates—to group methods together into an array so that you can
+delegates——to group methods together into an array so that you can
 call several methods in a loop.
 The key lines in this code are the ones in which you pass each delegate
 to the ProcessAndDisplayNumber method, such as here:
@@ -474,7 +474,7 @@ bool swapped = true;
 do
 {
 swapped = false;
-for (int i = 0; i < sortArray.Length—1; i++)
+for (int i = 0; i < sortArray.Length——1; i++)
 {
 if (sortArray[i] > sortArray[i+1])) // problem with this
 test
@@ -522,7 +522,7 @@ bool swapped = true;
 do
 {
 swapped = false;
-for (int i = 0; i < sortArray.Count—1; i++)
+for (int i = 0; i < sortArray.Count——1; i++)
 
 
 {
@@ -557,7 +557,7 @@ public static bool CompareSalary(Employee e1, Employee e2)
 =>
 e1.Salary < e2.Salary;
 }
-Note that to match the signature of the Func<T, T, bool> delegate, you
+**NOTE** that to match the signature of the Func<T, T, bool> delegate, you
 must define CompareSalary in this class as taking two Employee
 references and returning a Boolean. In the implementation, the
 comparison based on salary is performed.
@@ -627,7 +627,7 @@ Action<double> operation2 = MathOperations.Square;
 Action<double> operations = operation1 + operation2;
 Multicast delegates also recognize the operators – and -= to remove
 method calls from the delegate.
-NOTE
+**NOTE**
 In terms of what’s going on under the hood, a multicast delegate
 is a class derived from System.MulticastDelegate , which in turn is
 derived from System.Delegate . System.MulticastDelegate has
@@ -745,7 +745,7 @@ method Two is never invoked. The result might differ because the order
 of calling the methods is not defined:
 One
 Exception Caught
-NOTE
+**NOTE**
 Errors and exceptions are explained in detail in Chapter 14,
 “Errors and Exceptions.”
 In such a scenario, you can avoid the problem by iterating the list on
@@ -783,7 +783,7 @@ Anonymous Methods
 Up to this point, a method must already exist for the delegate to work
 (that is, the delegate is defined with the same signature as the
 method(s) it will be used with). However, there is another way to use
-delegates—with anonymous methods. An anonymous method is a
+delegates——with anonymous methods. An anonymous method is a
 block of code that is used as the parameter for the delegate.
 The syntax for defining a delegate with an anonymous method doesn’t
 change. It’s when the delegate is instantiated that things change. The
@@ -839,11 +839,11 @@ If you have to write the same functionality more than once, don’t use
 anonymous methods. In this case, instead of duplicating the code,
 write a named method. You have to write it only once and reference it
 by its name.
-NOTE
+**NOTE**
 The syntax for anonymous methods was introduced with C# 2.
 With new programs you really don’t need this syntax anymore
 because lambda expressions (explained in the next section) offer
-the same—and more—functionality. However, you’ll find the
+the same——and more——functionality. However, you’ll find the
 syntax for anonymous methods in many places in existing source
 code, which is why it’s good to know it.
 Lambda expressions have been available since C# 3.
@@ -965,14 +965,14 @@ public int AnonymousMethod(int x) => x + someVal;
 Using the lambda expression and invoking the method creates an
 instance of the anonymous class and passes the value of the variable
 from the time when the call is made.
-NOTE
+**NOTE**
 
 
 In case you are using closures with multiple threads, you can get
 into concurrency conflicts. It’s best to only use immutable types
 for closures. This way it’s guaranteed the value can’t change, and
 synchronization is not needed.
-NOTE
+**NOTE**
 You can use lambda expressions anywhere the type is a delegate.
 Another use of lambda expressions is when the type is Expression
 or Expression<T> , in which case the compiler creates an
@@ -1017,7 +1017,7 @@ NewCarInfo?.Invoke(this, new CarInfoEventArgs(car));
 }
 }
 }
-NOTE
+**NOTE**
 The null propagation operator .? used in the previous example is
 new since C# 6. This operator is discussed in Chapter 6,
 “Operators and Casts.”
@@ -1056,7 +1056,7 @@ public event EventHandler<CarInfoEventArgs> NewCarInfo
 add => _newCarInfo += value;
 remove => _newCarInfo -= value;
 }
-NOTE
+**NOTE**
 The long notation to define events is useful if more needs to be
 done than just adding and removing the event handler, such as
 adding synchronization for multiple thread access. The UWP and
