@@ -1298,8 +1298,7 @@ objects are ref `struct` s. These types have been available since C#
 
 **NOTE**
 To compare structural values, it’s a good practice to implement
-the `interface` `IEquatable<T>` . This interface is discussed in Chapter
-6.
+the `interface` `IEquatable<T>` . This interface is discussed in Chapter 6.
 
 ### Constructors for Structs
 You can define constructors for structs in a similar way as you do it for
@@ -1315,171 +1314,198 @@ public Dimensions(double length, double width)
     Width = width;
 }
 ```
-Incidentally, you can supply a Close or Dispose method for a struct in
+Incidentally, you can supply a `Close` or `Dispose` method for a struct in
 the same way you do for a class. The Dispose method is discussed in
 detail in Chapter 17.
-ref structs
+
+#### ref structs
 Structs are not always put on the stack. They can also live on the heap.
 You can assign a struct to an object, which results in creating an object
 in the heap. Such a behavior can be a problem with some types. With
-.NET Core 2.1, the Span type allows access to memory on the stack.
-Copies of the Span type need to be atomic. This can only be guaranteed
-when the type stays on the stack. Also, the Span type can use managed
+.NET Core 2.1, the `Span` type allows access to memory on the `stack`.
+Copies of the `Span` type need to be atomic. This can only be guaranteed
+when the type stays on the stack. Also, the `Span` type can use managed
 pointers in its fields. Having such pointers on the heap can crash the
 application when the garbage collector runs. Thus, it needs to be
 guaranteed that the type stays on the stack.
+
 With a new C# 7.2 language construct, reference types are stored on
 the heap and value types are typically stored on the stack but also can
 be stored on the heap. There’s also a third type available——a value type
 that can only exist on the stack.
 
-
-This type is created by applying the ref modifier to a struct as shown
+This type is created by applying the `ref` modifier to a struct as shown
 in the following code snippet. You can add properties, fields of value,
 reference types, and methods——just like other structs (code file
 RefStructSample/ValueTypeOnly.cs ):
+```c#
 ref struct ValueTypeOnly
 {
-//...
+    //...
 }
+```
 What can’t be done with this type is to assign it to an object——for
-example, invoke methods of the Object base class such as ToString .
+example, invoke methods of the `Object` base class such as `ToString` .
 This would incur boxing and create a reference type, which is not
 allowed with this type.
+這種類型無法做到的是將它分配給一個對象 - 例如，調用`Object`基類的方法，如`ToString`。
+這將導致裝箱並創建引用類型，此類型不允許。
+
 **NOTE**
 With most applications you’ll not have a need to create a custom
-ref struct type. However, for high-performance applications
+`ref struct` type. However, for high-performance applications
 where garbage collection needs to be reduced, there’s need for this
-type. To get more information about ref struct and the reason
-for this type, along with ref return and ref locals , you should
-read Chapter 17 with details about the Span type and more
-information about ref .
-PASSING PARAMETERS BY VALUE AND BY
-REFERENCE
-Let’s assume you have a type named A with a property of type int
-named X . The method ChangeA receives a parameter of type A and
-changes the value of X to 2 (code file
+type. To get more information about `ref struct` and the reason
+for this type, along with `ref return` and `ref locals` , you should
+read Chapter 17 with details about the `Span` type and more
+information about `ref` .
+對於大多數應用程序，您不需要創建自定義`ref struct`類型。 但是，對於需要減少垃圾收集的高性能應用程序，需要這種類型。 要獲得有關`ref struct`的更多信息以及此類型的原因，以及`ref return`和`ref locals`，您應該閱讀第17章，其中詳細介紹了`Span`類型以及有關`ref`的更多信息。
+
+
+## PASSING PARAMETERS BY VALUE AND BY REFERENCE
+Let’s assume you have a type named `A` with a property of type `int`
+named `X` . The method `ChangeA` receives a parameter of type `A` and
+changes the value of `X` to `2` (code file
 PassingByValueAndReference/Program.cs ):
+```c#
 public static void ChangeA(A a)
 {
-a.X = 2;
+    a.X = 2;
 }
+```
 
-
-The Main method creates an instance of type A , initializes X to 1 , and
-invokes the ChangeA method:
+The `Main` method creates an instance of type `A` , initializes `X` to `1` , and
+invokes the `ChangeA` method:
+```c#
 static void Main()
 {
-A a1 = new A { X = 1 };
-ChangeA(a1);
-Console.WriteLine($"a1.X: {a1.X}");
+    A a1 = new A { X = 1 };
+    ChangeA(a1);
+    Console.WriteLine($"a1.X: {a1.X}");
 }
-What would you guess is the output? 1 or 2 ?
-The answer is ... it depends. You need to know if A is a class or a struct.
-Let’s start with A as a struct:
+```
+What would you guess is the output? `1` or `2` ?
+The answer is ... it depends. You need to know if `A` is a `class` or a `struct`.
+Let’s start with A as a `struct`:
+```c#
 public struct A
 {
-public int X { get; set; }
+    public int X { get; set; }
 }
-Structs are passed by value; with that the variable a from the ChangeA
-method gets a copy from the variable a1 that is put on the stack. Only
-the copy is changed and destroyed at the end of the method ChangeA .
-The content of a1 never changes and stays 1 .
+```
+Structs are passed by value; with that the variable a from the `ChangeA`
+method gets a copy from the variable `a1` that is put on the stack. Only
+the copy is changed and destroyed at the end of the method `ChangeA` .
+The content of `a1` never changes and stays `1` .
 This is completely different with A as a class:
+```c#
 public class A
 {
-public int X { get; set; }
+    public int X { get; set; }
 }
-Classes are passed by reference. This way, a is a variable that
-references the same object on the heap as the variable a1 . When
-ChangeA changes the value of the X property of a , the change makes it
-a1.X because it is the same object. Here, the result is 2 .
+```
+Classes are passed by reference. This way, `a` is a variable that
+references the same object on the heap as the variable `a1` . When
+`ChangeA` changes the value of the `X` property of `a` , the change makes it
+`a1.X` because it is the same object. Here, the result is `2` .
+
 **NOTE**
 To avoid this confusion on different behavior between classes and
 structs when members are changed, it’s a good practice to make
-structs immutable. If a struct only has members that don’t allow
-
-
+structs `immutable`. If a struct only has members that don’t allow
 changing the state, you can’t get into such a confusing situation.
 Of course, there’s always an exception to the rule to make struct
-types immutable. The ValueTuple that is new with C# 7 is
-implemented as a mutable struct. However, with ValueTuple the
+types immutable. The `ValueTuple` that is new with C# 7 is
+implemented as a mutable struct. However, with `ValueTuple` the
 public members are fields instead of properties (which is another
-violation of a guideline offering public fields). Because of the
-significance of tuples, and using them in similar ways as int and
-float , that’s a good reason to violate some guidelines.
-ref Parameters
+violation of a guideline offering `public` fields). Because of the
+significance of `tuples`, and using them in similar ways as `int` and
+`float` , that’s a good reason to violate some guidelines.
+
+### ref Parameters
 You can also pass structs by reference. Changing the declaration of the
 ChangeA method by adding the ref modifier, the variable is passed by
 reference——also if A is of type struct:
+```c#
 public static void ChangeA(ref A a)
 {
-a.X = 2;
+    a.X = 2;
 }
+```
 It’s good to know this from the caller side as well, so with method
-parameters that have the ref modifier applied, this needs to be added
-on calling the method as well:
+parameters that have the `ref` modifier applied, this needs to be added
+on calling the method as well:(定義時要加`ref`使用時也要加上`ref`)
+```c#
 static void Main()
 {
-A a1 = new A { X = 1 };
-ChangeA(ref a1);
-Console.WriteLine($"a1.X: {a1.X}");
+    A a1 = new A { X = 1 };
+    ChangeA(ref a1);
+    Console.WriteLine($"a1.X: {a1.X}");
 }
+```
 Now the struct is passed by reference, likewise the class type, so the
-result is 2 .
-What about using the ref modifier with a class type? Let’s change the
+result is `2` .
+
+What about using the `ref` modifier with a class type? Let’s change the
 implementation of the ChangeA method to this:
+```c#
 public static void ChangeA(A a)
 {
-a.X = 2;
-a = new A { X = 3 };
+    a.X = 2;
+    a = new A { X = 3 };
 }
+```
 
-
-Using A of type class, what result can be expected now? Of course, the
-result from the Main method will not be 1 because a pass by reference
-is done by class types. Setting a.X to 2 , the original object a1 gets
-changed. However, the next line a = new A { X = 3 } now creates a
+Using `A` of type class, what result can be expected now? Of course, the
+result from the `Main` method will not be 1 because a pass by reference
+is done by class types. Setting `a.X` to `2` , the original object `a1` gets
+changed. However, the next line `a = new A { X = 3 }` now creates a
 new object on the heap, and a references the new object. The variable
-a1 used within the Main method still references the old object with the
-value 2 . After the end of the ChangeA method, the new object on the
+`a1` used within the `Main` method still references the old object with the
+value `2` . After the end of the `ChangeA` method, the new object on the
 heap is not referenced and can be garbage collected. So here the result
-is 2 .
-Using the ref modifier with A as a class type, a reference to a reference
+is `2` .
+
+Using the `ref` modifier with `A` as a class type, a reference to a reference
 (or in C++ jargon, a pointer to a pointer) is passed, which allows
 allocating a new object, and the Main method shows the result 3 :
+```c#
 public static void ChangeA(ref A a)
 {
-a.X = 2;
-a = new A { X = 3 };
+    a.X = 2;
+    a = new A { X = 3 };
 }
+```
 Finally, it is important to understand that C# continues to apply
 initialization requirements to parameters passed to methods. Any
 variable must be initialized before it is passed into a method, whether
 it is passed in by value or by reference.
+
 **NOTE**
-With C# 7, you also can use the ref keyword with local variables
+With C# 7, you also can use the `ref` keyword with local variables
 and with the return type of a method. This new feature is
 discussed in Chapter 17.
-out Parameters
+
+### out Parameters
 If a method returns one value, the method usually declares a return
 type and returns the result. What about returning multiple values from
 a method, maybe with different types? There are different options to
 do this. One option is to declare a class and struct and define all the
-
-
 information that should be returned as members of this type. Another
 option is to use a tuple type. Tuples are explained in Chapter 13,
 “Functional Programming with C#.” The third option is to use the out
 keyword.
-Let’s get into an example by using the Parse method that is defined
-with the Int32 type. The ReadLine method gets a string from user
-input. Assuming the user enters a number, the int.Parse method
+
+Let’s get into an example by using the `Parse` method that is defined
+with the `Int32` type. The `ReadLine` method gets a string from user
+input. Assuming the user enters a number, the `int.Parse` method
 converts the string and returns the number (code file
 OutKeywordSample/Program.cs ):
+```c#
 string input1 = Console.ReadLine();
 int result1 = int.Parse(input1);
 Console.WriteLine($"result: {result1}");
+```
 However, users do not always enter the data you would like them to
 enter. In case the user does not enter a number, an exception is
 thrown. Of course, it is possible to catch the exception and work with
@@ -1487,90 +1513,98 @@ the user accordingly, but this is not a good idea to do for a “normal”
 case. Maybe it can be assumed to be the “normal” case that the user
 enters wrong data. Dealing with exceptions is covered in Chapter 14,
 “Errors and Exceptions.”
+
 A better way to deal with the wrong type of data is to use a different
-method of the Int32 type: TryParse . TryParse is declared to return a
+method of the `Int32` type: `TryParse.TryParse` is declared to return a
 bool type whether the parsing is successful or not. The result of the
 parsing (if it was successful) is returned with a parameter using the
-out modifier:
-public static bool TryParse(string s, out int result);
+`out` modifier:
+`public static bool TryParse(string s, out int result);`
 Invoking this method, the result variable doesn’t need to be initialized
 beforehand; the variable is initialized within the method. With C# 7,
 the variable can also be declared on method invocation. Similar to the
-ref keyword, the out keyword needs to be supplied on calling the
+`ref` keyword, the `out` keyword needs to be supplied on calling the
 method and not only with the method declaration:
+```c#
 string input2 = ReadLine();
 if (int.TryParse(input2, out int result2))
 {
-Console.WriteLine($"result: {result2}");
+    Console.WriteLine($"result: {result2}");
 }
-
-
 else
 {
-Console.WriteLine("not a number");
+    Console.WriteLine("not a number");
 }
+```
+
 **NOTE**
-is a new feature of C# 7. Before C# 7, an out variable
+`out var` is a new feature of C# 7. Before C# 7, an `out` variable
 needed to be declared before invoking the method. With C# 7, the
 declaration can happen calling the method. You can declare the
-variable using the var keyword (that’s why the feature is known
-by out var ), if the type is unambiguously defined by the method
+variable using the `var` keyword (that’s why the feature is known
+by `out var` ), if the type is unambiguously defined by the method
 signature. You can also define the concreate type, as was shown
 in the previous code snippet. The scope of the variable is valid
 after the method invocation.
-out var
-in Parameters
-C# 7.2 adds the in modifier to parameters. The out modifier allows
-returning values specified with the arguments. The in modifier
+
+### in Parameters
+C# 7.2 adds the `in` modifier to parameters. The `out` modifier allows
+returning values specified with the arguments. The `in` modifier
 guarantees the data that is sent into the method does not change
 (when passing a value type).
-Let’s define a simple mutable struct with the name AValueType and a
-public mutable field (code file InParameterSample/AValueType.cs ):
+Let’s define a simple mutable struct with the name `AValueType` and a
+public `mutable` field (code file InParameterSample/AValueType.cs ):
+```c#
 struct AValueType
 {
-public int Data;
+    public int Data;
 }
-Now when you define a method using the in modifier, the variable
+```
+Now when you define a method using the `in` modifier, the variable
 cannot be changed. Trying to change the mutable field Data , the
 compiler complains about not being able to assign a value to a member
-of the read-only variable because the variable is readonly . The in
-modifier makes the parameter a readonly variable (code file
+of the read-only variable because the variable is `readonly` . The `in`
+modifier makes the parameter a `readonly` variable (code file
 InParameterSample/Program.cs ):
-
-
+```c#
 static void CantChange(in AValueType a)
 {
-// a.Data = 43; // does not compile - readonly variable
-Console.WriteLine(a.Data);
+    // a.Data = 43; // does not compile - readonly variable
+    Console.WriteLine(a.Data);
 }
-When invoking the method CantChange , you can invoke the method
+```
+When invoking the method `CantChange` , you can invoke the method
 with or without passing the in modifier. This doesn’t have an effect on
 the generated code.
+
 Using value types with the in modifier not only helps to ensure that
 the memory cannot be changed but the compiler also can create better
 optimized code. Instead of copying the value type with the method
 invocation, the compiler can use references instead, and thus reduces
 the memory needed and increases performance.
+
 **NOTE**
 The in modifier is mainly used with value types. However, you
 can use it with reference types as well. When using the in modifier
 with reference types, you can change the content of the variable,
 but not the variable itself.
-NULLABLE TYPES
+
+
+## NULLABLE TYPES
 Variables of reference types (classes) can be null while variables of
 value types (structs) cannot. This can be a problem with some
 scenarios, such as mapping C# types to database or XML types. A
 database or XML number can be null, whereas an int or double cannot
 be null.
+
 One way to deal with this conflict is to use classes that map to database
 number types (which is done by Java). Using reference types that map
 to database numbers to allow the null value has an important
 disadvantage: It creates extra overhead. With reference types, the
 garbage collector is needed to clean up. Value types do not need to be
 cleaned up by the garbage collector; they are removed from memory
-
-
 when the variable goes out of scope.
+
 C# has a solution for this: nullable types. A nullable type is a value
 type that can be null. You just have to put the ? after the type (which
 needs to be a struct). The only overhead a value type has compared to
@@ -1598,34 +1632,39 @@ Using the coalescing operator ?? , there’s a shorter syntax possible with
 nullable types. In a case where x3 is null , − 1 is set with the variable x6 ;
 otherwise you take the value of x3 :
 int x6 = x3 ?? -1;
+
 **NOTE**
-
-
 With nullable types, you can use all operators that are available
 with the underlying types——for example, +, -, *, / and more with
 int? . You can use nullable types with every struct type, not only
 with predefined C# types. You can read more about nullable types
 and what’s behind the scenes in Chapter 5, “Generics.”
-ENUM TYPES
+
+
+## ENUM TYPES
 An enumeration is a value type that contains a list of named constants,
 such as the Color type shown here. The enumeration type is defined by
 using the enum keyword (code file EnumSample/Color.cs ):
+```c#
 public enum Color
 {
-Red,
-Green,
-Blue
+    Red,
+    Green,
+    Blue
 }
+```
 You can declare variables of enum types, such as the variable c1 , and
 assign a value from the enumeration by setting one of the named
 constants prefixed with the name of the enum type (code file
 EnumSample/Program.cs ):
+```c#
 private static void ColorSamples()
 {
-Color c1 = Color.Red;
-Console.WriteLine(c1);
-//...
+    Color c1 = Color.Red;
+    Console.WriteLine(c1);
+    //...
 }
+```
 Running the program, the console output shows Red , which is the
 constant value of the enumeration.
 By default, the type behind the enum type is an int . The underlying
@@ -1633,14 +1672,14 @@ type can be changed to other integral types (byte, short, int, long with
 signed and unsigned variants). The values of the named constants are
 incremental values starting with 0, but they can be changed to other
 values:
-
-
+```c#
 public enum Color : short
 {
-Red = 1,
-Green = 2,
-Blue = 3
+    Red = 1,
+    Green = 2,
+    Blue = 3
 }
+```
 You can change a number to an enumeration value and back using
 casts.
 Color c2 = (Color)2;
@@ -1672,7 +1711,6 @@ values using the logical OR operator (code file EnumSample/Program.cs ):
 DaysOfWeek mondayAndWednesday = DaysOfWeek.Monday |
 DaysOfWeek.Wednesday;
 Console.WriteLine(mondayAndWednesday);
-
 
 Running the program, the output is a string representation of the
 days:
@@ -1716,6 +1754,7 @@ if (Enum.TryParse<Color>("Red", out red))
 {
 Console.WriteLine($"successfully parsed {red}");
 }
+
 **NOTE**
 is a generic method where T is a generic
 parameter type. This parameter type needs to be defined with the
@@ -1740,17 +1779,18 @@ foreach (short val in Enum.GetValues(typeof(Color)))
 {
 Console.WriteLine(val);
 }
-PARTIAL CLASSES
+
+
+## PARTIAL CLASSES
 The partial keyword allows the class, struct, method, or interface to
 span multiple files. Typically, a code generator of some type is
-
-
 generating part of a class, and so having the class in multiple files can
 be beneficial. Let’s assume you want to make some additions to the
 class that is automatically generated from a tool. If the tool reruns
 then your changes are lost. The partial keyword is helpful for splitting
 the class in two files and making your changes to the file that is not
 defined by the code generator.
+
 To use the partial keyword, simply place partial before class , struct ,
 or interface . In the following example, the class SampleClass resides in
 two separate source files, SampleClassAutogenerated.cs and
@@ -1807,6 +1847,7 @@ IOtherSampleClass
 public void MethodOne() { }
 public void MethodTwo() { }
 }
+
 **NOTE**
 Although it may be tempting to create huge classes that span
 multiple files and possibly having different developers working on
@@ -1814,7 +1855,6 @@ different files but the same class, the partial keyword was not
 designed for this use. With such a scenario, it would be better to
 split the big class into several smaller classes, having a class just
 for one purpose.
-
 
 Partial classes can contain partial methods. This is extremely useful if
 generated code should invoke methods that might not exist at all. The
@@ -1848,14 +1888,15 @@ public void APartialMethod()
 }
 A partial method needs to be of type void . Otherwise the compiler
 cannot remove the invocation in case no implementation exists.
-EXTENSION METHODS
+
+
+## EXTENSION METHODS
 There are many ways to extend a class. Inheritance, which is covered
 in Chapter 4, is a great way to add functionality to your objects.
 Extension methods are another option that can also be used to add
-
-
 functionality to classes. This option is also possible when inheritance
 cannot be used (for example, the class is sealed).
+
 **NOTE**
 Extension methods can be used to extend interfaces. This way you
 can have common functionality for all the classes that implement
@@ -1885,14 +1926,13 @@ int wordCount = fox.GetWordCount();
 Console.WriteLine($"{wordCount} words");
 Behind the scenes, the compiler changes this to invoke the static
 method instead:
-
-
 int wordCount = StringExtension.GetWordCount(fox);
 Using the instance method syntax instead of calling a static method
 from your code directly results in a much nicer syntax. This syntax
 also has the advantage that the implementation of this method can be
 replaced by a different class without the need to change the code——just
 a new compiler run is needed.
+
 How does the compiler find an extension method for a specific type?
 The this keyword is needed to match an extension method for a type,
 but also the namespace of the static class that defines the extension
@@ -1907,6 +1947,7 @@ when all the namespaces of these types are opened, the compiler
 results in an error that the call is ambiguous and it cannot decide
 between multiple implementations. If, however, the calling code is in
 one of these namespaces, this namespace takes precedence.
+
 **NOTE**
 Language Integrated Query (LINQ) makes use of many extension
 methods. LINQ is discussed in Chapter 12, “Language Integrated
@@ -1917,11 +1958,10 @@ System.Object . In fact, if you don’t specify a base class when you define
 a class, the compiler automatically assumes that it derives from
 Object . Because inheritance has not been used in this chapter, every
 class you have seen here is actually derived from System.Object . (As
-
-
 noted earlier, for structs this derivation is indirect——a struct is always
 derived from System.ValueType , which in turn derives from
 System.Object .)
+
 The practical significance of this is that——besides the methods,
 properties, and so on that you define——you also have access to a
 number of public and protected member methods that have been
@@ -1990,17 +2030,18 @@ references, then only the references are copied, not the objects
 referred to. This method is protected and cannot be called to copy
 external objects. Nor is it virtual, so you cannot override its
 implementation.
-SUMMARY
+
+
+## SUMMARY
 This chapter examined C# syntax for declaring and manipulating
 objects. You have seen how to declare static and instance fields,
 properties, methods, and constructors. You have also seen new
 features that have been added with C# 7, such as expression-bodied
-
-
 members with constructors, property accessors, and out vars.
 You have also seen how all types in C# derive ultimately from the type
 System.Object , which means that all types start with a basic set of
 useful methods, including ToString .
+
 Inheritance comes up a few times throughout this chapter, and you
 examine implementation, interface inheritance, and the other aspects
 of object-orientation with C# in Chapter 4.
