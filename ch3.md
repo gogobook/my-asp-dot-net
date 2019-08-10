@@ -1574,28 +1574,28 @@ static void CantChange(in AValueType a)
 }
 ```
 When invoking the method `CantChange` , you can invoke the method
-with or without passing the in modifier. This doesn’t have an effect on
+with or without passing the `in` modifier. This doesn’t have an effect on
 the generated code.
 
-Using value types with the in modifier not only helps to ensure that
+Using value types with the `in` modifier not only helps to ensure that
 the memory cannot be changed but the compiler also can create better
 optimized code. Instead of copying the value type with the method
 invocation, the compiler can use references instead, and thus reduces
 the memory needed and increases performance.
 
 **NOTE**
-The in modifier is mainly used with value types. However, you
-can use it with reference types as well. When using the in modifier
+The `in` modifier is mainly used with value types. However, you
+can use it with reference types as well. When using the `in` modifier
 with reference types, you can change the content of the variable,
 but not the variable itself.
 
 
 ## NULLABLE TYPES
-Variables of reference types (classes) can be null while variables of
+Variables of reference types (classes) can be `null` while variables of
 value types (structs) cannot. This can be a problem with some
 scenarios, such as mapping C# types to database or XML types. A
-database or XML number can be null, whereas an int or double cannot
-be null.
+database or XML number can be `null`, whereas an `int` or `double` cannot
+be `null`.
 
 One way to deal with this conflict is to use classes that map to database
 number types (which is done by Java). Using reference types that map
@@ -1606,45 +1606,46 @@ cleaned up by the garbage collector; they are removed from memory
 when the variable goes out of scope.
 
 C# has a solution for this: nullable types. A nullable type is a value
-type that can be null. You just have to put the ? after the type (which
+type that can be null. You just have to put the `?` after the type (which
 needs to be a struct). The only overhead a value type has compared to
 the underlying struct is a Boolean member that tells whether it is null.
-With the following code snippet, x1 is a normal int , and x2 is a
-nullable int. Because x2 is a nullable int, null can be assigned to x2 :
-int x1 = 1;
-int? x2 = null;
-Because an int cannot have a value that cannot be assigned to int? ,
-passing a variable of int to int? always succeeds and is accepted from
+
+With the following code snippet, x1 is a normal `int` , and x2 is a
+nullable `int`. Because x2 is a nullable `int`, null can be assigned to x2 :
+`int x1 = 1;`
+`int? x2 = null;`
+Because an `int` cannot have a value that cannot be assigned to `int?` ,
+passing a variable of `int` to `int?` always succeeds and is accepted from
 the compiler:
-int? x3 = x1;
-The reverse is not true. int? cannot be directly assigned to int . This
+`int? x3 = x1;`
+The reverse is not true. `int?` cannot be directly assigned to `int` . This
 can fail, and thus a cast is required:
-int x4 = (int)x3;
-Of course, the cast generates an exception in a case where x3 is null. A
-better way to deal with that is to use the HasValue and Value properties
-of nullable types. HasValue returns true or false , depending on
-whether the nullable type has a value, and Value returns the
-underlying value. Using the conditional operator, x5 gets filled without
-possible exceptions. In a case where x3 is null, HasValue returns false ,
-and here − 1 is supplied to the variable x5 :
-int x5 = x3.HasValue ? x3.Value : -1;
-Using the coalescing operator ?? , there’s a shorter syntax possible with
-nullable types. In a case where x3 is null , − 1 is set with the variable x6 ;
-otherwise you take the value of x3 :
-int x6 = x3 ?? -1;
+`int x4 = (int)x3;`
+Of course, the cast generates an exception in a case where `x3` is `null`. A
+better way to deal with that is to use the `HasValue` and `Value` properties
+of nullable types. `HasValue` returns true or false , depending on
+whether the nullable type has a value, and `Value` returns the
+underlying `value`. Using the conditional operator, `x5` gets filled without
+possible exceptions. In a case where `x3` is `null`, `HasValue` returns false ,
+and here `−1` is supplied to the variable `x5` :
+`int x5 = x3.HasValue ? x3.Value : -1;`
+Using the coalescing operator `??` , there’s a shorter syntax possible with
+nullable types. In a case where `x3` is null , `−1` is set with the variable `x6` ;
+otherwise you take the value of `x3` :
+`int x6 = x3 ?? -1;`
 
 **NOTE**
 With nullable types, you can use all operators that are available
 with the underlying types——for example, +, -, *, / and more with
-int? . You can use nullable types with every struct type, not only
+`int?` . You can use nullable types with every struct type, not only
 with predefined C# types. You can read more about nullable types
 and what’s behind the scenes in Chapter 5, “Generics.”
 
 
 ## ENUM TYPES
 An enumeration is a value type that contains a list of named constants,
-such as the Color type shown here. The enumeration type is defined by
-using the enum keyword (code file EnumSample/Color.cs ):
+such as the `Color` type shown here. The enumeration type is defined by
+using the `enum` keyword (code file EnumSample/Color.cs ):
 ```c#
 public enum Color
 {
@@ -1653,9 +1654,9 @@ public enum Color
     Blue
 }
 ```
-You can declare variables of enum types, such as the variable c1 , and
+You can declare variables of `enum` types, such as the variable `c1` , and
 assign a value from the enumeration by setting one of the named
-constants prefixed with the name of the enum type (code file
+constants prefixed with the name of the `enum` type (code file
 EnumSample/Program.cs ):
 ```c#
 private static void ColorSamples()
@@ -1665,12 +1666,13 @@ private static void ColorSamples()
     //...
 }
 ```
-Running the program, the console output shows Red , which is the
+Running the program, the console output shows `Red` , which is the
 constant value of the enumeration.
-By default, the type behind the enum type is an int . The underlying
-type can be changed to other integral types (byte, short, int, long with
-signed and unsigned variants). The values of the named constants are
-incremental values starting with 0, but they can be changed to other
+
+By default, the type behind the `enum` type is an `int` . The underlying
+type can be changed to other integral types (`byte`, `short`, `int`, `long` with
+`signed` and `unsigned` variants). The values of the named constants are
+incremental values starting with `0`, but they can be changed to other
 values:
 ```c#
 public enum Color : short
@@ -1682,107 +1684,116 @@ public enum Color : short
 ```
 You can change a number to an enumeration value and back using
 casts.
-Color c2 = (Color)2;
-short number = (short)c2;
+`Color c2 = (Color)2;`
+`short number = (short)c2;`
 You can also use an enum type to assign multiple options to a variable
 and not just one of the enum constants. To do this, the values assigned
-to the constants must be different bits, and the Flags attribute needs to
+to the constants must be different bits, and the `Flags` attribute needs to
 be set with the enum.
-The enum type DaysOfWeek defines different values for every day.
+
+The enum type `DaysOfWeek` defines different values for every day.
 Setting different bits can be done easily using hexadecimal values that
-are assigned using the 0x prefix. The Flags attribute is information for
+are assigned using the `0x` prefix. The `Flags` attribute is information for
 the compiler for creating a different string representation of the values
-——for example, setting the value 3 to a variable of DaysOfWeek results in
-Monday, Tuesday when the Flags attribute is used (code file
+——for example, setting the value `3` to a variable of `DaysOfWeek` results in
+Monday, Tuesday when the `Flags` attribute is used (code file
 EnumSample/DaysOfWeek.cs ):
+```c#
 [Flags]
 public enum DaysOfWeek
 {
-Monday = 0x1,
-Tuesday = 0x2,
-Wednesday = 0x4,
-Thursday = 0x8,
-Friday = 0x10,
-Saturday = 0x20,
-Sunday = 0x40
+    Monday = 0x1,
+    Tuesday = 0x2,
+    Wednesday = 0x4,
+    Thursday = 0x8,
+    Friday = 0x10,
+    Saturday = 0x20,
+    Sunday = 0x40
 }
+```
 With such an enum declaration, you can assign a variable multiple
 values using the logical OR operator (code file EnumSample/Program.cs ):
-DaysOfWeek mondayAndWednesday = DaysOfWeek.Monday |
-DaysOfWeek.Wednesday;
+```c#
+DaysOfWeek mondayAndWednesday = DaysOfWeek.Monday | DaysOfWeek.Wednesday;
 Console.WriteLine(mondayAndWednesday);
-
+```
 Running the program, the output is a string representation of the
 days:
-Monday, Tuesday
+`Monday, Tuesday`
 Setting different bits, it is also possible to combine single bits to cover
-multiple values, such as Weekend with a value of 0x60 that combines
-Saturday and Sunday with the logical OR operator, Workday to combine
-all the days from Monday to Friday , and AllWeek to combine Workday and
-Weekend with the logical OR operator (code file
+multiple values, such as `Weekend` with a value of `0x60` that combines
+`Saturday` and `Sunday` with the logical OR operator, Workday to combine
+all the days from `Monday` to `Friday` , and `AllWeek` to combine `Workday` and
+`Weekend` with the logical OR operator (code file
 EnumSample/DaysOfWeek.cs ):
+```c#
 [Flags]
 public enum DaysOfWeek
 {
-Monday = 0x1,
-Tuesday = 0x2,
-Wednesday = 0x4,
-Thursday = 0x8,
-Friday = 0x10,
-Saturday = 0x20,
-Sunday = 0x40,
-Weekend = Saturday | Sunday
-Workday = 0x1f,
-AllWeek = Workday | Weekend
+    Monday = 0x1,
+    Tuesday = 0x2,
+    Wednesday = 0x4,
+    Thursday = 0x8,
+    Friday = 0x10,
+    Saturday = 0x20,
+    Sunday = 0x40,
+    Weekend = Saturday | Sunday
+    Workday = 0x1f,
+    AllWeek = Workday | Weekend
 }
-With this in place, it’s possible to assign DaysOfWeek.Weekend directly to
-a variable, but also assigning the separate values DaysOfWeek.Saturday
-and DaysOfWeek.Sunday combined with the logical OR operator results
-in the same. The output shown is the string representation of Weekend .
+```
+With this in place, it’s possible to assign`DaysOfWeek.Weekend` directly to
+a variable, but also assigning the separate values `DaysOfWeek.Saturday`
+and `DaysOfWeek.Sunday` combined with the logical OR operator results
+in the same. The output shown is the string representation of `Weekend` .
+```c#
 DaysOfWeek weekend = DaysOfWeek.Saturday | DaysOfWeek.Sunday;
 Console.WriteLine(weekend);
-Working with enumerations, the class Enum is sometimes a big help for
+```
+Working with enumerations, the class `Enum` is sometimes a big help for
 dynamically getting some information about enum types. Enum offers
 methods to parse strings to get the corresponding enumeration
 constant, and to get all the names and values of an enum type.
-The following code snippet uses a string to get the corresponding Color
-value using Enum.TryParse (code file EnumSample/Program.cs ):
+The following code snippet uses a string to get the corresponding `Color`
+value using `Enum.TryParse` (code file EnumSample/Program.cs ):
+```c#
 Color red;
-
-
 if (Enum.TryParse<Color>("Red", out red))
 {
-Console.WriteLine($"successfully parsed {red}");
+    Console.WriteLine($"successfully parsed {red}");
 }
-
+```
 **NOTE**
-is a generic method where T is a generic
+`Enum.TryParse<T>()`is a generic method where `T` is a generic
 parameter type. This parameter type needs to be defined with the
 method invocation. Generic methods are explained in detail in
 Chapter 5.
-Enum.TryParse<T>()
-The Enum.GetNames method returns a string array of all the names of
+
+The `Enum.GetNames` method returns a string array of all the names of
 the enumeration:
+```c#
 foreach (var day in Enum.GetNames(typeof(Color)))
 {
-Console.WriteLine(day);
+    Console.WriteLine(day);
 }
+```
 When you run the application, this is the output:
-Red
-Green
-Blue
+`Red`
+`Green`
+`Blue`
 To get all the values of the enumeration, you can use the method
-Enum.GetValues . Enum.GetValues returns an Array of the enum values.
+`Enum.GetValues`. `Enum.GetValues` returns an Array of the enum values.
 To get the integral value, it needs to be cast to the underlying type of
 the enumeration, which is done by the foreach statement:
+```c#
 foreach (short val in Enum.GetValues(typeof(Color)))
 {
-Console.WriteLine(val);
+    Console.WriteLine(val);
 }
-
+```
 
 ## PARTIAL CLASSES
-The partial keyword allows the class, struct, method, or interface to
+The `partial` keyword allows the class, struct, method, or interface to
 span multiple files. Typically, a code generator of some type is
 generating part of a class, and so having the class in multiple files can
 be beneficial. Let’s assume you want to make some additions to the
@@ -1796,99 +1807,106 @@ or interface . In the following example, the class SampleClass resides in
 two separate source files, SampleClassAutogenerated.cs and
 SampleClass.cs :
 SampleClass.cs:
+```c#
 //SampleClassAutogenerated.cs
 partial class SampleClass
 {
-public void MethodOne() { }
+        public void MethodOne() { }
 }
 //SampleClass.cs
 partial class SampleClass
 {
-public void MethodTwo() { }
+    public void MethodTwo() { }
 }
+```
 When the project that these two source files are part of is compiled, a
 single type called SampleClass will be created with two methods:
 MethodOne and MethodTwo .
 If any of the following keywords are used in describing the class, the
 same must apply to all partials of the same type:
-public
-private
-protected
-internal
-abstract
-sealed
-new
+   public
+   private
+   protected
+   internal
+   abstract
+   sealed
+   new
+ - generic constraints
 
-
-generic constraints
-Nested partials are allowed as long as the partial keyword precedes
+Nested partials are allowed as long as the `partial` keyword precedes
 the class keyword in the nested type. Attributes, XML comments,
 interfaces, generic-type parameter attributes, and members are
 combined when the partial types are compiled into the type. Given
 these two source files:
 // SampleClassAutogenerated.cs
+```C#
 [CustomAttribute]
 partial class SampleClass: SampleBaseClass, ISampleClass
 {
-public void MethodOne() { }
+    public void MethodOne() { }
 }
 // SampleClass.cs
 [AnotherAttribute]
 partial class SampleClass: IOtherSampleClass
 {
-public void MethodTwo() { }
+    public void MethodTwo() { }
 }
+```
 the equivalent source file would be as follows after the compile:
+```C#
 [CustomAttribute]
 [AnotherAttribute]
 partial class SampleClass: SampleBaseClass, ISampleClass,
 IOtherSampleClass
 {
-public void MethodOne() { }
-public void MethodTwo() { }
+    public void MethodOne() { }
+    public void MethodTwo() { }
 }
-
+```
 **NOTE**
 Although it may be tempting to create huge classes that span
 multiple files and possibly having different developers working on
-different files but the same class, the partial keyword was not
+different files but the same class, the `partial` keyword was not
 designed for this use. With such a scenario, it would be better to
 split the big class into several smaller classes, having a class just
 for one purpose.
 
-Partial classes can contain partial methods. This is extremely useful if
+`Partial` classes can contain `partial` methods. This is extremely useful if
 generated code should invoke methods that might not exist at all. The
-programmer extending the partial class can decide to create a custom
+programmer extending the `partial` class can decide to create a custom
 implementation of the partial method, or do nothing. The following
-code snippet contains a partial class with the method MethodOne that
-invokes the method APartialMethod . The method APartialMethod is
-declared with the partial keyword; thus, it does not need any
+code snippet contains a `partial` class with the method MethodOne that
+invokes the method APartialMethod . The method `APartialMethod` is
+declared with the `partial` keyword; thus, it does not need any
 implementation. If there’s not an implementation, the compiler
 removes the invocation of this method:
 //SampleClassAutogenerated.cs
+```C#
 partial class SampleClass
 {
-public void MethodOne()
-{
-APartialMethod();
+    public void MethodOne()
+    {
+        APartialMethod();
+    }
+    public partial void APartialMethod();
 }
-public partial void APartialMethod();
-}
-An implementation of the partial method can be done within any other
-part of the partial class, as shown in the following code snippet. With
+```
+An implementation of the `partial` method can be done within any other
+part of the `partial` class, as shown in the following code snippet. With
 this method in place, the compiler creates code within MethodOne to
 invoke this APartialMethod declared here:
 // SampleClass.cs
+```C#
 partial class SampleClass: IOtherSampleClass
 {
-public void APartialMethod()
-{
-// implementation of APartialMethod
+    public void APartialMethod()
+    {
+    // implementation of APartialMethod
+    }
 }
-}
-A partial method needs to be of type void . Otherwise the compiler
+```
+A `partial` method needs to be of type `void` . Otherwise the compiler
 cannot remove the invocation in case no implementation exists.
-
 
 ## EXTENSION METHODS
 There are many ways to extend a class. Inheritance, which is covered
@@ -1901,32 +1919,37 @@ cannot be used (for example, the class is sealed).
 Extension methods can be used to extend interfaces. This way you
 can have common functionality for all the classes that implement
 this interface. Interfaces are explained in Chapter 4.
+
 Extension methods are static methods that can look like part of a class
 without actually being in the source code for the class.
-Let’s say you want the string type to be extended with a method to
-count the number of words within a string. The method GetWordCount
-makes use of the String.Split method to split up a string in a string
+
+Let’s say you want the `string` type to be extended with a method to
+count the number of words within a `string`. The method `GetWordCount`
+makes use of the `String.Split` method to split up a string in a string
 array, and counts the number of elements within the array using the
-Length property (code file ExtensionMethods/Program.cs ):
-ExtensionMethods/Program.cs):
+`Length` property (code file ExtensionMethods/Program.cs ):
+```C#
 public static class StringExtension
 {
-public static int GetWordCount(this string s) =>
-s.Split().Length;
+    public static int GetWordCount(this string s) =>
+    s.Split().Length;
 }
-The string is extended by using the this keyword with the first
+```
+The `string` is extended by using the this keyword with the first
 parameter. This keyword defines the type that is extended.
+
 Even though the extension method is static, you use standard method
-syntax. Notice that you call GetWordCount using the fox variable and
+syntax. Notice that you call `GetWordCount` using the `fox` variable and
 not using the type name:
-string fox = "the quick brown fox jumped over the lazy dogs
-down " +
+```C#
+string fox = "the quick brown fox jumped over the lazy dogs down " +
 "9876543210 times";
 int wordCount = fox.GetWordCount();
 Console.WriteLine($"{wordCount} words");
+```
 Behind the scenes, the compiler changes this to invoke the static
 method instead:
-int wordCount = StringExtension.GetWordCount(fox);
+`int wordCount = StringExtension.GetWordCount(fox);`
 Using the instance method syntax instead of calling a static method
 from your code directly results in a much nicer syntax. This syntax
 also has the advantage that the implementation of this method can be
@@ -1934,11 +1957,11 @@ replaced by a different class without the need to change the code——just
 a new compiler run is needed.
 
 How does the compiler find an extension method for a specific type?
-The this keyword is needed to match an extension method for a type,
+The `this` keyword is needed to match an extension method for a type,
 but also the namespace of the static class that defines the extension
-method needs to be opened. If you put the StringExtensions class
-within the namespace Wrox.Extensions , the compiler finds the
-GetWordCount method only if Wrox.Extensions is opened with the using
+method needs to be opened. If you put the `StringExtensions` class
+within the namespace `Wrox.Extensions` , the compiler finds the
+GetWordCount method only if `Wrox.Extensions` is opened with the using
 directive. In case the type also defines an instance method with the
 same name, the extension method is never used. Any instance method
 already in the class takes precedence. When you have multiple
@@ -1952,25 +1975,27 @@ one of these namespaces, this namespace takes precedence.
 Language Integrated Query (LINQ) makes use of many extension
 methods. LINQ is discussed in Chapter 12, “Language Integrated
 Query.”
-THE OBJECT CLASS
+
+
+## THE OBJECT CLASS
 As indicated earlier, all .NET classes are ultimately derived from
-System.Object . In fact, if you don’t specify a base class when you define
+`System.Object` . In fact, if you don’t specify a base class when you define
 a class, the compiler automatically assumes that it derives from
-Object . Because inheritance has not been used in this chapter, every
-class you have seen here is actually derived from System.Object . (As
+`Object` . Because inheritance has not been used in this chapter, every
+class you have seen here is actually derived from `System.Object` . (As
 noted earlier, for structs this derivation is indirect——a struct is always
 derived from System.ValueType , which in turn derives from
-System.Object .)
+`System.Object` .)
 
 The practical significance of this is that——besides the methods,
 properties, and so on that you define——you also have access to a
-number of public and protected member methods that have been
+number of `public` and `protected` member methods that have been
 defined for the Object class. These methods are available in all other
 classes that you define.
 For the time being, the following list summarizes the purpose of each
 method:
-ToString ——A fairly
-basic, quick-and-easy string representation. Use
+
+- `ToString` ——A fairly basic, quick-and-easy string representation. Use
 it when you want a quick idea of the contents of an object, perhaps
 for debugging purposes. It provides very little choice regarding
 how to format the data. For example, dates can, in principle, be
@@ -1980,8 +2005,8 @@ sophisticated string representation——for example, one that takes
 into account your formatting preferences or the culture (the locale)
 ——then you should implement the IFormattable interface (see
 Chapter 9, “Strings and Regular Expressions”).
-GetHashCode ——If
-objects are placed in a data structure known as a
+
+- `GetHashCode` ——If objects are placed in a data structure known as a
 map (also known as a hash table or dictionary), it is used by classes
 that manipulate these structures to determine where to place an
 object in the structure. If you intend your class to be used as a key
@@ -1989,22 +2014,20 @@ for a dictionary, you need to override GetHashCode . Some fairly
 strict requirements exist for how you implement your overload,
 which you learn about when you examine dictionaries in Chapter
 10, “Collections.”
-(both versions) and ReferenceEquals ——As you’ll **NOTE** by the
+
+- `Equals`(both versions) and ReferenceEquals ——As you’ll **NOTE** by the
 existence of three different methods aimed at comparing the
 equality of objects, the .NET Framework has quite a sophisticated
 scheme for measuring equality. Subtle differences exist between
 how these three methods, along with the comparison operator, == ,
 are intended to be used. In addition, restrictions exist on how you
 should override the virtual, one-parameter version of Equals if you
-Equals
-
-
 choose to do so, because certain base classes in the
 System.Collections namespace call the method and expect it to
 behave in certain ways. You explore the use of these methods in
 Chapter 6 when you examine operators.
-Finalize ——Covered
-in Chapter 17, this method is intended as the
+
+- `Finalize` ——Covered in Chapter 17, this method is intended as the
 nearest that C# has to C++-style destructors. It is called when a
 reference object is garbage collected to clean up resources. The
 Object implementation of Finalize doesn’t actually do anything
@@ -2013,14 +2036,15 @@ Finalize if an object owns references to unmanaged resources that
 need to be removed when the object is deleted. The garbage
 collector cannot do this directly because it only knows about
 managed resources, so it relies on any finalizers that you supply.
-GetType ——This object returns an instance of a class derived from
+
+- `GetType` ——This object returns an instance of a class derived from
 System.Type , so it can provide an extensive range of information
 about the class of which your object is a member, including base
 type, methods, properties, and so on. System.Type also provides the
 entry point into .NET’s reflection technology. Chapter 16 examines
 this topic.
-MemberwiseClone ——The
-only member of System.Object that isn’t
+
+- `MemberwiseClone` ——The only member of `System.Object` that isn’t
 examined in detail anywhere in the book. That’s because it is fairly
 simple in concept. It just makes a copy of the object and returns a
 reference (or in the case of a value type, a boxed reference) to the
@@ -2040,7 +2064,7 @@ features that have been added with C# 7, such as expression-bodied
 members with constructors, property accessors, and out vars.
 You have also seen how all types in C# derive ultimately from the type
 System.Object , which means that all types start with a basic set of
-useful methods, including ToString .
+useful methods, including `ToString` .
 
 Inheritance comes up a few times throughout this chapter, and you
 examine implementation, interface inheritance, and the other aspects
