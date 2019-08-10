@@ -1,13 +1,10 @@
-
-
-Object-Oriented Programming with C#
+# Object-Oriented Programming with C#
 WHAT’S IN THIS CHAPTER?
-Types of inheritance
-Implementation inheritance
-Access modifiers
-Interfaces
-is
-and as Operators
+- Types of inheritance
+- Implementation inheritance
+- Access modifiers
+- Interfaces
+- `is` and `as` Operators
 WROX.COM CODE DOWNLOADS
 FOR THIS CHAPTER
 The Wrox.com code downloads for this chapter are found at
@@ -17,48 +14,52 @@ https://github.com/ProfessionalCSharp/ProfessionalCSharp7 in
 the directory ObjectOrientation .
 The code for this chapter is divided into the following major
 examples:
-VirtualMethods
-InheritanceWithConstructors
-UsingInterfaces
+- VirtualMethods
+- InheritanceWithConstructors
+- UsingInterfaces
 
 
-OBJECT ORIENTATION
+## OBJECT ORIENTATION
 C# is not a pure object-oriented programming language. C# offers
 multiple programming paradigms. However, object orientation is an
 important concept with C#, and it’s a core principle of all the libraries
 offered by .NET.
 The three most important concepts of object-orientation are
-inheritance, encapsulation, and polymorphism. Chapter 3, “Objects
+*inheritance*, *encapsulation*, and *polymorphism*. Chapter 3, “Objects
 and Types,” talks about creating individual classes to arrange
 properties, methods, and fields. When members of a type are declared
 private , they cannot be accessed from the outside. They are
-encapsulated within the type. This chapter’s focus is on inheritance
-and polymorphism.
+encapsulated within the type. This chapter’s focus is on *inheritance*
+and *polymorphism*.
 The previous chapter also explains that all classes ultimately derive
 from the class System.Object . This chapter covers how to create a
 hierarchy of classes and how polymorphism works with C#. It also
 describes all the C# keywords related to inheritance.
-TYPES OF INHERITANCE
+
+
+## TYPES OF INHERITANCE
 Let’s start by reviewing some object-oriented (OO) terms and look at
 what C# does and does not support as far as inheritance is concerned.
-Single inheritance——With single inheritance, one class can
+
+- **Single inheritance**——With single inheritance, one class can
 derive from one base class. This is a possible scenario with C#.
-Multiple inheritance——Multiple inheritance allows deriving
+
+- **Multiple inheritance**——Multiple inheritance allows deriving
 from multiple base classes. C# does not support multiple
 inheritance with classes, but it allows multiple inheritance with
 interfaces.
-Multilevel inheritance——Multilevel inheritance allows
+
+- **Multilevel inheritance**——Multilevel inheritance allows
 inheritance across a bigger hierarchy. Class B derives from class A ,
 and class C derives from class B . Here, class B is also known as
 intermediate base class. This is supported and often used with C#.
-Interface inheritance——Interface inheritance defines
+- **Interface inheritance**——Interface inheritance defines
 inheritance with interfaces. Here, multiple inheritance is possible.
 Interfaces and interface inheritance is explained later in this
-
-
 chapter in the “Interfaces” section.
 Let’s discuss some specific issues with inheritance and C#.
-Multiple Inheritance
+
+### Multiple Inheritance
 Some languages such as C++ support what is known as multiple
 inheritance, in which a class derives from more than one other class.
 With implementation inheritance, multiple inheritance adds
@@ -67,6 +68,7 @@ where multiple inheritance is not used. Because of this, the designers
 of C# decided not to support multiple inheritance with classes because
 support for multiple inheritance increases complexity and adds
 overhead even in cases when multiple inheritance is not used.
+
 C# does allow types to be derived from multiple interfaces. One type
 can implement multiple interfaces. This means that a C# class can be
 derived from one other class, and any number of interfaces. Indeed,
@@ -74,7 +76,8 @@ we can be more precise: Thanks to the presence of System.Object as a
 common base type, every C# class (except for Object ) has exactly one
 base class, and every C# class may additionally have any number of
 base interfaces.
-Structs and Classes
+
+### Structs and Classes
 Chapter 3 distinguishes between structs (value types) and classes
 (reference types). One restriction of using structs is that they do not
 support inheritance, beyond the fact that every struct is automatically
@@ -83,43 +86,54 @@ code a type hierarchy of structs, it is possible for structs to implement
 interfaces. In other words, structs don’t really support implementation
 inheritance, but they do support interface inheritance. The following
 summarizes the situation for any types that you define:
-Structs are always derived from System.ValueType . They can also
+
+- *Structs* are always derived from System.ValueType . They can also
 implement any number of interfaces.
-Classes are always derived from either System.Object or a class that
+
+- *Classes* are always derived from either System.Object or a class that
 you choose. They can also implement any number of interfaces.
 
 
-IMPLEMENTATION INHERITANCE
+## IMPLEMENTATION INHERITANCE
 If you want to declare that a class derives from another class, use the
 following syntax:
+```c#
 class MyDerivedClass: MyBaseClass
 {
-// members
+    // members
 }
+```
 If a class (or a struct) also derives from interfaces, the list of base class
 and interfaces is separated by commas:
 public class MyDerivedClass: MyBaseClass, IInterface1,
+```c#
 IInterface2
 {
-// members
+    // members
 }
+```
+
 **NOTE**
 In case a class and interfaces are used to derive from, the class
 always must come first——before interfaces.
 For a struct, the syntax is as follows (it can only use interface
 inheritance):
+```c#
 public struct MyDerivedStruct: IInterface1, IInterface2
 {
-// members
+    // members
 }
+```
 If you do not specify a base class in a class definition, the C# compiler
 assumes that System.Object is the base class. Hence, deriving from the
 Object class (or using the object keyword) is the same as not defining
 a base class.
+```c#
 class MyClass // implicitly derives from System.Object
 {
-// members
+    // members
 }
+```
 
 
 Let’s get into an example to define a base class Shape . Something that’s
@@ -129,53 +143,58 @@ corresponding classes are defined that are contained within the Shape
 class. The Shape class defines read-only properties Position and Shape
 that are initialized using auto property initializers (code file
 VirtualMethods/Shape.cs ):
+```c#
 public class Position
 {
-public int X { get; set; }
-public int Y { get; set; }
+    public int X { get; set; }
+    public int Y { get; set; }
 }
 public class Size
 {
-public int Width { get; set; }
-public int Height { get; set; }
+    public int Width { get; set; }
+    public int Height { get; set; }
 }
 public class Shape
 {
-public Position Position { get; } = new Position();
-public Size Size { get; } = new Size();
+    public Position Position { get; } = new Position();
+    public Size Size { get; } = new Size();
 }
-Virtual Methods
+```
+### Virtual Methods
 By declaring a base class method as virtual , you allow the method to
 be overridden in any derived classes:
+```c#
 public class Shape
 {
-public virtual void Draw() =>
-Console.WriteLine($"Shape with {Position} and {Size}");
+    public virtual void Draw() =>
+    Console.WriteLine($"Shape with {Position} and {Size}");
 }
+```
 In case the implementation is a one-liner, expression bodied methods
 (using the lambda operator) can also be used with the virtual keyword.
 This syntax can be used independent of the modifiers applied:
+```c#
 public class Shape
 {
-public virtual void Draw() =>
-
-
-Console.WriteLine($"Shape with {Position} and {Size}");
+public virtual void Draw() => Console.WriteLine($"Shape with {Position} and {Size}");
 }
+```
 It is also permitted to declare a property as virtual . For a virtual or
 overridden property, the syntax is the same as for a non-virtual
 property, with the exception of the keyword virtual , which is added to
 the definition. The syntax looks like this:
-public virtual Size Size { get; set; }
+`public virtual Size Size { get; set; }`
 Of course, it is also possible to use the full property syntax for virtual
 properties. The following code snippet makes use of C# 7 expression-
 bodied property accessors:
+```c#
 private Size _size;
 public virtual Size Size
 {
-get => _size;
-set => _size = value;
+    get => _size;
+    set => _size = value;
 }
+```
 For simplicity, the following discussion focuses mainly on methods,
 but it applies equally well to properties.
 The concepts behind virtual functions in C# are identical to standard
@@ -188,15 +207,14 @@ virtual unless indicated. In Java, by contrast, all functions are virtual.
 C# differs from C++ syntax, though, because it requires you to declare
 when a derived class’s function overrides another function, using the
 override keyword (code file VirtualMethods/ConcreteShapes.cs ):
+```c#
 public class Rectangle : Shape
 {
-public override void Draw() =>
-Console.WriteLine($"Rectangle with {Position} and
-{Size}");
+    public override void Draw() =>
+    Console.WriteLine($"Rectangle with {Position} and {Size}");
 }
+```
 This syntax for method overriding removes potential runtime bugs
-
-
 that can easily occur in C++, when a method signature in a derived
 class unintentionally differs slightly from the base version, resulting in
 the method failing to override the base version. In C#, this is picked up
@@ -204,43 +222,48 @@ as a compile-time error because the compiler would see a function
 marked as override but would not see a base method for it to override.
 The Size and Position types override the ToString method. This
 method is declared as virtual in the base class Object :
+```c#
 public class Position
 {
-public int X { get; set; }
-public int Y { get; set; }
-public override string ToString() => $"X: {X}, Y: {Y}";
+    public int X { get; set; }
+    public int Y { get; set; }
+    public override string ToString() => $"X: {X}, Y: {Y}";
 }
 public class Size
 {
-public int Width { get; set; }
-public int Height { get; set; }
-public override string ToString() => $"Width: {Width},
-Height: {Height}";
+    public int Width { get; set; }
+    public int Height { get; set; }
+    public override string ToString() => $"Width: {Width},
+    Height: {Height}";
 }
+```
 **NOTE**
 The members of the base class Object are explained in Chapter 3.
+
 **NOTE**
 When overriding methods of the base class, the signature (all
 parameter types and the method name) and the return type must
 match exactly. If this is not the case then you can create a new
 member that does not override the base member.
+
 Within the Main method, a rectangle named r is instantiated, its
 properties initialized, and the method Draw invoked (code file
-
-
 VirtualMethods/Program.cs ):
+```c#
 var r = new Rectangle();
 r.Position.X = 33;
 r.Position.Y = 22;
 r.Size.Width = 200;
 r.Size.Height = 100;
 r.Draw();
+```
 Run the program to see the output of the Draw method:
 Rectangle with X: 33, Y: 22 and Width: 200, Height: 100
 Neither member fields nor static functions can be declared as virtual.
 The concept simply wouldn’t make sense for any class member other
 than an instance function member.
-Polymorphism
+
+### Polymorphism
 With polymorphism, the method that is invoked is defined
 dynamically and not during compile time. The compiler creates a
 virtual method table (vtable) that lists the methods that can be
@@ -259,10 +282,9 @@ Rectangle . If the method of the base class wouldn’t be virtual or the
 method from the derived class not overridden, the Draw method of the
 type of the declared object (the Shape ) would be used, and thus the
 output would start with Shape :
-Rectangle with X: 33, Y: 22 and Width: 200, Height: 100
+`Rectangle with X: 33, Y: 22 and Width: 200, Height: 100`
 
-
-Hiding Methods
+### Hiding Methods
 If a method with the same signature is declared in both base and
 derived classes but the methods are not declared with the modifiers
 virtual and override , respectively, then the derived class version is
@@ -275,10 +297,12 @@ about this potential problem, thus making it safer to hide methods if
 that is your intention. This also has versioning benefits for developers
 of class libraries.
 Suppose that you have a class called Shape in a class library:
+```c#
 public class Shape
 {
-// various members
+    // various members
 }
+```
 At some point in the future, you write a derived class Ellipse that adds
 some functionality to the Shape base class. In particular, you add a
 method called MoveBy , which is not present in the base class:
