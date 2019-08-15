@@ -269,13 +269,15 @@ dynamically and not during compile time. The compiler creates a
 virtual method table (vtable) that lists the methods that can be
 invoked during runtime, and it invokes the method based on the type
 at runtime.
+
 Let’s have a look at one example. The method DrawShape receives a
 Shape parameter and invokes the Draw method of the Shape class (code
 file VirtualMethods/Program.cs ):
-public static void DrawShape(Shape shape) => shape.Draw();
+`public static void DrawShape(Shape shape) => shape.Draw();`
 Use the rectangle created before to invoke the method. Although the
 method is declared to receive a Shape object, any type that derives from
 Shape (including the Rectangle ) can be passed to this method:
+
 Run the program to see the output of the Rectangle.Draw method
 instead of the Shape.Draw method. The output line starts with
 Rectangle . If the method of the base class wouldn’t be virtual or the
@@ -289,6 +291,7 @@ If a method with the same signature is declared in both base and
 derived classes but the methods are not declared with the modifiers
 virtual and override , respectively, then the derived class version is
 said to hide the base class version.
+
 In most cases, you would want to override methods rather than hide
 them. By hiding them you risk calling the wrong method for a given
 class instance. However, as shown in the following example, C# syntax
@@ -296,6 +299,7 @@ is designed to ensure that the developer is warned at compile time
 about this potential problem, thus making it safer to hide methods if
 that is your intention. This also has versioning benefits for developers
 of class libraries.
+
 Suppose that you have a class called Shape in a class library:
 ```c#
 public class Shape
@@ -306,27 +310,29 @@ public class Shape
 At some point in the future, you write a derived class Ellipse that adds
 some functionality to the Shape base class. In particular, you add a
 method called MoveBy , which is not present in the base class:
+```c#
 public class Ellipse: Shape
 {
-public void MoveBy(int x, int y)
-{
-Position.X += x;
-Position.Y += y;
+    public void MoveBy(int x, int y)
+    {
+        Position.X += x;
+        Position.Y += y;
+    }
 }
-}
+```
 At some later time, the developer of the base class decides to extend
 the functionality of the base class and, by coincidence, adds a method
 that is also called MoveBy and that has the same name and signature as
 yours; however, it probably doesn’t do the same thing. This new
 method might be declared virtual or not.
+
 If you recompile the derived class you get a compiler **WARNING** because
 of a potential method clash. However, it can also happen easily that
-
-
 the new base class is used without compiling the derived class; it just
 replaces the base class assembly. The base class assembly could be
 installed in the global assembly cache (which is done by many
 Framework assemblies).
+
 Now let’s assume the MoveBy method of the base class is declared
 virtual and the base class itself invokes the MoveBy method. What
 method will be called? The method of the base class or the MoveBy
@@ -337,72 +343,79 @@ didn’t exist earlier), the compiler assumes the MoveBy method from the
 derived class is a completely different method that doesn’t have any
 relation to the method of the base class; it just has the same name.
 This method is treated the same way as if it had a different name.
+
 Compiling the Ellipse class generates a compilation **WARNING** that
 reminds you to use the new keyword to hide a method. In practice, not
 using the new keyword has the same compilation result, but you avoid
 the compiler **WARNING**:
+```c#
 public class Ellipse: Shape
 {
-new public void Move(Position newPosition)
-{
-Position.X = newPosition.X;
-Position.Y = newPosition.Y;
+    new public void Move(Position newPosition)
+    {
+        Position.X = newPosition.X;
+        Position.Y = newPosition.Y;
+    }
+    //... other members
 }
-//... other members
-}
+```
 Instead of using the new keyword, you can also rename the method or
 override the method of the base class if it is declared virtual and serves
 the same purpose. However, in case other methods already invoke this
 method, a simple rename can lead to breaking other code.
+
 **NOTE**
-The new method modifier shouldn’t be used deliberately to hide
-
-
+The `new` method modifier shouldn’t be used deliberately to hide
 members of the base class. The main purpose of this modifier is to
 deal with version conflicts and react to changes on base classes
 after the derived class was done.
-Calling Base Versions of Methods
+
+### Calling Base Versions of Methods
 C# has a special syntax for calling base versions of a method from a
-derived class: base.<MethodName> . For example, you have the Move
-method declared in the base class Shape and want to invoke it in the
-derived class Rectangle to use the implementation from the base class.
+derived class: `base.<MethodName>` . For example, you have the `Move`
+method declared in the base class `Shape` and want to invoke it in the
+derived class `Rectangle` to use the implementation from the base class.
 To add functionality from the derived class, you can invoke it using
 base (code file VirtualMethods/Shape.cs ):
+```c#
 public class Shape
 {
-public virtual void Move(Position newPosition)
-{
-Position.X = newPosition.X;
-Position.Y = newPosition.Y;
-Console.WriteLine($"moves to {Position}");
+    public virtual void Move(Position newPosition)
+    {
+        Position.X = newPosition.X;
+        Position.Y = newPosition.Y;
+        Console.WriteLine($"moves to {Position}");
+    }
+    //...other members
 }
-//...other members
-}
-The Move method is overridden in the Rectangle class to add the term
-Rectangle to the console. After this text is written, the method of the
+```
+The `Move` method is overridden in the `Rectangle` class to add the term
+`Rectangle` to the console. After this text is written, the method of the
 base class is invoked using the base keyword (code file
 VirtualMethods/ConcreteShapes.cs ):
+```c#
 public class Rectangle: Shape
 {
-public override void Move(Position newPosition)
-{
-Console.Write("Rectangle ");
-base.Move(newPosition);
+    public override void Move(Position newPosition)
+    {
+        Console.Write("Rectangle ");
+        base.Move(newPosition);
+    }
+    //...other members
 }
-//...other members
-}
+```
 Now move the rectangle to a new position (code file
 VirtualMethods/Program.cs ):
-
-
-r.Move(new Position { X = 120, Y = 40 });
+`r.Move(new Position { X = 120, Y = 40 });`
 Run the application to see output that is a result of the Move method in
 the Rectangle and the Shape classes:
-Rectangle moves to X: 120, Y: 40
+`Rectangle moves to X: 120, Y: 40`
+
 **NOTE**
 Using the base keyword, you can invoke any method of the base
 class——not just the method that is overridden.
-Abstract Classes and Methods
+
+### Abstract Classes and Methods
 C# allows both classes and methods to be declared as abstract. An
 abstract class cannot be instantiated, whereas an abstract method does
 not have an implementation and must be overridden in any
@@ -411,36 +424,41 @@ automatically virtual (although you don’t need to supply the virtual
 keyword, and doing so results in a syntax error). If any class contains
 any abstract methods, that class is also abstract and must be declared
 as such.
+
 Let’s change the Shape class to be abstract . With this it is necessary to
 derive from this class. The new method Resize is declared abstract,
 and thus it can’t have any implementation in the Shape class (code file
 VirtualMethods/Shape.cs ):
+```c#
 public abstract class Shape
 {
-public abstract void Resize(int width, int height); //
-abstract method
+    public abstract void Resize(int width, int height); //
+    abstract method
 }
+```
 When deriving a type from the abstract base class, it is necessary to
 implement all abstract members. Otherwise, the compiler complains:
+```c#
 public class Ellipse : Shape
 {
-
-
-public override void Resize(int width, int height)
-{
-Size.Width = width;
-Size.Height = height;
+    public override void Resize(int width, int height)
+    {
+        Size.Width = width;
+        Size.Height = height;
+    }
 }
-}
+```
 Of course, the implementation could also look like the following
 example. Throwing an exception of type NotImplementationException
 is also an implementation, just not the implementation that was meant
 to be and usually just a temporary implementation during
 development:
+```c#
 public override void Resize(int width, int height)
 {
-throw new NotImplementedException();
+    throw new NotImplementedException();
 }
+```
 **NOTE**
 Exceptions are explained in detail in Chapter 14, “Errors and
 Exceptions.”
@@ -448,68 +466,73 @@ Using the abstract Shape class and the derived Ellipse class, you can
 declare a variable of a Shape . You cannot instantiate it, but you can
 instantiate an Ellipse and assign it to the Shape variable (code file
 VirtualMethods/Program.cs ):
+```c#
 Shape s1 = new Ellipse();
 DrawShape(s1);
-Sealed Classes and Methods
+```
+### Sealed Classes and Methods
 In case it shouldn’t be allowed to create a class that derives from your
 class, your class should be sealed. Adding the sealed modifier to a
 class doesn’t allow you to create a subclass of it. Sealing a method
 means it’s not possible to override this method.
+```c#
 sealed class FinalClass
 {
-
-
-//...
+    //...
 }
 class DerivedClass: FinalClass // wrong. Cannot derive from
 sealed class.
 {
-//...
+    //...
 }
+```
 The most likely situation in which you’ll mark a class or method as
-sealed is if the class or method is internal to the operation of the
+`sealed` is if the class or method is internal to the operation of the
 library, class, or other classes that you are writing, to ensure that any
 attempt to override some of its functionality might lead to instability
 in the code. For example, maybe you haven’t tested inheritance and
 made the investment in design decisions for inheritance. If this is the
-case, it’s better to mark your class sealed .
-There’s another reason to seal classes. With a sealed class, the
+case, it’s better to mark your class `sealed` .
+
+There’s another reason to seal classes. With a `sealed` class, the
 compiler knows that derived classes are not possible, and thus the
 virtual table used for virtual methods can be reduced or eliminated,
 which can increase performance. The string class is sealed. As I
 haven’t seen a single application not using strings, it’s best to have this
 type as performant as possible. Making the class sealed is a good hint
 for the compiler.
+
 Declaring a method as sealed serves a purpose similar to that for a
 class. The method can be an overridden method from a base class, but
 in the following example the compiler knows another class cannot
 extend the virtual table for this method; it ends here.
+```c#
 class MyClass: MyBaseClass
 {
-public sealed override void FinalMethod()
-{
-// implementation
-}
+    public sealed override void FinalMethod()
+    {
+        // implementation
+    }
 }
 class DerivedClass: MyClass
 {
-public override void FinalMethod() // wrong. Will give
-compilation error
-{
+    public override void FinalMethod() // wrong. Will give compilation error
+    {
+    }
 }
-
-
-}
+```
 In order to use the sealed keyword on a method or property, it must
 have first been overridden from a base class. If you do not want a
 method or property in a base class overridden, then don’t mark it as
 virtual.
-Constructors of Derived Classes
+
+### Constructors of Derived Classes
 Chapter 3 discusses how constructors can be applied to individual
 classes. An interesting question arises as to what happens when you
 start defining your own constructors for classes that are part of a
 hierarchy, inherited from other classes that may also have custom
 constructors.
+
 Assume that you have not defined any explicit constructors for any of
 your classes. This means that the compiler supplies default zeroing-
 out constructors for all your classes. There is actually quite a lot going
@@ -521,76 +544,85 @@ you are effectively taking control of construction. This has implications
 right down through the hierarchy of derived classes, so you have to
 ensure that you don’t inadvertently do anything to prevent
 construction through the hierarchy from taking place smoothly.
+
 You might be wondering why there is any special problem with derived
 classes. The reason is that when you create an instance of a derived
 class, more than one constructor is at work. The constructor of the
 class you instantiate isn’t by itself sufficient to initialize the class; the
 constructors of the base classes must also be called. That’s why we’ve
 been talking about construction through the hierarchy.
+
 With the earlier sample of the Shape type, properties have been
 initialized using the auto property initializer:
+```c#
 public class Shape
 {
-public Position Position { get; } = new Position();
-public Size Size { get; } = new Size();
-
-
+    public Position Position { get; } = new Position();
+    public Size Size { get; } = new Size();
 }
+```
 Behind the scenes, the compiler creates a default constructor for the
 class and moves the property initializer within this constructor:
+```c#
 public class Shape
 {
-public Shape()
-{
-Position = new Position();
-Size = new Size();
+    public Shape()
+    {
+        Position = new Position();
+        Size = new Size();
+    }
+    public Position Position { get; };
+    public Size Size { get; };
 }
-public Position Position { get; };
-public Size Size { get; };
-}
+```
 Of course, instantiating a Rectangle type that derives from the Shape
-class, the Rectangle needs Position and Size , and thus the constructor
+class, the Rectangle needs `Position` and `Size` , and thus the constructor
 from the base class is invoked on constructing the derived object.
+
 In case you don’t initialize members within the default constructor,
 the compiler automatically initializes reference types to null and value
 types to 0 . Boolean types are initialized to false . The Boolean type is a
 value type, and false is the same as 0 , so it’s the same rule that applies
 to the Boolean type.
+
 With the Ellipse class, it’s not necessary to create a default
 constructor if the base class defines a default constructor and you’re
 okay with initializing all members to their defaults. Of course, you still
 can supply a constructor and call the base constructor using a
 constructor initializer:
+```c#
 public class Ellipse : Shape
 {
-public Ellipse()
-: base()
-{
+    public Ellipse()
+    : base()
+    {
+    }
 }
-}
+```
 The constructors are always called in the order of the hierarchy. The
 constructor of the class System.Object is first, and then progress
 continues down the hierarchy until the compiler reaches the class
-
-
 being instantiated. For instantiating the Ellipse type, the Shape
 constructor follows the Object constructor, and then the Ellipse
 constructor comes. Each of these constructors handles the
 initialization of the fields in its own class.
+
 Now, make a change to the constructor of the Shape class. Instead of
 doing a default initialization with Size and Position properties, assign
 values within the constructor (code file
 InheritanceWithConstructors/Shape.cs ):
+```c#
 public abstract class Shape
 {
-public Shape(int width, int height, int x, int y)
-{
-Size = new Size { Width = width, Height = height };
-Position = new Position { X = x, Y = y };
+    public Shape(int width, int height, int x, int y)
+    {
+        Size = new Size { Width = width, Height = height };
+        Position = new Position { X = x, Y = y };
+    }
+    public Position Position { get; }
+    public Size Size { get; }
 }
-public Position Position { get; }
-public Size Size { get; }
-}
+```
 When removing the default constructor and recompiling the program,
 the Ellipse and Rectangle classes can’t compile because the compiler
 doesn’t know what values should be passed to the only nondefault
@@ -598,10 +630,11 @@ constructor of the base class. Here you need to create a constructor in
 the derived class and initialize the base class constructor with the
 constructor initializer (code file
 InheritanceWithConstructors/ConcreteShapes.cs ):
-public Rectangle(int width, int height, int x, int y)
-: base(width, height, x, y)
+```c#
+public Rectangle(int width, int height, int x, int y): base(width, height, x, y)
 {
 }
+```
 Putting the initialization inside the constructor block is too late
 because the constructor of the base class is invoked before the
 constructor of the derived class is called. That’s why there’s a
@@ -609,254 +642,182 @@ constructor initializer that is declared before the constructor block.
 In case you want to allow creating Rectangle objects by using a default
 constructor, you can still do this. You can also do it if the constructor
 of the base class doesn’t have a default constructor. You just need to
-
-
 assign the values for the base class constructor in the constructor
 initializer as shown. In the following snippet, named arguments are
 used because otherwise it would be hard to distinguish between width ,
 height , x , and y values passed.
-public Rectangle()
-: base(width: 0, height: 0, x: 0, y: 0)
+```c#
+public Rectangle(): base(width: 0, height: 0, x: 0, y: 0)
 {
 }
+```
 **NOTE**
 Named arguments are discussed in Chapter 3.
+
 As you can see, this is a very neat and well-designed process. Each
 constructor handles initialization of the variables that are obviously its
 responsibility; and, in the process, your class is correctly instantiated
 and prepared for use. If you follow the same principles when you write
 your own constructors for your classes, even the most complex classes
 should be initialized smoothly and without any problems.
-MODIFIERS
+
+## MODIFIERS
 You have already encountered quite a number of so-called modifiers——
 keywords that can be applied to a type or a member. Modifiers can
 indicate the visibility of a method, such as public or private , or the
 nature of an item, such as whether a method is virtual or abstract . C#
 has a number of modifiers, and at this point it’s worth taking a minute
 to provide the complete list.
-Access Modifiers
+
+### Access Modifiers
 Access modifiers indicate which other code items can view an item.
-MODIFIER APPLIES DESCRIPTION
-TO
-public
-Any types The item is visible to any other code.
+MODIFIER | APPLIES TO | DESCRIPTION
+public   | Any types or members | The item is visible to any other code.
+---------|------------|----------------------------
+protected|Any member of a type, and any nested type | The item is visible only to any derived type.
+---------|------------|-----------------------------
+internal |Any types or members | The item is visible only within its containing assembly.
+---------|------------|------------------------ 
+private  |Any member of a type, and any nested type | The item is visible only inside the type to which it belongs.
+---------|------------|------------------------
+protected internal|Any member of a type, and any nested type |The item is visible to any code within its containing assembly and to any code inside a derived type. Practically this means protected or internal, either protected (from any assembly) or internal (from within the assembly).
+---------|------------|------------------------ 
+private protected|Any member of a type, and any nested type | Contrary to the access modifier protected internal which means either protected or internal , private protected combines protected internal with an and. Access is allowed only for derived types that are within the same assembly, but not from other assemblies. This access modifier is new with C# 7.2.
+---------|------------|-------------------------
 
-
-protected
-internal
-private
-protected
-internal
-private
-protected
-or
-members
-Any
-member
-of a type,
-and any
-nested
-type
-Any types
-or
-members
-Any
-member
-of a type,
-and any
-nested
-type
-Any
-member
-of a type,
-and any
-nested
-type
-Any
-member
-of a type,
-and any
-nested
-type
-The item is visible only to any derived type.
-The item is visible only within its containing
-assembly.
-The item is visible only inside the type to
-which it belongs.
-The item is visible to any code within its
-containing assembly and to any code inside
-a derived type. Practically this means
-protected or internal, either protected
-(from any assembly) or internal (from
-within the assembly).
-Contrary to the access modifier protected
-internal which means either protected or
-internal , private protected combines
-protected internal with an and. Access is
-allowed only for derived types that are
-within the same assembly, but not from
-other assemblies. This access modifier is
-new with C# 7.2.
 **NOTE**
-
-
 public , protected , and private are logical access modifiers.
 internal is a physical access modifier whose boundary is an
 assembly.
+
 **NOTE** that type definitions can be internal or public, depending on
 whether you want the type to be visible outside its containing
 assembly:
+```c#
 public class MyClass
 {
-// ...
-You cannot define types as protected , private , or protected internal
+    // ...
+```
+You cannot define types as `protected` , `private` , or `protected internal`
 because these visibility levels would be meaningless for a type
 contained in a namespace. Hence, these visibilities can be applied only
 to members. However, you can define nested types (that is, types
 contained within other types) with these visibilities because in this
 case the type also has the status of a member. Hence, the following
 code is correct:
+```c#
 public class OuterClass
 {
-protected class InnerClass
-{
-// ...
+    protected class InnerClass
+    {
+        // ...
+    }
+    // ...
 }
-// ...
-}
+```
 If you have a nested type, the inner type is always able to see all
 members of the outer type. Therefore, with the preceding code, any
 code inside InnerClass always has access to all members of OuterClass ,
 even where those members are private.
-Other Modifiers
+
+### Other Modifiers
 The modifiers in the following table can be applied to members of
 types and have various uses. A few of these modifiers also make sense
 when applied to types.
-MODIFIER APPLIES DESCRIPTION
+MODIFIER | APPLIES TO| DESCRIPTION
+new | Function members | The member hides an inherited member with the same signature.
+----|----|-----
+static  | All members |The member does not operate on a specific instance of the class. This is also known as class member instead of instance member.
+virtual | Function members only | The member can be overridden by a derived class.
+abstract| Function members only | A virtual member that defines the signature of the member but doesn’t provide an implementation.
+override| Function members only | The member overrides an inherited virtual or abstract member.
+sealed  | Classes, methods, and properties | For classes, the class cannot be inherited from. For properties and methods, the member overrides an inherited virtual member but cannot be overridden by any members in any derived classes. Must be used in conjunction with override .
+extern  | Static [ DllImport ] methods only | The member is implemented externally, in a different language. The use of this keyword is explained in Chapter 17,“Managed and Unmanaged Memory.”
 
 
-new
-static
-virtual
-abstract
-override
-sealed
-extern
-TO
-Function
-members
-All
-members
-Function
-members
-only
-Function
-members
-only
-Function
-members
-only
-Classes,
-methods,
-and
-properties
-The member hides an inherited member
-with the same signature.
-The member does not operate on a specific
-instance of the class. This is also known as
-class member instead of instance member.
-The member can be overridden by a
-derived class.
-A virtual member that defines the
-signature of the member but doesn’t
-provide an implementation.
-The member overrides an inherited virtual
-or abstract member.
-For classes, the class cannot be inherited
-from. For properties and methods, the
-member overrides an inherited virtual
-member but cannot be overridden by any
-members in any derived classes. Must be
-used in conjunction with override .
-Static
-The member is implemented externally, in
-[ DllImport ] a different language. The use of this
-methods
-keyword is explained in Chapter 17,
-only
-“Managed and Unmanaged Memory.”
-INTERFACES
+## INTERFACES
 As mentioned earlier, by deriving from an interface, a class is
 declaring that it implements certain functions. Because not all object-
 oriented languages support interfaces, this section examines C#’s
 implementation of interfaces in detail. It illustrates interfaces by
 presenting the complete definition of one of the interfaces that has
-been predefined by Microsoft: System.IDisposable . IDisposable
-contains one method, Dispose , which is intended to be implemented
-
-
+been predefined by Microsoft: `System.IDisposable` . `IDisposable`
+contains one method, `Dispose` , which is intended to be implemented 
 by classes to clean up resources:
+```C#
 public interface IDisposable
 {
-void Dispose();
+    void Dispose();
 }
+```
 This code shows that declaring an interface works syntactically in
 much the same way as declaring an abstract class. Be aware, however,
 that it is not permitted to supply implementations of any of the
 members of an interface. In general, an interface can contain only
-declarations of methods, properties, indexers, and events.
+declarations of `methods`, `properties`, `indexers`, and `events`.
+也就是沒有fields
+
 Compare interfaces to abstract classes: An abstract class can have
 implementations or abstract members without implementation.
 However, an interface can never have any implementation; it is purely
 abstract. Because the members of an interface are always abstract, the
 abstract keyword is not needed with interfaces.
+介面沒有實作，且皆為abstract ，因此不用寫 abstract。
+
 Similarly to abstract classes, you can never instantiate an interface; it
 contains only the signatures of its members. In addition, you can
 declare variables of a type of an interface.
+不能將介面實例化
+
 An interface has neither constructors (how can you construct
 something that you can’t instantiate?) nor fields (because that would
 imply some internal implementation). An interface is also not allowed
 to contain operator overloads——although this possibility is always
 discussed with the language design and might change at some time in
 the future.
+介面沒有建構子也沒有欄位，不允許運算子重載。
+
 It’s also not permitted to declare modifiers on the members in an
 interface definition. Interface members are always implicitly public ,
 and they cannot be declared as virtual . That’s up to implementing
 classes to decide. Therefore, it is fine for implementing classes to
 declare access modifiers, as demonstrated in the example in this
 section.
-For example, consider IDisposable . If a class wants to declare publicly
-that it implements the Dispose method, it must implement
-IDisposable , which in C# terms means that the class derives from
-IDisposable :
+不允許在成員上宣告修飾器
 
-
+For example, consider `IDisposable` . If a class wants to declare publicly
+that it implements the `Dispose` method, it must implement
+`IDisposable` , which in C# terms means that the class derives from
+`IDisposable` :
+```C#
 class SomeClass: IDisposable
 {
-// This class MUST contain an implementation of the
-// IDisposable.Dispose() method, otherwise
-// you get a compilation error.
-public void Dispose()
-{
-// implementation of Dispose() method
+    // This class MUST contain an implementation of the
+    // IDisposable.Dispose() method, otherwise
+    // you get a compilation error.
+    public void Dispose()
+    {
+        // implementation of Dispose() method
+    }
+    // rest of class
 }
-// rest of class
-}
-In this example, if SomeClass derives from IDisposable but doesn’t
-contain a Dispose implementation with the exact same signature as
-defined in IDisposable , you get a compilation error because the class is
-breaking its agreed-on contract to implement IDisposable . Of course,
-it’s no problem for the compiler if a class has a Dispose method but
-doesn’t derive from IDisposable . The problem is that other code would
+```
+In this example, if `SomeClass` derives from `IDisposable` but doesn’t
+contain a `Dispose` implementation with the exact same signature as
+defined in `IDisposable` , you get a compilation error because the class is
+breaking its agreed-on contract to implement `IDisposable` . Of course,
+it’s no problem for the compiler if a class has a `Dispose` method but
+doesn’t derive from `IDisposable` . The problem is that other code would
 have no way of recognizing that SomeClass has agreed to support the
-IDisposable features.
+`IDisposable` features.
+
 **NOTE**
-is a relatively simple interface because it defines only
+`IDisposable` is a relatively simple interface because it defines only
 one method. Most interfaces contain more members. The correct
-implementation of IDisposable is not really that simple; it’s
+implementation of `IDisposable` is not really that simple; it’s
 covered in Chapter 17.
-IDisposable
-Defining and Implementing Interfaces
+
+### Defining and Implementing Interfaces
 This section illustrates how to define and use interfaces by developing
 a short program that follows the interface inheritance paradigm. The
 example is based on bank accounts. Assume that you are writing code
@@ -864,14 +825,13 @@ that will ultimately allow computerized transfers between bank
 accounts. Assume also for this example that there are many companies
 that implement bank accounts, but they have all mutually agreed that
 any classes representing bank accounts will implement an interface,
-IBankAccount , which exposes methods to deposit or withdraw money,
-
-
-and a property to return the balance. It is this interface that enables
+`IBankAccount` , which exposes methods to `deposit` or `withdraw` money,
+and a property to return the `balance`. It is this interface that enables
 outside code to recognize the various bank account classes
 implemented by different bank accounts. Although the aim is to enable
 the bank accounts to communicate with each other to allow transfers
 of funds between accounts, that feature isn’t introduced just yet.
+
 To keep things simple, you keep all the code for the example in the
 same source file. Of course, if something like the example were used in
 real life, you could surmise that the different bank account classes
@@ -880,20 +840,24 @@ on different machines owned by the different banks. That’s all much
 too complicated for the purposes of this example. However, to
 maintain some realism, you define different namespaces for the
 different companies.
-To begin, you need to define the IBankAccount interface (code file
+
+To begin, you need to define the `IBankAccount` interface (code file
 UsingInterfaces/IBankAccount.cs ):
+```c#
 namespace Wrox.ProCSharp
 {
-public interface IBankAccount
-{
-void PayIn(decimal amount);
-bool Withdraw(decimal amount);
-decimal Balance { get; }
+    public interface IBankAccount
+    {
+        void PayIn(decimal amount);
+        bool Withdraw(decimal amount);
+        decimal Balance { get; }
+    }
 }
-}
-Notice the name of the interface, IBankAccount . It’s a best-practice
-convention to begin an interface name with the letter I, to indicate it’s
+```
+Notice the name of the interface, `IBankAccount` . It’s a best-practice
+convention to begin an interface name with the letter `I`, to indicate it’s
 an interface.
+
 **NOTE**
 Chapter 2, “Core C#,” points out that in most cases, .NET usage
 guidelines discourage the so-called Hungarian notation in which
@@ -901,37 +865,37 @@ names are preceded by a letter that indicates the type of object
 being defined. Interfaces are one of the few exceptions for which
 Hungarian notation is recommended.
 
-
 The idea is that you can now write classes that represent bank
 accounts. These classes don’t have to be related to each other in any
 way; they can be completely different classes. They will all, however,
 declare that they represent bank accounts by the mere fact that they
-implement the IBankAccount interface.
+implement the `IBankAccount` interface.
 Let’s start off with the first class, a saver account run by the Royal
 Bank of Venus (code file UsingInterfaces/VenusBank.cs ):
+```c#
 namespace Wrox.ProCSharp.VenusBank
 {
-public class SaverAccount: IBankAccount
-{
-private decimal _balance;
-public void PayIn(decimal amount) => _balance += amount;
-public bool Withdraw(decimal amount)
-{
-if (_balance >= amount)
-{
-_balance -= amount;
-return true;
+    public class SaverAccount: IBankAccount
+    {
+        private decimal _balance;
+        public void PayIn(decimal amount) => _balance += amount;
+        public bool Withdraw(decimal amount)
+        {
+            if (_balance >= amount)
+            {
+                _balance -= amount;
+                return true;
+            }
+            Console.WriteLine("Withdrawal attempt failed.");
+            return false;
+        }
+        public decimal Balance => _balance;
+        public override string ToString() => $"Venus Bank Saver: Balance = {_balance,6:C}";
+    }
 }
-Console.WriteLine("Withdrawal attempt failed.");
-return false;
-}
-public decimal Balance => _balance;
-public override string ToString() =>
-$"Venus Bank Saver: Balance = {_balance,6:C}";
-}
-}
+```
 It should be obvious what the implementation of this class does. You
-maintain a private field, balance , and adjust this amount when money
+maintain a private field, `balance` , and adjust this amount when money
 is deposited or withdrawn. You display an error message if an attempt
 to withdraw money fails because of insufficient funds. Notice also that
 because we are keeping the code as simple as possible, we are not
@@ -939,94 +903,104 @@ implementing extra properties, such as the account holder’s name! In
 real life that would be essential information, of course, but for this
 example it’s unnecessarily complicated.
 The only really interesting line in this code is the class declaration:
-public class SaverAccount: IBankAccount
+`public class SaverAccount: IBankAccount`
 
-
-You’ve declared that SaverAccount is derived from one interface,
-IBankAccount , and you have not explicitly indicated any other base
-classes (which means that SaverAccount is derived directly from
-System.Object ). By the way, derivation from interfaces acts completely
+You’ve declared that `SaverAccount` is derived from one interface,
+`IBankAccount` , and you have not explicitly indicated any other base
+classes (which means that `SaverAccount` is derived directly from
+`System.Object` ). By the way, derivation from interfaces acts completely
 independently from derivation from classes.
-Being derived from IBankAccount means that SaverAccount gets all the
-members of IBankAccount ; but because an interface doesn’t actually
-implement any of its methods, SaverAccount must provide its own
+
+Being derived from `IBankAccount` means that `SaverAccount` gets all the
+members of `IBankAccount` ; but because an interface doesn’t actually
+implement any of its methods, `SaverAccount` must provide its own
 implementations of all of them. If any implementations are missing,
 you can rest assured that the compiler will complain. Recall also that
 the interface just indicates the presence of its members. It’s up to the
-class to determine whether it wants any of them to be virtual or
-abstract (though abstract functions are only allowed if the class itself
-is abstract ). For this particular example, you don’t have any reason to
-make any of the interface functions virtual.
+class to determine whether it wants any of them to be `virtual` or
+`abstract` (though `abstract` functions are only allowed if the class itself
+is `abstract` ). For this particular example, you don’t have any reason to
+make any of the interface functions `virtual`.
 To illustrate how different classes can implement the same interface,
-assume that the Planetary Bank of Jupiter also implements a class to
+assume that the `Planetary Bank of Jupiter` also implements a class to
 represent one of its bank accounts——a Gold Account (code file
 UsingInterfaces/JupiterBank.cs ):
+```c#
 namespace Wrox.ProCSharp.JupiterBank
 {
-public class GoldAccount: IBankAccount
-{
-// ...
+    public class GoldAccount: IBankAccount
+    {
+        // ...
+    }
 }
-}
-The details of the GoldAccount class aren’t presented here; in the
+```
+The details of the `GoldAccount` class aren’t presented here; in the
 sample code, it’s basically identical to the implementation of
-SaverAccount . We stress that GoldAccount has no connection with
-SaverAccount , other than they both happen to implement the same
+`SaverAccount` . We stress that `GoldAccount` has no connection with
+`SaverAccount` , other than they both happen to implement the same
 interface.
+
 Now that you have your classes, you can test them. You first need a few
+```c#
 using declarations:
 using Wrox.ProCSharp;
 using Wrox.ProCSharp.VenusBank;
 using Wrox.ProCSharp.JupiterBank;
 
-
-Now you need a Main method (code file UsingInterfaces/Program.cs ):
+```
+Now you need a `Main` method (code file UsingInterfaces/Program.cs ):
+```c#
 namespace Wrox.ProCSharp
 {
-class Program
-{
-static void Main()
-{
-IBankAccount venusAccount = new SaverAccount();
-IBankAccount jupiterAccount = new GoldAccount();
-venusAccount.PayIn(200);
-venusAccount.Withdraw(100);
-Console.WriteLine(venusAccount.ToString());
-jupiterAccount.PayIn(500);
-jupiterAccount.Withdraw(600);
-jupiterAccount.Withdraw(100);
-Console.WriteLine(jupiterAccount.ToString());
+    class Program
+    {
+        static void Main()
+        {
+
+            IBankAccount venusAccount = new SaverAccount();
+            IBankAccount jupiterAccount = new GoldAccount();
+            venusAccount.PayIn(200);
+            venusAccount.Withdraw(100);
+            Console.WriteLine(venusAccount.ToString());
+            jupiterAccount.PayIn(500);
+            jupiterAccount.Withdraw(600);
+            jupiterAccount.Withdraw(100);
+            Console.WriteLine(jupiterAccount.ToString());
+        }
+    }
 }
-}
-}
+```
 This code produces the following output:
-> BankAccounts
-Venus Bank Saver: Balance = $100.00
-Withdrawal attempt failed.
-Jupiter Bank Saver: Balance = $400.00
+```
+    > BankAccounts
+    Venus Bank Saver: Balance = $100.00
+    Withdrawal attempt failed.
+    Jupiter Bank Saver: Balance = $400.00
+```
 The main point to notice about this code is the way that you have
-declared both your reference variables as IBankAccount references.
+declared both your reference variables as `IBankAccount` references.
 This means that they can point to any instance of any class that
 implements this interface. However, it also means that you can call
 only methods that are part of this interface through these references——
 if you want to call any methods implemented by a class that are not
 part of the interface, you need to cast the reference to the appropriate
 type. In the example code, you were able to call ToString (not
-implemented by IBankAccount ) without any explicit cast, purely
+implemented by `IBankAccount` ) without any explicit cast, purely
 because ToString is a System.Object method, so the C# compiler
 knows that it will be supported by any class (put differently, the cast
 from any interface to System.Object is implicit). Chapter 6, “Operators
 and Casts,” covers the syntax for performing casts.
+
 Interface references can in all respects be treated as class references——
 but the power of an interface reference is that it can refer to any class
-
-
 that implements that interface. For example, this allows you to form
 arrays of interfaces, whereby each element of the array is a different
 class:
+```c#
 IBankAccount[] accounts = new IBankAccount[2];
 accounts[0] = new SaverAccount();
 accounts[1] = new GoldAccount();
+```
 **NOTE**, however, that you would get a compiler error if you tried
 something like this:
 accounts[1] = new SomeOtherClass(); // SomeOtherClass does
@@ -1118,10 +1092,13 @@ verify, shows that the correct amounts have been transferred:
 > CurrentAccount
 Venus Bank Saver: Balance = $300.00
 Jupiter Bank Current Account: Balance = $400.00
-IS AND AS OPERATORS
+
+
+## IS AND AS OPERATORS
 Before concluding inheritance with interfaces and classes, we need to
-have a look at two important operators related to inheritance: the is
-and as operators.
+have a look at two important operators related to inheritance: the `is`
+and `as` operators.
+
 You’ve already seen that you can directly assign objects of a specific
 type to a base class or an interface——if the type has a direct relation in
 the hierarchy. For example, the SaverAccount created earlier can be
@@ -1132,7 +1109,7 @@ What if you have a method accepting an object type, and you want to
 get access to the IBankAccount members? The object type doesn’t have
 the members of the IBankAccount interface. You can do a cast. Cast the
 object (you can also use any parameter of type of any interface and
-cast it to the type you need) to an IBankAccount and work with that:
+cast it to the type you need) to an IBankAccount and work with that: 
 
 
 public void WorkWithManyDifferentObjects(object o)
