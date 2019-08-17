@@ -1,32 +1,27 @@
-
-
-Generics
+# Generics
 WHAT’S IN THIS CHAPTER?
-An overview of generics
-Creating generic classes
-Features of generic classes
-Generic interfaces
-Generic structs
-Generic methods
-WROX.COM DOWNLOADS FOR THIS
-CHAPTER
+- An overview of generics
+- Creating generic classes
+- Features of generic classes
+- Generic interfaces
+- Generic structs
+- Generic methods
+WROX.COM DOWNLOADS FOR THIS CHAPTER
 The Wrox.com code downloads for this chapter are found at
 wrox.com on the Download Code tab. The source code is also
 available at
 https://github.com/ProfessionalCSharp/ProfessionalCSharp7
-the directory Generics .
+in the directory Generics .
 The code for this chapter is divided into the following major
 examples:
-Linked List Objects
-Linked List Sample
-Document Manager
+- Linked List Objects
+- Linked List Sample
+- Document Manager
+- Variance
+- Generic Methods
+- Specialization
 
-
-in
-Variance
-Generic Methods
-Specialization
-GENERICS OVERVIEW
+## GENERICS OVERVIEW
 Generics are an important concept of not only C# but also .NET.
 Generics are more than a part of the C# programming language; they
 are deeply integrated with the IL (Intermediate Language) code in the
@@ -34,14 +29,17 @@ assemblies. With generics, you can create classes and methods that are
 independent of contained types. Instead of writing a number of
 methods or classes with the same functionality for different types, you
 can create just one method or class.
+
 Another option to reduce the amount of code is using the Object class.
 However, passing using types derived from the Object class is not type
 safe. Generic classes make use of generic types that are replaced with
 specific types as needed. This allows for type safety: The compiler
 complains if a specific type is not supported with the generic class.
+
 Generics are not limited to classes; in this chapter, you also see
 generics with interfaces and methods. You can find generics with
 delegates in Chapter 8, “Delegates, Lambdas, and Events.”
+
 Generics are not specific only to C#; similar concepts exist with other
 languages. For example, C++ templates have some similarity to
 generics. However, there’s a big difference between C++ templates and
@@ -53,45 +51,47 @@ only a construct of the C# language but are defined with the Common
 Language Runtime (CLR). This makes it possible to instantiate
 generics with a specific type in Visual Basic even though the generic
 class was defined with C#.
+
 The following sections explore the advantages and disadvantages of
 generics, particularly in regard to the following:
+- Performance
+- Type safety
+- Binary code reuse
+- Code bloat
+- Naming guidelines
 
-
-Performance
-Type safety
-Binary code reuse
-Code bloat
-Naming guidelines
-Performance
+### Performance
 One of the big advantages of generics is performance. In Chapter 10,
 “Collections,” you see non-generic and generic collection classes from
-the namespaces System.Collections and System.Collections.Generic .
+the namespaces `System.Collections` and `System.Collections.Generic` .
 Using value types with non-generic collection classes results in boxing
 and unboxing when the value type is converted to a reference type, and
 vice versa.
+
 **NOTE**
 Boxing and unboxing are discussed in Chapter 6, “Operators and
 Casts.” Here is just a short refresher about these terms.
+
 Value types are stored on the stack, whereas reference types are stored
 on the heap. C# classes are reference types; structs are value types.
 .NET makes it easy to convert value types to reference types, so you
 can use a value type everywhere an object (which is a reference type) is
-needed. For example, an int can be assigned to an object. The
+needed. For example, an `int` can be assigned to an object. The
 conversion from a value type to a reference type is known as boxing.
 Boxing occurs automatically if a method requires an object as a
 parameter, and a value type is passed. In the other direction, a boxed
 value type can be converted to a value type by using unboxing. With
 unboxing, the cast operator is required.
-The following example shows that the ArrayList class from the
-namespace System.Collections stores objects; the Add method is
+
+The following example shows that the `ArrayList` class from the
+namespace `System.Collections` stores objects; the Add method is
 defined to require an object as a parameter, so an integer type is
-boxed. When the values from an ArrayList are read, unboxing occurs
-
-
+boxed. When the values from an `ArrayList` are read, unboxing occurs
 when the object is converted to an integer type. This may be obvious
 with the cast operator that is used to assign the first element of the
-ArrayList collection to the variable i1 , but it also happens inside the
-foreach statement where the variable i2 of type int is accessed:
+`ArrayList` collection to the variable `i1` , but it also happens inside the
+foreach statement where the variable `i2` of type `int` is accessed:
+```c#
 var list = new ArrayList();
 list.Add(44); // boxing —— convert a value type to a reference
 type
@@ -100,70 +100,80 @@ to
 // a value type
 foreach (int i2 in list)
 {
-Console.WriteLine(i2); // unboxing
+    Console.WriteLine(i2); // unboxing
 }
+```
 Boxing and unboxing are easy to use but have a big performance
 impact, especially when iterating through many items.
-Instead of using objects, the List<T> class from the namespace
-System.Collections.Generic enables you to define the type when it is
-used. In the example here, the generic type of the List<T> class is
-defined as int , so the int type is used inside the class that is generated
+
+Instead of using objects, the `List<T>` class from the namespace
+`System.Collections.Generic` enables you to define the type when it is
+used. In the example here, the generic type of the `List<T>` class is
+defined as `int` , so the `int` type is used inside the class that is generated
 dynamically from the Just-In-Time (JIT) compiler. Boxing and
 unboxing no longer happen:
+```c#
 var list = new List<int>();
 list.Add(44); // no boxing —— value types are stored in the
 List<int>
 int i1 = list[0]; // no unboxing, no cast needed
 foreach (int i2 in list)
 {
-Console.WriteLine(i2);
+    Console.WriteLine(i2);
 }
-Type Safety
-Another feature of generics is type safety. As with the ArrayList class,
+```
+
+### Type Safety
+Another feature of generics is type safety. As with the `ArrayList` class,
 if objects are used, any type can be added to this collection. The
 following example shows adding an integer, a string, and an object of
-type MyClass to the collection of type ArrayList :
+type MyClass to the collection of type `ArrayList` :
+```c#
 var list = new ArrayList();
-
-
 list.Add(44);
 list.Add("mystring");
 list.Add(new MyClass());
-If this collection is iterated using the following foreach statement,
+```
+If this collection is iterated using the following `foreach` statement,
 which iterates using integer elements, the compiler accepts this code.
 However, because not all elements in the collection can be cast to an
-int , a runtime exception will occur:
+`int` , a runtime exception will occur:
+```c#
 foreach (int i in list)
 {
-Console.WriteLine(i);
+    Console.WriteLine(i);
 }
+```
 Errors should be detected as early as possible. With the generic class
-List<T> , the generic type T defines what types are allowed. With a
-definition of List<int> , only integer types can be added to the
+`List<T>` , the generic type `T` defines what types are allowed. With a
+definition of `List<int>` , only integer types can be added to the
 collection. The compiler doesn’t compile this code because the Add
 method has invalid arguments:
+```c#
 var list = new List<int>();
 list.Add(44);
 list.Add("mystring"); // compile time error
 list.Add(new MyClass()); // compile time error
-Binary Code Reuse
+```
+### Binary Code Reuse
 Generics enable better binary code reuse. A generic class can be
 defined once and can be instantiated with many different types. Unlike
 C++ templates, it is not necessary to access the source code.
-For example, here the List<T> class from the namespace
-System.Collections.Generic is instantiated with an int , a string , and
-a MyClass type:
+For example, here the `List<T>` class from the namespace
+`System.Collections.Generic` is instantiated with an `int` , a `string` , and
+a `MyClass` type:
+```c#
 var list = new List<int>();
 list.Add(44);
 var stringList = new List<string>();
 stringList.Add("mystring");
 var myClassList = new List<MyClass>();
 myClassList.Add(new MyClass());
+```
 Generic types can be defined in one language and used from any other
-
-
 .NET language.
-Code Bloat
+
+### Code Bloat
 You might be wondering how much code is created with generics when
 instantiating them with different specific types. Because a generic class
 definition goes into the assembly, instantiating generic classes with
@@ -177,108 +187,105 @@ reference a reference type. Value types are contained within the
 memory of the generic instantiated class; and because every value type
 can have different memory requirements, a new class for every value
 type is instantiated.
-Naming Guidelines
+
+### Naming Guidelines
 If generics are used in the program, it helps when generic types can be
 distinguished from non-generic types. Here are naming guidelines for
 generic types:
-Prefix generic type names with the letter T .
-If the generic type can be replaced by any class because there’s no
-special requirement, and only one generic type is used, the
-character T is good as a generic type name:
-public class List<T> { }
-public class LinkedList<T> { }
-If there’s a special requirement for a generic type (for example, it
-must implement an interface or derive from a base class), or if two
-or more generic types are used, use descriptive names for the type
-names:
-public delegate void EventHandler<TEventArgs>(object sender,
-TEventArgs e);
-public delegate TOutput Converter<TInput, TOutput>(TInput
+- Prefix generic type names with the letter `T` .
+- If the generic type can be replaced by any class because there’s no special requirement, and only one generic type is used, the character `T` is good as a generic type name:
+`public class List<T> { }`
+`public class LinkedList<T> { }`
+- If there’s a special requirement for a generic type (for example, it must implement an interface or derive from a base class), or if two or more generic types are used, use descriptive names for the type names:
+`public delegate void EventHandler<TEventArgs>(object sender, TEventArgs e);`
+`public delegate TOutput Converter<TInput, TOutput>(TInput from);`
+`public class SortedList<TKey, TValue> { }`
 
-
-from);
-public class SortedList<TKey, TValue> { }
-CREATING GENERIC CLASSES
+## CREATING GENERIC CLASSES
 The example in this section starts with a normal, non-generic
 simplified linked list class that can contain objects of any kind, and
 then converts this class to a generic class.
+
 With a linked list, one element references the next one. Therefore, you
 must create a class that wraps the object inside the linked list and
-references the next object. The class LinkedListNode contains a
+references the next object. The class `LinkedListNode` contains a
 property named Value that is initialized with the constructor. In
-addition to that, the LinkedListNode class contains references to the
+addition to that, the `LinkedListNode` class contains references to the
 next and previous elements in the list that can be accessed from
 properties (code file LinkedListObjects/LinkedListNode.cs ):
+```c#
 public class LinkedListNode
 {
-public LinkedListNode(object value) => Value = value;
-public object Value { get; }
-public LinkedListNode Next { get; internal set; }
-public LinkedListNode Prev { get; internal set; }
+    public LinkedListNode(object value) => Value = value;
+    public object Value { get; }
+    public LinkedListNode Next { get; internal set; }
+    public LinkedListNode Prev { get; internal set; }
 }
-The LinkedList class includes First and Last properties of type
-LinkedListNode that mark the beginning and end of the list. The
-method AddLast adds a new element to the end of the list. First, an
-object of type LinkedListNode is created. If the list is empty, then the
+```
+The `LinkedList` class includes `First` and `Last` properties of type
+`LinkedListNode` that mark the beginning and end of the list. The
+method `AddLast` adds a new element to the end of the list. First, an
+object of type `LinkedListNode` is created. If the list is empty, then the
 First and Last properties are set to the new element; otherwise, the
 new element is added as the last element to the list. By implementing
-the GetEnumerator method, it is possible to iterate through the list with
-the foreach statement. The GetEnumerator method makes use of the
+the `GetEnumerator` method, it is possible to iterate through the list with
+the foreach statement. The `GetEnumerator` method makes use of the
 yield statement for creating an enumerator type:
-public class LinkedList: IEnumerable
+```c#
+public class LinkedList : IEnumerable
 {
-public LinkedListNode First { get; private set; }
-public LinkedListNode Last { get; private set; }
-public LinkedListNode AddLast(object node)
-{
-
-
-var newNode = new LinkedListNode(node);
-if (First == null)
-{
-First = newNode;
-Last = First;
+    public LinkedListNode First { get; private set; }
+    public LinkedListNode Last { get; private set; }
+    public LinkedListNode AddLast(object node)
+    {
+        var newNode = new LinkedListNode(node);
+        if (First == null)
+        {
+            First = newNode;
+            Last = First;
+        }
+        else
+        {
+            LinkedListNode previous = Last;
+            Last.Next = newNode;
+            Last = newNode;
+            Last.Prev = previous;
+        }
+        return newNode;
+    }
+    public IEnumerator GetEnumerator()
+    {
+        LinkedListNode current = First;
+        while (current != null)
+        {
+            yield return current.Value;
+            current = current.Next;
+        }
+    }
 }
-else
-{
-LinkedListNode previous = Last;
-Last.Next = newNode;
-Last = newNode;
-Last.Prev = previous;
-}
-return newNode;
-}
-public IEnumerator GetEnumerator()
-{
-LinkedListNode current = First;
-while (current != null)
-{
-yield return current.Value;
-current = current.Next;
-}
-}
-}
+```
 **NOTE**
 The yield statement creates a state machine for an enumerator.
 This statement is explained in Chapter 7, “Arrays.”
-Now you can use the LinkedList class with any type. The following
-code segment instantiates a new LinkedList object and adds two
+
+Now you can use the `LinkedList` class with any type. The following
+code segment instantiates a new `LinkedList` object and adds two
 integer types and one string type. As the integer types are converted to
 an object, boxing occurs as explained earlier in this chapter. With the
 foreach statement, unboxing happens. In the foreach statement, the
 elements from the list are cast to an integer, so a runtime exception
 occurs with the third element in the list because casting to an int fails
 (code file LinkedListObjects/Program.cs ):
-
-
+```c#
 var list1 = new LinkedList();
 list1.AddLast(2);
 list1.AddLast(4);
 list1.AddLast("6");
 foreach (int i in list1)
 {
-Console.WriteLine(i);
+    Console.WriteLine(i);
 }
+```
 Now make a generic version of the linked list. A generic class is
 defined similarly to a normal class with the generic type declaration.
 You can then use the generic type within the class as a field member or
@@ -288,138 +295,144 @@ object ; the constructor is changed as well to accept an object of type T .
 A generic type can also be returned and set, so the properties Next and
 Prev are now of type LinkedListNode<T> (code file
 LinkedListSample/LinkedListNode.cs ):
+```c#
 public class LinkedListNode<T>
 {
-public LinkedListNode(T value) => Value = value;
-public T Value { get; }
-public LinkedListNode<T> Next { get; internal set; }
-public LinkedListNode<T> Prev { get; internal set; }
+    public LinkedListNode(T value) => Value = value;
+    public T Value { get; }
+    public LinkedListNode<T> Next { get; internal set; }
+    public LinkedListNode<T> Prev { get; internal set; }
 }
-In the following code, the class LinkedList is changed to a generic class
-as well. LinkedList<T> contains LinkedListNode<T> elements. The type
-T from the LinkedList defines the type T of the properties First and
+```
+In the following code, the class `LinkedList` is changed to a generic class
+as well. `LinkedList<T>` contains `LinkedListNode<T>` elements. The type
+T from the LinkedList defines the type `T` of the properties First and
 Last . The method AddLast now accepts a parameter of type T and
-instantiates an object of LinkedListNode<T>.
-Besides the interface IEnumerable , a generic version is also available:
-IEnumerable<T> . IEnumerable<T> derives from IEnumerable and adds
-the GetEnumerator method, which returns IEnumerator<T> .
-LinkedList<T> implements the generic interface IEnumerable<T> (code
+instantiates an object of `LinkedListNode<T>`.
+
+Besides the interface `IEnumerable` , a generic version is also available:
+`IEnumerable<T>` . `IEnumerable<T>` derives from `IEnumerable` and adds
+the `GetEnumerator` method, which returns `IEnumerator<T>` .
+`LinkedList<T>` implements the generic interface `IEnumerable<T>` (code
 file LinkedListSample/LinkedList.cs ):
-public class LinkedList<T>: IEnumerable<T>
+```c#
+public class LinkedList<T> : IEnumerable<T>
 {
-public LinkedListNode<T> First { get; private set; }
-
-
-public LinkedListNode<T> Last { get; private set; }
-public LinkedListNode<T> AddLast(T node)
-{
-var newNode = new LinkedListNode<T>(node);
-if (First == null)
-{
-First = newNode;
-Last = First;
+    public LinkedListNode<T> First { get; private set; }
+    public LinkedListNode<T> Last { get; private set; }
+    public LinkedListNode<T> AddLast(T node)
+    {
+        var newNode = new LinkedListNode<T>(node);
+        if (First == null)
+        {
+            First = newNode;
+            Last = First;
+        }
+        else
+        {
+            LinkedListNode<T> previous = Last;
+            Last.Next = newNode;
+            Last = newNode;
+            Last.Prev = previous;
+        }
+        return newNode;
+    }
+    public IEnumerator<T> GetEnumerator()
+    {
+        LinkedListNode<T> current = First;
+        while (current != null)
+        {
+            yield return current.Value;
+            current = current.Next;
+        }
+    }
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
-else
-{
-LinkedListNode<T> previous = Last;
-Last.Next = newNode;
-Last = newNode;
-Last.Prev = previous;
-}
-return newNode;
-}
-public IEnumerator<T> GetEnumerator()
-{
-LinkedListNode<T> current = First;
-while (current != null)
-{
-yield return current.Value;
-current = current.Next;
-}
-}
-IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}
+```
 **NOTE**
-Enumerators and the interfaces IEnumerable and IEnumerator are
+Enumerators and the interfaces `IEnumerable` and `IEnumerator` are
 discussed in Chapter 7.
+
 Using the generic LinkedList<T> , you can instantiate it with an int
 type, and there’s no boxing. Also, you get a compiler error if you don’t
 pass an int with the method AddLast . Using the generic
 IEnumerable<T> , the foreach statement is also type safe, and you get a
 compiler error if that variable in the foreach statement is not an int
-
-
 (code file LinkedListSample/Program.cs ):
+```c#
 var list2 = new LinkedList<int>();
 list2.AddLast(1);
 list2.AddLast(3);
 list2.AddLast(5);
 foreach (int i in list2)
 {
-Console.WriteLine(i);
+    Console.WriteLine(i);
 }
+```
 Similarly, you can use the generic LinkedList<T> with a string type
 and pass strings to the AddLast method:
+```c#
 var list3 = new LinkedList<string>();
 list3.AddLast("2");
 list3.AddLast("four");
 list3.AddLast("foo");
 foreach (string s in list3)
 {
-Console.WriteLine(s);
+    Console.WriteLine(s);
 }
+```
 **NOTE**
 Every class that deals with the object type is a possible candidate
 for a generic implementation. Also, if classes make use of
 hierarchies, generics can be very helpful in making casting
 unnecessary.
-GENERICS FEATURES
+
+## GENERICS FEATURES
 When creating generic classes, you might need some additional C#
 keywords. For example, it is not possible to assign null to a generic
 type. In this case, the keyword default can be used, as demonstrated
 in the next section. If the generic type does not require the features of
 the Object class but you need to invoke some specific methods in the
 generic class, you can define constraints.
+
 This section discusses the following topics:
+- Default values
+- Constraints
+- Inheritance
+- Static members
 
-
-Default values
-Constraints
-Inheritance
-Static members
 This example begins with a generic document manager, which is used
 to read and write documents from and to a queue. Start by creating a
 new Console project named DocumentManager and add the class
 DocumentManager<T> . The method AddDocument adds a document to the
 queue. The read-only property IsDocumentAvailable returns true if the
 queue is not empty (code file DocumentManager/DocumentManager.cs ):
+```c#
 using System;
 using System.Collections.Generic;
 namespace Wrox.ProCSharp.Generics
 {
-public class DocumentManager<T>
-{
-private readonly Queue<T> _documentQueue = new Queue<T>
-();
-private readonly object _lockQueue = new object();
-public void AddDocument(T doc)
-{
-lock (_lockQueue)
-{
-_documentQueue.Enqueue(doc);
+    public class DocumentManager<T>
+    {
+        private readonly Queue<T> _documentQueue = new Queue<T>();
+        private readonly object _lockQueue = new object();
+        public void AddDocument(T doc)
+        {
+            lock (_lockQueue)
+            {
+                _documentQueue.Enqueue(doc);
+            }
+        }
+        public bool IsDocumentAvailable => _documentQueue.Count > 0;
+    }
 }
-}
-public bool IsDocumentAvailable => _documentQueue.Count >
-0;
-}
-}
+```
 Threading and the lock statement are discussed in Chapter 21, “Tasks
 and Parallel Programming.”
-Default Values
+
+### Default Values
 Now you add a GetDocument method to the DocumentManager<T> class.
 Inside this method the type T should be assigned to null . However, it
-
-
 is not possible to assign null to generic types. That’s because a generic
 type can also be instantiated as a value type, and null is allowed only
 with reference types. To circumvent this problem, you can use the
