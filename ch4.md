@@ -1003,96 +1003,103 @@ accounts[1] = new GoldAccount();
 ```
 **NOTE**, however, that you would get a compiler error if you tried
 something like this:
+```c#
 accounts[1] = new SomeOtherClass(); // SomeOtherClass does
 NOT implement
 // IBankAccount: WRONG!!
+```
 The preceding causes a compilation error similar to this:
+```
 Cannot implicitly convert type 'Wrox.ProCSharp.
 SomeOtherClass' to
 'Wrox.ProCSharp.IBankAccount'
-Interface Inheritance
+```
+### Interface Inheritance
 It’s possible for interfaces to inherit from each other in the same way
 that classes do. This concept is illustrated by defining a new interface,
 ITransferBankAccount , which has the same features as IBankAccount
 but also defines a method to transfer money directly to a different
 account (code file UsingInterfaces/ITransferBankAccount ):
+```c#
 namespace Wrox.ProCSharp
 {
-public interface ITransferBankAccount: IBankAccount
-{
-bool TransferTo(IBankAccount destination, decimal
-amount);
+    public interface ITransferBankAccount: IBankAccount
+    {
+        bool TransferTo(IBankAccount destination, decimal
+        amount);
+    }
 }
-}
-Because ITransferBankAccount is derived from IBankAccount , it gets all
-the members of IBankAccount as well as its own. That means that any
-class that implements (derives from) ITransferBankAccount must
-implement all the methods of IBankAccount , as well as the new
-TransferTo method defined in ITransferBankAccount . Failure to
-
-
+```
+Because `ITransferBankAccount` is derived from `IBankAccount` , it gets all
+the members of `IBankAccount` as well as its own. That means that any
+class that implements (derives from) `ITransferBankAccount` must
+implement all the methods of `IBankAccount` , as well as the new
+TransferTo method defined in `ITransferBankAccount` . Failure to
 implement all these methods results in a compilation error.
-**NOTE** that the TransferTo method uses an IBankAccount interface
+
+**NOTE** that the TransferTo method uses an `IBankAccount` interface
 reference for the destination account. This illustrates the usefulness of
 interfaces: When implementing and then invoking this method, you
 don’t need to know anything about what type of object you are
 transferring money to——all you need to know is that this object
-implements IBankAccount .
-To illustrate ITransferBankAccount , assume that the Planetary Bank of
+implements `IBankAccount` .
+
+To illustrate `ITransferBankAccount` , assume that the Planetary Bank of
 Jupiter also offers a current account. Most of the implementation of
-the CurrentAccount class is identical to implementations of
+the `CurrentAccount` class is identical to implementations of
 SaverAccount and GoldAccount (again, this is just to keep this example
 simple——that won’t normally be the case), so in the following code only
 the differences are highlighted (code file
 UsingInterfaces/JupiterBank.cs ):
+```c#
 public class CurrentAccount: ITransferBankAccount
 {
-private decimal _balance;
-public void PayIn(decimal amount) => _balance += amount;
-public bool Withdraw(decimal amount)
-{
-if (_balance >= amount)
-{
-_balance -= amount;
-return true;
+    private decimal _balance;
+    public void PayIn(decimal amount) => _balance += amount;
+    public bool Withdraw(decimal amount)
+    {
+        if (_balance >= amount)
+        {
+            _balance -= amount;
+            return true;
+        }
+        Console.WriteLine("Withdrawal attempt failed.");
+        return false;
+    }
+    public decimal Balance => _balance;
+    public bool TransferTo(IBankAccount destination, decimal amount)
+    {
+        bool result = Withdraw(amount);
+        if (result)
+        {
+        destination.PayIn(amount);
+        }
+        return result;
+    }
+    public override string ToString() => $"Jupiter Bank Current Account: Balance = {_balance,6:C}";
 }
-Console.WriteLine("Withdrawal attempt failed.");
-return false;
-}
-public decimal Balance => _balance;
-public bool TransferTo(IBankAccount destination, decimal
-amount)
-{
-bool result = Withdraw(amount);
-if (result)
-{
-destination.PayIn(amount);
-}
-return result;
-}
-public override string ToString() =>
-$"Jupiter Bank Current Account: Balance =
-
-
-{_balance,6:C}";
-}
+```
 The class can be demonstrated with this code:
+```c#
 static void Main()
 {
-IBankAccount venusAccount = new SaverAccount();
-ITransferBankAccount jupiterAccount = new CurrentAccount();
-venusAccount.PayIn(200);
-jupiterAccount.PayIn(500);
-jupiterAccount.TransferTo(venusAccount, 100);
-Console.WriteLine(venusAccount.ToString());
-Console.WriteLine(jupiterAccount.ToString());
+    IBankAccount venusAccount = new SaverAccount();
+    ITransferBankAccount jupiterAccount = new CurrentAccount();
+    venusAccount.PayIn(200);
+    jupiterAccount.PayIn(500);
+    jupiterAccount.TransferTo(venusAccount, 100);
+    Console.WriteLine(venusAccount.ToString());
+    Console.WriteLine(jupiterAccount.ToString());
 }
+```
 The preceding code produces the following output, which, as you can
 verify, shows that the correct amounts have been transferred:
+
+```c#
 > CurrentAccount
 Venus Bank Saver: Balance = $300.00
 Jupiter Bank Current Account: Balance = $400.00
-
+```
 
 ## IS AND AS OPERATORS
 Before concluding inheritance with interfaces and classes, we need to
@@ -1101,67 +1108,75 @@ and `as` operators.
 
 You’ve already seen that you can directly assign objects of a specific
 type to a base class or an interface——if the type has a direct relation in
-the hierarchy. For example, the SaverAccount created earlier can be
-directly assigned to an IBankAccount because the SaverAccount type
-implements the interface IBankAccount :
-IBankAccount venusAccount = new SaverAccount();
+the hierarchy. For example, the `SaverAccount` created earlier can be
+directly assigned to an IBankAccount because the `SaverAccount` type
+implements the interface `IBankAccount` :
+`IBankAccount venusAccount = new SaverAccount();`
 What if you have a method accepting an object type, and you want to
-get access to the IBankAccount members? The object type doesn’t have
-the members of the IBankAccount interface. You can do a cast. Cast the
+get access to the `IBankAccount` members? The object type doesn’t have
+the members of the `IBankAccount` interface. You can do a cast. Cast the
 object (you can also use any parameter of type of any interface and
-cast it to the type you need) to an IBankAccount and work with that: 
+cast it to the type you need) to an `IBankAccount` and work with that: 
 
-
+```c#
 public void WorkWithManyDifferentObjects(object o)
 {
-IBankAccount account = (IBankAccount)o;
-// work with the account
+    IBankAccount account = (IBankAccount)o;
+    // work with the account
 }
-This works as long as you always supply an object of type IBankAccount
-to this method. Of course, if an object of type object is accepted, there
+```
+This works as long as you always supply an object of type `IBankAccount`
+to this method. Of course, if an object of type `object` is accepted, there
 will be the case when invalid objects are passed. This is when you get
-an InvalidCastException . It’s never a good idea to accept exceptions in
+an `InvalidCastException` . It’s never a good idea to accept exceptions in
 normal cases. You can read more about this in Chapter 14. This is
-where the is and as operators come into play.
+where the `is` and `as` operators come into play.
+
 Instead of doing the cast directly, it’s a good idea to check whether the
-parameter implements the interface IBankAccount . The as operator
+parameter implements the interface `IBankAccount` . The as operator
 works similar to the cast operator within the class hierarchy——it
 returns a reference to the object. However, it never throws an
-InvalidCastException . Instead, this operator returns null in case the
+`InvalidCastException` . Instead, this operator returns null in case the
 object is not of the type asked for. Here, it is a good idea to verify for
-null before using the reference; otherwise a NullReferenceException
+null before using the reference; otherwise a `NullReferenceException`
 will be thrown later using the following reference:
+
+```c#
 public void WorkWithManyDifferentObjects(object o)
 {
-IBankAccount account = o as IBankAccount;
-if (account != null)
-{
-// work with the account
+    IBankAccount account = o as IBankAccount;
+    if (account != null)
+    {
+        // work with the account
+    }
 }
-}
+```
 Instead of using the as operator, you can use the is operator. The is
 operator returns true or false , depending on whether the condition is
 fulfilled and the object is of the specified type. If the condition is true ,
 the resulting object is written to the variable declared of the matching
 type as shown in the following code snippet:
+
+```c#
 public void WorkWithManyDifferentObjects(object o)
 {
-if (o is IBankAccount account)
-{
-// work with the account
+    if (o is IBankAccount account)
+    {
+        // work with the account
+    }
 }
-
-
-}
+```
 **NOTE**
 Adding the variable declaration to the is operator is a new
 feature of C# 7. This is part of the pattern matching functionality
 that is discussed in detail in Chapter 13, “Functional
 Programming with C#.”
+
 Instead of having bad surprises by exceptions based on casts,
 conversions within the class hierarchy work well with the is and as
 operators.
-SUMMARY
+
+# SUMMARY
 This chapter described how to code inheritance in C#. The chapter
 described how C# offers rich support for both multiple interface and
 single implementation inheritance and explained that C# provides a
