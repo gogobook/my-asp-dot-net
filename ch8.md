@@ -1,13 +1,10 @@
-
-
-Delegates, Lambdas, and Events
+# Delegates, Lambdas, and Events
 WHAT’S IN THIS CHAPTER?
-Delegates
-Lambda expressions
-Closures
-Events
-WROX.COM CODE DOWNLOADS
-FOR THIS CHAPTER
+- Delegates
+- Lambda expressions
+- Closures
+- Events
+WROX.COM CODE DOWNLOADS FOR THIS CHAPTER
 The Wrox.com code downloads for this chapter are found at
 www.wrox.com on the Download Code tab. The source code is also
 available at
@@ -15,13 +12,13 @@ https://github.com/ProfessionalCSharp/ProfessionalCSharp7 in
 the directory Delegates .
 The code for this chapter is divided into the following major
 examples:
-Simple Delegates
-Bubble Sorter
-Lambda Expressions
-Events Sample
+- Simple Delegates
+- Bubble Sorter
+- Lambda Expressions
+- Events Sample
 
 
-REFERENCING METHODS
+## REFERENCING METHODS
 Delegates are the .NET variant of addresses to methods. Compare this
 to C++, where a function pointer is nothing more than a pointer to a
 memory location that is not type-safe. You have no idea what a pointer
@@ -37,7 +34,8 @@ This chapter explains the basics of delegates and lambda expressions,
 and shows you how to implement methods called by delegates with
 lambda expressions. It also demonstrates how .NET uses delegates as
 the means of implementing events.
-DELEGATES
+
+## DELEGATES
 Delegates exist for situations in which you want to pass methods
 around to other methods. To see what that means, consider this line of
 code:
@@ -53,8 +51,6 @@ information is available only at runtime and hence needs to be passed
 in as a parameter to the first method. That might sound confusing, but
 it should become clearer with a couple of examples:
 Threads and tasks——It is possible in C# to tell the computer to
-
-
 start a new sequence of execution in parallel with what it is
 currently doing. Such a sequence is known as a thread, and you
 start one using the Start method on an instance of one of the base
@@ -91,8 +87,6 @@ In C and C++, you can just take the address of a function and pass it as
 a parameter. There’s no type safety with C. You can pass any function
 to a method where a function pointer is required. Unfortunately, this
 direct approach not only causes some problems with type safety but
-
-
 also neglects the fact that when you are doing object-oriented
 programming, methods rarely exist in isolation; they usually need to
 be associated with a class instance before they can be called. Because
@@ -123,8 +117,6 @@ the delegate, you provide full details about the signature and the
 return type of the method that it represents.
 **NOTE**
 One good way to understand delegates is to think of a delegate as
-
-
 something that gives a name to a method signature and the
 return type.
 Suppose that you want to define a delegate called TwoLongsOp that
@@ -153,7 +145,6 @@ aware of this class and uses its delegate syntax to hide the details
 of the operation of this class. This is another good example of how
 C# works in conjunction with the base classes to make
 programming as easy as possible.
-
 
 After you have defined a delegate, you can create an instance of it so
 that you can use it to store details about a particular method.
@@ -187,8 +178,6 @@ C# always syntactically take a one-parameter constructor, the
 parameter being the method to which the delegate refers. This method
 must match the signature with which you originally defined the
 delegate. In this case, you would get a compilation error if you tried to
-
-
 initialize the variable firstStringMethod with any method that did not
 take any parameters and return a string. Notice that because
 int.ToString is an instance method (as opposed to a static one), you
@@ -221,7 +210,6 @@ detects that a delegate type is required with firstStringMethod , so it
 creates an instance of the delegate type GetAString and passes the
 address of the method with the object x to the constructor.
 
-
 **NOTE**
 Be aware that you can’t type the brackets to the method name as
 x.ToString() and pass it to the delegate variable. This would be
@@ -249,7 +237,6 @@ its own overload of ToString and a static method with the same
 signature to GetCurrencyUnit . This way, the same delegate variable can
 be used to invoke these methods (code file
 GetAStringDemo/Currency.cs ):
-
 
 struct Currency
 {
@@ -325,8 +312,6 @@ difficult to write without using delegates.
 Simple Delegate Example
 This example defines a MathOperations class that uses a couple of static
 methods to perform two operations on doubles. Then you use
-
-
 delegates to invoke these methods. The MathOperations class looks like
 this (code file SimpleDelegates/MathOperations ):
 class MathOperations
@@ -367,8 +352,6 @@ Console.WriteLine($"Value is {value}, result of
 operation is {result}");
 }
 }
-
-
 }
 In this code, you instantiate an array of DoubleOp delegates (remember
 that after you have defined a delegate class, you can basically
@@ -403,8 +386,6 @@ SimpleDelegate
 Using operations[0]:
 Value is 2, result of operation is 4
 Value is 7.94, result of operation is 15.88
-
-
 Value
 Using
 Value
@@ -444,8 +425,6 @@ Func<double, double>[] operations =
 MathOperations.MultiplyByTwo,
 MathOperations.Square
 };
-
-
 and use it with the ProcessAndDisplayNumber method as a parameter:
 static void ProcessAndDisplayNumber(Func<double, double>
 action,
@@ -485,8 +464,6 @@ sortArray[i + 1] = temp;
 swapped = true;
 }
 }
-
-
 } while (swapped);
 This is all very well for int s, but you want your Sort method to be able
 to sort any object. In other words, if some client code hands you an
@@ -523,8 +500,6 @@ do
 {
 swapped = false;
 for (int i = 0; i < sortArray.Count——1; i++)
-
-
 {
 if (comparison(sortArray[i+1], sortArray[i]))
 {
@@ -563,8 +538,6 @@ references and returning a Boolean. In the implementation, the
 comparison based on salary is performed.
 Now you are ready to write some client code to request a sort (code file
 BubbleSorter/Program.cs ):
-
-
 using System;
 namespace Wrox.ProCSharp.Delegates
 {
@@ -604,8 +577,6 @@ more than one method, you need to make an explicit call through a
 delegate more than once. However, it is possible for a delegate to wrap
 more than one method. Such a delegate is known as a multicast
 delegate. When a multicast delegate is called, it successively calls each
-
-
 method in order. For this to work, the delegate signature should
 return a void ; otherwise, you would only get the result of the last
 method invoked by the delegate.
@@ -637,8 +608,6 @@ To illustrate the use of multicast delegates, the following code recasts
 the SimpleDelegate example into a new example: MulticastDelegate .
 Because you now need the delegate to refer to methods that return
 void , you rewrite the methods in the MathOperations class so they
-
-
 display their results instead of returning them (code file
 MulticastDelegates/MathOperations.cs ):
 class MathOperations
@@ -678,8 +647,6 @@ Console.WriteLine();
 Each time ProcessAndDisplayNumber is called, it displays a message
 saying that it has been called. Then the following statement causes
 each of the method calls in the action delegate instance to be called in
-
-
 succession:
 action(value);
 Running the preceding code produces this result:
@@ -715,8 +682,6 @@ static void One()
 {
 Console.WriteLine("One");
 throw new Exception("Error in one");
-
-
 }
 static void Two()
 {
@@ -750,8 +715,6 @@ Errors and exceptions are explained in detail in Chapter 14,
 “Errors and Exceptions.”
 In such a scenario, you can avoid the problem by iterating the list on
 your own. The Delegate class defines the method GetInvocationList
-
-
 that returns an array of Delegate objects. You can now use this
 delegate to invoke the methods associated with them directly, catch
 exceptions, and continue with the next iteration (code file
@@ -789,8 +752,6 @@ The syntax for defining a delegate with an anonymous method doesn’t
 change. It’s when the delegate is instantiated that things change. The
 following simple console application shows how using an anonymous
 method can work (code file AnonymousMethods/Program.cs ):
-
-
 class Program
 {
 static void Main()
@@ -829,8 +790,6 @@ anonymous method that has a target outside of the anonymous
 method. The reverse is also true: A jump statement outside the
 anonymous method cannot have a target inside the anonymous
 method.
-
-
 Unsafe code cannot be accessed inside an anonymous method, and the
 ref and out parameters that are used outside of the anonymous
 method cannot be accessed. Other variables defined outside of the
@@ -847,7 +806,8 @@ the same——and more——functionality. However, you’ll find the
 syntax for anonymous methods in many places in existing source
 code, which is why it’s good to know it.
 Lambda expressions have been available since C# 3.
-LAMBDA EXPRESSIONS
+
+## LAMBDA EXPRESSIONS
 One way where lambda expressions are used is to assign a lambda
 expression to a delegate type: implement code inline. Lambda
 expressions can be used whenever you have a delegate parameter type.
@@ -896,8 +856,6 @@ Func<double, double, double> twoParamsWithTypes =
 (double x, double y) => x * y;
 Console.WriteLine(twoParamsWithTypes(4, 2));
 Multiple Code Lines
-
-
 If the lambda expression consists of a single statement, a method
 block with curly brackets and a return statement are not needed.
 There’s an implicit return added by the compiler:
@@ -931,8 +889,6 @@ creates a new method that is used later when f is invoked, this might
 not look confusing at all. Looking at this code block, the returned value
 calling f should be the value from x plus 5, but this might not be the
 case (code file LambdaExpressions/Program.cs ):
-
-
 int someVal = 5;
 Func<int, int> f = x => x + someVal;
 Assuming the variable someVal is later changed, and then the lambda
@@ -966,8 +922,6 @@ Using the lambda expression and invoking the method creates an
 instance of the anonymous class and passes the value of the variable
 from the time when the call is made.
 **NOTE**
-
-
 In case you are using closures with multiple threads, you can get
 into concurrency conflicts. It’s best to only use immutable types
 for closures. This way it’s guaranteed the value can’t change, and
@@ -978,7 +932,7 @@ Another use of lambda expressions is when the type is Expression
 or Expression<T> , in which case the compiler creates an
 expression tree. This feature is discussed in Chapter 12,
 “Language Integrated Query.”
-EVENTS
+## EVENTS
 Events are based on delegates and offer a publish/subscribe
 mechanism to delegates. You can find events everywhere across the
 framework. In Windows applications, the Button class offers the Click
@@ -996,8 +950,6 @@ EventHandler<CarInfoEventArgs> with the event keyword. Inside the
 method NewCar , the event NewCarInfo is fired by invoking the method
 RaiseNewCarInfo . The implementation of this method verifies whether
 the delegate is not null and raises the event (code file
-
-
 EventsSample/CarDealer.cs ):
 using System;
 namespace Wrox.ProCSharp.Delegates
@@ -1032,8 +984,6 @@ generic delegate EventHandler<T> . EventHandler<TEventArgs> defines a
 handler that returns void and accepts two parameters. With
 EventHandler<TEventArgs> , the first parameter needs to be of type
 object, and the second parameter is of type T .
-
-
 EventHandler<TEventArgs> also defines a constraint on T ;
 from the base class EventArgs , which is the case with
 CarInfoEventArgs :
@@ -1066,8 +1016,6 @@ The class CarDealer fires the event by calling the Invoke method of the
 delegate. This invokes all the handlers that are subscribed to the event.
 Remember, as previously shown with multicast delegates, the order of
 the methods invoked is not guaranteed. To have more control over
-
-
 calling the handler methods you can use the Delegate class method
 GetInvocationList to access every item in the delegate list and invoke
 each on its own, as shown earlier.
@@ -1101,8 +1049,6 @@ public class Consumer
 {
 private string _name;
 public Consumer(string name) => _name = name;
-
-
 public void NewCarIsHere(object sender, CarInfoEventArgs e)
 {
 Console.WriteLine($"{_name}: car {e.Car} is new");
@@ -1139,9 +1085,8 @@ Valtteri: car Mercedes is new
 Max: car Mercedes is new
 CarDealer, new car Ferrari
 Max: car Ferrari is new
-SUMMARY
 
-
+## SUMMARY
 This chapter provided the basics of delegates, lambda expressions, and
 events. You learned how to declare a delegate and add methods to the
 delegate list; you learned how to implement methods called by

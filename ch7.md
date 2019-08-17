@@ -1,18 +1,15 @@
-
-
-Arrays
+# Arrays
 WHAT’S IN THIS CHAPTER?
-Simple arrays
-Multidimensional arrays
-Jagged arrays
-The Array class
-Arrays as parameters
-Enumerators
-Structural comparison
-Spans
-Array Pools
-WROX.COM CODE DOWNLOADS
-FOR THIS CHAPTER
+- Simple arrays
+- Multidimensional arrays
+- Jagged arrays
+- The Array class
+- Arrays as parameters
+- Enumerators
+- Structural comparison
+- Spans
+- Array Pools
+WROX.COM CODE DOWNLOADS FOR THIS CHAPTER
 The Wrox.com code downloads for this chapter are found at
 www.wrox.com on the Download Code tab. The source code is also
 available at
@@ -20,22 +17,22 @@ https://github.com/ProfessionalCSharp/ProfessionalCSharp7 in
 the directory Arrays .
 The code for this chapter is divided into the following major
 examples:
+- SimpleArrays
+- SortingSample
+- ArraySegment
+- YieldSample
+- StructuralComparison
+- SpanSample
+- ArrayPoolSample
 
-
-SimpleArrays
-SortingSample
-ArraySegment
-YieldSample
-StructuralComparison
-SpanSample
-ArrayPoolSample
-MULTIPLE OBJECTS OF THE SAME TYPE
+## MULTIPLE OBJECTS OF THE SAME TYPE
 If you need to work with multiple objects of the same type, you can use
 collections (see Chapter 10, “Collections”) and arrays. C# has a special
 notation to declare, initialize, and use arrays. Behind the scenes, the
 Array class comes into play, which offers several methods to sort and
 filter the elements inside the array. Using an enumerator, you can
 iterate through all the elements of the array.
+
 **NOTE**
 For using multiple objects of different types, you can combine
 them using classes, structs, and tuples. Classes and structs are
@@ -45,9 +42,8 @@ SIMPLE ARRAYS
 If you need to use multiple objects of the same type, you can use an
 array. An array is a data structure that contains a number of elements
 of the same type.
-Array Declaration
 
-
+### Array Declaration
 An array is declared by defining the type of elements inside the array,
 followed by empty brackets and a variable name. For example, an
 array containing integer elements is declared like this:
@@ -59,15 +55,16 @@ heap must be allocated. You do this by initializing the variable of the
 array using the new operator, with the type and the number of
 elements inside the array. Here, you specify the size of the array:
 myArray = new int[4];
+
 **NOTE**
 Value types and reference types are covered in Chapter 3.
+
 With this declaration and initialization, the variable myArray
 references four integer values that are allocated on the managed heap
 (see Figure 7-1).
 FIGURE 7-1
+
 **NOTE**
-
-
 An array cannot be resized after its size is specified without
 copying all the elements. If you don’t know how many elements
 should be in the array in advance, you can use a collection (see
@@ -87,7 +84,8 @@ There’s even a shorter form using the C# compiler. Using curly
 brackets you can write the array declaration and initialization. The
 code generated from the compiler is the same as the previous result:
 int[] myArray = {4, 7, 11, 2};
-Accessing Array Elements
+
+### Accessing Array Elements
 After an array is declared and initialized, you can access the array
 elements using an indexer. Arrays support only indexers that have
 integer parameters.

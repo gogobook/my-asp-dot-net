@@ -1286,13 +1286,12 @@ spans mapping to native memory and the ref keyword in Chapter
 JSON or XML is covered in Chapter 32, “Web API.” You can read
 details about JSON and XML in Bonus Chapter 2, “XML and
 JSON,” which you can find online.
-SUMMAR
+
+## SUMMAR
 You have quite several available data types at your disposal when
 working with the .NET Framework. One of the most frequently used
 types in your applications (especially applications that focus on
 submitting and retrieving data) is the string data type. The
-
-
 importance of string is the reason why this book has an entire chapter
 that focuses on how to use the string data type and manipulate it in
 your applications.

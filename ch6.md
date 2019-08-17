@@ -1,17 +1,14 @@
-
-
-Operators and Casts
+# Operators and Casts
 WHAT’S IN THIS CHAPTER?
-Operators in C#
-Using nameof and null-conditional operators
-Implicit and explicit conversions
-Converting value types to reference types using boxing
-Comparing value types and reference types
-Overloading the standard operators for custom types
-Implementing the Index Operator
-Converting between reference types by casting
-WROX.COM CODE DOWNLOADS
-FOR THIS CHAPTER
+- Operators in C#
+- Using nameof and null-conditional operators
+- Implicit and explicit conversions
+- Converting value types to reference types using boxing
+- Comparing value types and reference types
+- Overloading the standard operators for custom types
+- Implementing the Index Operator
+- Converting between reference types by casting
+WROX.COM CODE DOWNLOADS FOR THIS CHAPTER
 The Wrox.com code downloads for this chapter are found at
 www.wrox.com on the Download Code tab. The source code is also
 available at
@@ -19,16 +16,16 @@ https://github.com/ProfessionalCSharp/ProfessionalCSharp7 in
 the directory OperatorsAndCasts .
 The code for this chapter is divided into the following major
 examples:
-OperatorsSample
+- OperatorsSample
+- BinaryCalculations
+- OperatorOverloadingSample
+- OperatorOverloadingSample2
+- OverloadingComparisonSample
+- CustomIndexerSample
+- CastingSample
 
 
-BinaryCalculations
-OperatorOverloadingSample
-OperatorOverloadingSample2
-OverloadingComparisonSample
-CustomIndexerSample
-CastingSample
-OPERATORS AND CASTS
+## OPERATORS AND CASTS
 The preceding chapters have covered most of what you need to start
 writing useful programs using C#. This chapter continues the
 discussion with essential language elements and illustrates some
@@ -43,57 +40,53 @@ OPERATORS
 C# operators are very similar to C++ and Java operators; however,
 there are differences.
 C# supports the operators listed in the following table:
-CATEGORY OPERATOR
-Arithmetic +– * / %
-Logical & | ^
-&DiacriticalTilde;
-&& &boxV; !
-String concatenation +
-Increment and decrement ++– –
-Bit shifting ≪ ≫
+CATEGORY | OPERATOR
+---------|---------
+Arithmetic                              |+– * / %
+Logical                                 |   & \| ^ &DiacriticalTilde; && &boxV; !
+String concatenation                    |+
+Increment and decrement                 |++– –
+Bit shifting                            |≪ ≫
+Comparison                              |== != < > <= >=
+Assignment                              |= += -= *= /= %= &= |= ^= ≪= ≫=
+Member access (for objects and structs) |.
+Indexing (for arrays and indexers)      |[]
+Cast                                    |()
+Conditional (the ternary operator)      |?:
+Delegate concatenation and removal (discussed in Chapter 8, “Delegates, Lambdas, and Events”) | + -
+Object creation                         |new
+Type information                        |sizeof is typeof as
+Overflow exception control              |checked unchecked
+Indirection and address                 |[]
+Namespace alias qualifier (discussed in Chapter 2, “Core C#”) |::
+Null coalescing operator                |??
+Null-conditional operator               |?. ?[]
+Name of an identifier                   |nameof()
 
 
-Comparison == != < > <= >=
-Assignment = += -= *= /= %=
-&= |= ^= ≪= ≫=
-Member access (for objects and structs) .
-Indexing (for arrays and indexers) []
-Cast ()
-Conditional (the ternary operator) ?:
-Delegate concatenation and removal (discussed + -
-in Chapter 8, “Delegates, Lambdas, and
-Events”)
-Object creation new
-Type information sizeof is typeof
-as
-Overflow exception control checked unchecked
-Indirection and address []
-Namespace alias qualifier (discussed in
-Chapter 2, “Core C#”) ::
-Null coalescing operator ??
-Null-conditional operator ?. ?[]
-Name of an identifier nameof()
 **NOTE**
-**NOTE** that four specific operators ( sizeof , * , -> , and & ) are
+**NOTE** that four specific operators ( `sizeof , * , -> , and &` ) are
 available only in unsafe code (code that bypasses C#’s type-safety
 checking), which is discussed in Chapter 17, “Managed and
 Unmanaged Memory.”
+
 One of the biggest pitfalls to watch out for when using C# operators is
 that, as with other C-style languages, C# uses different operators for
 assignment ( = ) and comparison ( == ). For instance, the following
 statement means “let x equal three”:
-x = 3;
+`x = 3;`
 If you now want to compare x to a value, you need to use the double
-
-
 equals sign == :
+
 Fortunately, C#’s strict type-safety rules prevent the very common C
 error whereby assignment is performed instead of comparison in
 logical statements. This means that in C# the following statement will
 generate a compiler error:
+```c#
 if (x = 3) // compiler error
 {
 }
+```
 Visual Basic programmers who are accustomed to using the
 ampersand ( & ) character to concatenate strings will have to make an
 adjustment. In C#, the plus sign ( + ) is used instead for concatenation,
@@ -103,28 +96,30 @@ between two integers. Visual Basic programmers also might not
 recognize the modulus ( % ) arithmetic operator. This returns the
 remainder after division, so, for example, x % 5 returns 2 if x is equal
 to 7 .
+
 You will use few pointers in C#, and therefore few indirection
 operators. More specifically, the only place you will use them is within
 blocks of unsafe code, because that is the only place in C# where
 pointers are allowed. Pointers and unsafe code are discussed in
 Chapter 17.
-Operator Shortcuts
+
+### Operator Shortcuts
 The following table shows the full list of shortcut assignment operators
 available in C#:
-SHORTCUT OPERATOR EQUIVALENT TO
-x++, ++x x = x + 1
-x– –, – –x x = x – 1
-x += y x = x + y
-x -= y x = x——y
-x *= y x = x * y
-x /= y x = x / y
-x %= y x = x % y
+SHORTCUT OPERATOR | EQUIVALENT TO
+------------------|--------------
+x++, ++x    |x = x + 1
+x––, ––x    |x = x – 1
+x += y      |x = x + y
+x -= y      |x = x——y
+x *= y      |x = x * y
+x /= y      |x = x / y
+x %= y      |x = x % y
+x >>= y     |x = x >> y
+x <<= y     |x = x << y
+x &= y      |x = x & y
+x |= y      |x = x | y
 
-
-x ≫= y x = x ≫ y
-x ≪= y x = x ≪ y
-x &= y x = x & y
-x |= y x = x | y
 You may be wondering why there are two examples each for the ++
 increment and the – – decrement operators. Placing the operator
 before the expression is known as a prefix; placing the operator after
@@ -133,122 +128,138 @@ the way they behave.
 The increment and decrement operators can act both as entire
 expressions and within expressions. When used by themselves, the
 effect of both the prefix and postfix versions is identical and
-corresponds to the statement x = x + 1 . When used within larger
+corresponds to the statement `x = x + 1` . When used within larger
 expressions, the prefix operator increments the value of x before the
 expression is evaluated; in other words, x is incremented and the new
 value is used in the expression. Conversely, the postfix operator
 increments the value of x after the expression is evaluated——the
 expression is evaluated using the original value of x . The following
-example uses the increment operator ( ++ ) as an example to
+example uses the increment operator ( `++` ) as an example to
 demonstrate the difference between the prefix and postfix behavior
 (code file OperatorsSample/Program.cs ):
+```c#
 int x = 5;
 if (++x == 6) // true – x is incremented to 6 before the
 evaluation
 {
-Console.WriteLine("This will execute");
+    Console.WriteLine("This will execute");
 }
 if (x++ == 7) // false – x is incremented to 7 after the
 evaluation
 {
-Console.WriteLine("This won't");
+    Console.WriteLine("This won't");
 }
-The first if condition evaluates to true because x is incremented from
+```
+The first `if` condition evaluates to true because x is incremented from
 5 to 6 before the expression is evaluated. The condition in the second
-if statement is false , however, because x is incremented to 7 only
-after the entire expression has been evaluated (while x == 6 ).
-
-
-The prefix and postfix operators – – x and x – – behave in the same
+if statement is false , however, because `x` is incremented to `7` only
+after the entire expression has been evaluated (`while x == 6` ).
+The prefix and postfix operators `--x` and `x--` behave in the same
 way, but decrement rather than increment the operand.
-The other shortcut operators, such as += and -= , require two operands,
+
+The other shortcut operators, such as `+=` and `-=` , require two operands,
 and are used to modify the value of the first operand by performing an
 arithmetic or logical operation on it. For example, the next two lines
 are equivalent:
+```c#
 x += 5;
 x = x + 5;
+```
 The following sections look at some of the primary and cast operators
 that you will frequently use within your C# code.
-The Conditional-Expression Operator (?:)
+
+### The Conditional-Expression Operator (?:)
 The conditional-expression operator ( ?: ), also known as the ternary
 operator, is a shorthand form of the if...else construction. It gets its
 name from the fact that it involves three operands. It allows you to
 evaluate a condition, returning one value if that condition is true, or
 another value if it is false. The syntax is as follows:
-condition ? true_value: false_value
+`condition ? true_value: false_value`
 Here, condition is the Boolean expression to be evaluated, true _ value
 is the value that is returned if condition is true, and false _ value is the
 value that is returned otherwise.
+
 When used sparingly, the conditional-expression operator can add a
 dash of terseness to your programs. It is especially handy for providing
 one of a couple of arguments to a function that is being invoked. You
 can use it to quickly convert a Boolean value to a string value of true or
 false . It is also handy for displaying the correct singular or plural form
 of a word (code file OperatorsSample/Program.cs ):
+```c#
 int x = 1;
 string s = x + " ";
 s += (x == 1 ? "man": "men");
 Console.WriteLine(s);
+```
 This code displays 1 man if x is equal to one but displays the correct
 plural form for any other number. **NOTE**, however, that if your output
-
-
 needs to be localized to different languages, you have to write more
 sophisticated routines to take into account the different grammatical
 rules of different languages.
-The checked and unchecked Operators
+
+### The checked and unchecked Operators
 Consider the following code:
+```c#
 byte b = byte.MaxValue;
 b++;
 Console.WriteLine(b);
+```
 The byte data type can hold values only in the range 0 to 255.
 Assigning byte.MaxValue to a byte results in 255. With 255, all bits of
 the 8 available bits in the bytes are set: 11111111. Incrementing this
 value by one causes an overflow and results in 0.
+
 How the CLR handles this depends on a number of issues, including
 compiler options; so, whenever there’s a risk of an unintentional
 overflow, you need some way to ensure that you get the result you
 want.
+
 To do this, C# provides the checked and unchecked operators. If you
 mark a block of code as checked , the CLR enforces overflow checking,
 throwing an OverflowException if an overflow occurs. The following
 changes the preceding code to include the checked operator (code file
 OperatorsSample/Program.cs ):
+```c#
 byte b = 255;
 checked
 {
 b++;
 }
 Console.WriteLine(b);
+```
 When you try to run this code, you get an error message like this:
-System.OverflowException: Arithmetic operation resulted in an
-overflow.
+`System.OverflowException: Arithmetic operation resulted in an
+overflow.`
 You can enforce overflow checking for all unmarked code with the
 Visual Studio project settings Check for Arithmetic
 Overflow/Underflow in the Advance Build Settings. You can change
-
-
 this also directly in the csproj project file:
+```xml
 <PropertyGroup>
 <OutputType>Exe</OutputType>
 <TargetFramework>netcoreapp2.0</TargetFramework>
 <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
 </PropertyGroup>
+```
 If you want to suppress overflow checking, you can mark the code as
 unchecked :
+```c#
 byte b = 255;
 unchecked
 {
 b++;
 }
 Console.WriteLine(b);
+```
 In this case, no exception is raised, but you lose data because the byte
 type cannot hold a value of 256, the overflowing bits are discarded,
 and your b variable holds a value of zero (0).
-**NOTE** that unchecked is the default behavior. The only time you are
-likely to need to explicitly use the unchecked keyword is when you need
-a few unchecked lines of code inside a larger block that you have
-explicitly marked as checked .
+
+**NOTE** that `unchecked` is the default behavior. The only time you are
+likely to need to explicitly use the `unchecked` keyword is when you need
+a few `unchecked` lines of code inside a larger block that you have
+explicitly marked as `checked` .
+
 **NOTE**
 By default, overflow and underflow are not checked because
 enforcing checks has a performance impact. When you use
@@ -261,55 +272,59 @@ Overflow/Underflow) unchecked and use the checked operator
 where needed.
 
 
-The is Operator
-The is operator allows you to check whether an object is compatible
+### The is Operator
+The `is` operator allows you to check whether an object is compatible
 with a specific type. The phrase “is compatible” means that an object
 either is of that type or is derived from that type. For example, to
 check whether a variable is compatible with the object type, you could
 use the following bit of code (code file OperatorsSample/Program.cs ):
+```c#
 int i = 10;
 if (i is object)
 {
 Console.WriteLine("i is an object");
 }
-int ,
-like all C# data types, inherits from object ; therefore, the
+```
+int ,like all C# data types, inherits from object ; therefore, the
 expression i is object evaluates to true in this case, and the
 appropriate message will be displayed.
+
 C# 7 extends the is operator with pattern matching. You can check for
 constants, types, and var. Examples of constant checks are shown in
 the following code snippet, which checks for the constant 42 and the
 constant null :
+```c#
 int i = 42;
 if (i is 42)
 {
-Console.WriteLine("i has the value 42");
+    Console.WriteLine("i has the value 42");
 }
 object o = null;
 if (o is null)
 {
-Console.WriteLine("o is null");
+    Console.WriteLine("o is null");
 }
-Using the is operator with type matching, a variable can be declared
-right of the type. If the is operator returns true , the variable is filled
+```
+Using the `is` operator with type matching, a variable can be declared
+right of the type. If the `is` operator returns true , the variable is filled
 with a reference to the object of the type. This variable can then be
-used within the scope of the if statement where the is operator is
+used within the scope of the if statement where the `is` operator is
 used:
+```c#
 public static void AMethodUsingPatternMatching(object o)
 {
-
-
-if (o is Person p)
-{
-Console.WriteLine($"o is a Person with firstname
-{p.FirstName}");
-}
+    if (o is Person p)
+    {
+    Console.WriteLine($"o is a Person with firstname {p.FirstName}");
+    }
 }
 //...
 AMethodUsingPatternMatching (new Person("Katharina",
 "Nagel"));
-The as Operator
-The as operator is used to perform explicit type conversions of
+```
+
+### The as Operator
+The `as` operator is used to perform explicit type conversions of
 reference types. If the type being converted is compatible with the
 specified type, conversion is performed successfully. However, if the
 types are incompatible, the as operator returns the value null . As
@@ -332,97 +347,109 @@ s2
 5;
 o1 as string; // s1 = "Some String"
 o2 as string; // s2 = null
-The as operator allows you to perform a safe type conversion in a
+
+The `as` operator allows you to perform a safe type conversion in a
 single step without the need to first test the type using the is operator
 and then perform the conversion.
 **NOTE**
-The is and as operators are shown with inheritance in Chapter 4,
+The `is` and `as` operators are shown with inheritance in Chapter 4,
 “Object Orientation with C#.” Also check Chapter 13, “Functional
 Programming with C#” for more information on pattern
 matching and the is operator.
-The sizeof Operator
+
+### The sizeof Operator
 You can determine the size (in bytes) required on the stack by a value
-
-
 type using the sizeof operator (code file OperatorsSample/Program.cs ):
-Console.WriteLine(sizeof(int));
+`Console.WriteLine(sizeof(int));`
 This displays the number 4 because an int is 4 bytes long.
 You can also use the sizeof operator with structs if the struct contains
 only value types——for example, the Point class as shown here (code file
 OperatorsSample/Point.cs ):
+```c#
 public struct Point
 {
-public Point(int x, int y)
-{
-X = x;
-Y = y;
+    public Point(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+    public int X { get; }
+    public int Y { get; }
 }
-public int X { get; }
-public int Y { get; }
-}
+```
+
 **NOTE**
 You cannot use sizeof with classes.
+
 Using sizeof with custom types, you need to write the code within an
 unsafe code block (code file OperatorsSample/Program.cs ):
+```c#
 unsafe
 {
-Console.WriteLine(sizeof(Point));
+    Console.WriteLine(sizeof(Point));
 }
+```
 **NOTE**
 By default, unsafe code is not allowed. You need to specify the
-AllowUnsafeBlocks in the csproj project file. Chapter 17 looks at
+`AllowUnsafeBlocks` in the csproj project file. Chapter 17 looks at
 unsafe code in more detail.
 
-
-The typeof Operator
-The typeof operator returns a System.Type object representing a
-specified type. For example, typeof(string) returns a Type object
-representing the System.String type. This is useful when you want to
+### The typeof Operator
+The typeof operator returns a `System.Type` object representing a
+specified type. For example, typeof(string) returns a `Type` object
+representing the `System.String` type. This is useful when you want to
 use reflection to find information about an object dynamically. For
 more information, see Chapter 16, “Reflection, Metadata, and
 Dynamic Programming.”
-The nameof Operator
+
+### The nameof Operator
 The nameof operator is new since C# 6. This operator accepts a symbol,
 property, or method and returns the name.
 How can this be used? One example is when the name of a variable is
 needed, as in checking a parameter for null:
+```c#
 public void Method(object o)
 {
-if (o == null) throw new ArgumentNullException(nameof(o));
+    if (o == null) throw new ArgumentNullException(nameof(o));
+```
 Of course, it would be similar to throw the exception by passing a
 string instead of using the nameof operator. However, passing a string
 doesn’t give a compiler error if you misspell the name. Also, when you
 change the name of the parameter, you can easily miss changing the
 string passed to the ArgumentNullException constructor.
-if (o == null) throw new ArgumentNullException("o");
-Using the nameof operator for the name of a variable is just one use
+`if (o == null) throw new ArgumentNullException("o");`
+Using the `nameof` operator for the name of a variable is just one use
 case. You can also use it to get the name of a property——for example,
 for firing a change event (using the interface INotifyPropertyChanged )
 in a property set accessor and passing the name of a property.
+```c#
 public string FirstName
 {
-get => _firstName;
-set
-{
-_firstName = value;
-OnPropertyChanged(nameof(FirstName));
+    get => _firstName;
+    set
+    {
+        _firstName = value;
+        OnPropertyChanged(nameof(FirstName));
+    }
 }
-
-
-}
-The nameof operator can also be used to get the name of a method. This
+```
+The `nameof` operator can also be used to get the name of a method. This
 also works if the method is overloaded because all overloads result in
 the same value: the name of the method.
+```c#
 public void Method()
 {
-Log($"{nameof(Method)} called");
-The index Operator
-You use the index operator (brackets) for accessing arrays in Chapter
-7, “Arrays.” In the following code snippet, the index operator is used to
+    Log($"{nameof(Method)} called");
+```
+### The index Operator
+You use the `index` operator (brackets) for accessing arrays in Chapter
+7, “Arrays.” In the following code snippet, the `index` operator is used to
 access the third element of the array named arr1 by passing the
 number 2:
+```c#
 int[] arr1 = {1, 2, 3, 4};
 int x = arr1[2]; // x == 3
+```
 Similar to accessing elements of an array, the index operator is
 implemented with collection classes (discussed in Chapter 10,
 “Collections”).
@@ -433,16 +460,17 @@ value an int . With dictionaries, the key can be used with the indexer.
 In the following sample, the string first is passed to the index
 operator to set this element in the dictionary and then the same string
 is passed to the indexer to retrieve this element:
+```c#
 var dict = new Dictionary<string, int>();
 dict["first"] = 1;
 int x = dict["first"];
+```
 **NOTE**
 Later in this chapter in the “Implementing Custom Index
 Operators” section, you can read how to create index operators in
-
-
 your own classes.
-Nullable Types and Operators
+
+### Nullable Types and Operators
 An important difference between value types and reference types is
 that reference types can be null . A value type, such as int , cannot be
 null . This is a special issue on mapping C# types to database types. A
@@ -453,68 +481,73 @@ collector needs to deal with reference types. Now you can use a
 nullable int instead of a normal int . The overhead for this is just an
 additional Boolean that is used to check or set the null value. A
 nullable type still is a value type.
+
 With the following code snippet, the variable i1 is an int that gets 1
 assigned to it. i2 is a nullable int that has i1 assigned. The nullability
 is defined by using the ? with the type. int? can have an integer value
 assigned similar to the assignment of i1 . The variable i3 demonstrates
 that assigning null is also possible with nullable types (code file
 NullableTypesSample/Program.cs ):
+```c#
 int i1 = 1;
 int? i2 = 2;
 int? i3 = null;
-Every struct can be defined as a nullable type as shown with long? and
-DateTime?:
+```
+Every struct can be defined as a nullable type as shown with `long?` and
+`DateTime?`:
+```c#
 long? l1 = null;
 DateTime? d1 = null;
+```
 If you use nullable types in your programs, you must always consider
 the effect a null value can have when used in conjunction with the
 various operators. Usually, when using a unary or binary operator with
 nullable types, the result will be null if one or both of the operands is
 null . For example:
+```c#
 int? a = null;
 int? b = a + 4; // b = null
 int? c = a * 5; // c = null
-
-
+```
 When comparing nullable types, if only one of the operands is null ,
 the comparison always equates to false . This means that you cannot
 assume a condition is true just because its opposite is false , as often
 happens in programs using non-nullable types. For example, in the
 following example if a is null, the else clause is always invoked no
 matter whether b has a value of +5 or -5 .
+```c#
 int? a = null;
 int? b = -5;
 if (a >= b) // if a or b is null, this condition is false
 {
-Console.WriteLine("a >= b");
+    Console.WriteLine("a >= b");
 }
 else
 {
-Console.WriteLine("a < b");
+    Console.WriteLine("a < b");
 }
+```
 **NOTE**
-The possibility of a null value means that you cannot freely
+The possibility of a `null` value means that you cannot freely
 combine nullable and non-nullable types in an expression. This is
 discussed in the section “Type Conversions” later in this chapter.
+
 **NOTE**
-When you use the C# keyword ? with the type declaration——for
-example, int? ——the compiler resolves this to use the generic type
-Nullable<int>. The C# compiler converts the shorthand notation
+When you use the C# keyword `?` with the type declaration——for
+example, `int?` ——the compiler resolves this to use the generic type
+`Nullable<int>`. The C# compiler converts the shorthand notation
 to the generic type to reduce typing needs.
-The Null Coalescing Operator
+
+### The Null Coalescing Operator
 The null coalescing operator (??) provides a shorthand mechanism to
 cater to the possibility of null values when working with nullable and
-
-
 reference types. The operator is placed between two operands——the
 first operand must be a nullable type or reference type, and the second
 operand must be of the same type as the first or of a type that is
 implicitly convertible to the type of the first operand. The null
 coalescing operator evaluates as follows:
-If the first operand is not null , then the overall expression has the
-value of the first operand.
-If the first operand is null , then the overall expression has the
-value of the second operand.
+- If the first operand is not null , then the overall expression has the value of the first operand.
+- If the first operand is null , then the overall expression has the value of the second operand.
 For example:
 int? a = null;
 int b;
@@ -535,13 +568,12 @@ public MyClass Val
 {
 get => _val ?? (_val = new MyClass());
 }
-The Null-Conditional Operator
+
+### The Null-Conditional Operator
 A feature of C# to reduce the number of code lines is the null-
 conditional operator. A great number of code lines in production code
 verifies null conditions. Before accessing members of a variable that is
 passed as a method parameter, it needs to be checked to determine
-
-
 whether the variable has a value of null. Otherwise a
 NullReferenceException would be thrown. A .NET design guideline
 specifies that code should never throw exceptions of these types and
@@ -576,8 +608,6 @@ int age1 = p?.Age ?? 0;
 Multiple null-conditional operators can also be combined. Here the
 Address property of a Person object is accessed, and this property in
 turn defines a City property. Null checks need to be done for the
-
-
 object, and if it is not null, also for the result of the Address
 property:
 Person
@@ -605,27 +635,24 @@ The following table shows the order of precedence of the C# operators.
 The operators at the top of the table are those with the highest
 precedence (that is, the ones evaluated first in an expression
 containing multiple operators).
+
 GROUP OPERATORS
-Primary . ?. () [] ?[] x++ x–– new typeof sizeof
-checked unchecked
-Unary + ——! &DiacriticalTilde; ++x ––x and
-casts
-Multiplication/division * / %
+Primary                         . ?. () [] ?[] x++ x–– new typeof sizeof checked unchecked
+Unary                           + —! &DiacriticalTilde; ++x ––x and casts
+Multiplication/division         * / %
+Addition/subtraction            + -
+Shift operators                 << >>
+Relational                      < ><= >= is as
+Comparison                      == !=
+Bitwise AND                      &
+Bitwise XOR                      ^
+Bitwise OR                      |
+Logical AND                      &&
+Logical OR                      ||
+Null coalescing                 ??
+Conditional-expression operator ?:
+Assignment and Lambda           = += -= *= /= %= &= |= ^= ≪= ≫= ≫>= =>
 
-
-Addition/subtraction + -
-Shift operators ≪ ≫
-Relational < ><= >= is as
-Comparison == !=
-Bitwise AND &
-Bitwise XOR ^
-Bitwise OR |
-Logical AND &&
-Logical OR ||
-Null coalescing ??
-Conditional-expression
-operator ?:
-Assignment and Lambda = += -= *= /= %= &= |= ^= ≪= ≫= ≫>= =>
 Besides operator precedence, with binary operators you need to be
 aware of operator evaluations from left to right or right to left. With a
 few exceptions, all binary operators are left associative.
@@ -811,37 +838,6 @@ Console.WriteLine();
 }
 With the program output you can see binary, decimal, and
 hexadecimal values with the loop:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 1 hex: 1
 2 hex: 2
@@ -1099,10 +1095,6 @@ When you cast one type to another, you deliberately force the compiler
 to make the conversion. A cast looks like this:
 long val = 30000;
 int i = (int)val; // A valid cast. The maximum int is
-
-
-
-
 You indicate the type to which you are casting by placing its name in
 parentheses before the value to be converted. If you are familiar with
 C, this is the typical syntax for casts. If you are familiar with the C++
@@ -1113,8 +1105,6 @@ from a long to an int can cause problems if the value of the original
 long is greater than the maximum value of an int :
 long val = 3000000000;
 int i = (int)val; // An invalid cast. The maximum int is
-
-
 In this case, you get neither an error nor the result you expect. If you
 run this code and output the value stored in i , this is what you get:
 -1294967296
@@ -1136,8 +1126,6 @@ to price , and the total is cast to an int :
 double price = 25.30;
 int approximatePrice = (int)(price + 0.5);
 This gives the price rounded to the nearest dollar. However, in this
-
-
 conversion, data is lost——namely, everything after the decimal point.
 Therefore, such a conversion should never be used if you want to
 continue to do more calculations using this modified price value.
@@ -1174,8 +1162,6 @@ because the nullable type may have the value null , which cannot be
 represented by the non-nullable type. As long as an explicit cast
 between two equivalent non-nullable types is possible, so is the
 explicit cast between nullable types. However, when casting from a
-
-
 nullable type to a non-nullable type and the variable has the value
 null , an InvalidOperationException is thrown. For example:
 int? a = null;
@@ -1208,8 +1194,6 @@ Boxing and Unboxing
 In Chapter 2 you learned that all types——both the simple predefined
 types, such as int and char , and the complex types, such as classes and
 structs——derive from the object type. This means you can treat even
-
-
 literal values as though they are objects:
 string s = 10.ToString();
 However, you also saw that C# data types are divided into value types,
@@ -1243,8 +1227,6 @@ thrown at runtime.
 One word of **WARNING**: When unboxing, you have to be careful that the
 receiving value variable has enough room to store all the bytes in the
 value being unboxed. C#’s int s, for example, are only 32 bits long, so
-
-
 unboxing a long value (64 bits) into an int , as shown here, results in
 an InvalidCastException :
 long myLongNumber = 333333423;
@@ -1278,8 +1260,6 @@ refer to the same instance of a class, specifically whether the two
 references contain the same address in memory. As a static method,
 it cannot be overridden, so the System.Object implementation is what
 ReferenceEquals
-
-
 you always have. ReferenceEquals always returns true if supplied with
 two references that refer to the same object instance, and false
 otherwise. It does, however, consider null to be equal to null (code file
@@ -1326,8 +1306,6 @@ this method.
 The Static Equals Method
 The static version of Equals actually does the same thing as the virtual
 instance version. The difference is that the static version takes two
-
-
 parameters and compares them for equality. This method is able to
 cope when either of the objects is null ; therefore, it provides an extra
 safeguard against throwing exceptions if there is a risk that an object
@@ -1361,8 +1339,6 @@ references so that methods can be executed on them. In addition,
 Microsoft has already overloaded the instance Equals method in the
 System.ValueType class to test equality appropriate to value types. If
 you call sA.Equals(sB) where sA and sB are instances of some struct,
-
-
 the return value is true or false , according to whether sA and sB
 contain the same values in all their fields. On the other hand, no
 overload of == is available by default for your own structs. Writing (sA
@@ -1396,8 +1372,6 @@ The point of operator overloading is that you do not always just want
 to call methods or properties on objects. Often, you need to do things
 like add quantities together, multiply them, or perform logical
 operations such as comparing objects. Suppose you defined a class
-
-
 that represents a mathematical matrix. In the world of math, matrices
 can be added together and multiplied, just like numbers. Therefore, it
 is quite plausible that you would want to write code like this:
@@ -1433,8 +1407,6 @@ data. For the string class, this behavior is overridden so that
 comparing strings really does compare the contents of each string. You
 might want to do the same for your own classes. For structs, the ==
 operator does not do anything at all by default. Trying to compare two
-
-
 structs to determine whether they are equal produces a compilation
 error unless you explicitly overload == to tell the compiler how to
 perform the comparison.
@@ -1467,8 +1439,6 @@ uint myUnsignedInt = 2;
 double myDouble = 4.0;
 long myLong = myInteger + myUnsignedInt;
 double myOtherDouble = myDouble + myInteger;
-
-
 Now consider what happens when the compiler encounters this line:
 long myLong = myInteger + myUnsignedInt;
 The compiler identifies that it needs to add two integers and assign the
@@ -2404,8 +2374,6 @@ and the derived reference is set to refer to the object. If, however, the
 object in question is not an instance of the derived class (or of any
 class derived from it), the cast fails and an exception is thrown.
 Notice that the casts that the compiler has supplied, which convert
-
-
 between base and derived class, do not actually do any data conversion
 on the object in question. All they do is set the new reference to refer
 to the object if it is legal for that conversion to occur. To that extent,
@@ -2442,8 +2410,6 @@ System.ValueType , though it is hard to see why you would want to do
 this.)
 The cast from any struct (or primitive type) to object is always
 available as an implicit cast——because it is a cast from a derived type to
-
-
 a base type——and is just the familiar process of boxing. For example,
 using the Currency struct:
 var balance = new Currency(40,0);
@@ -2479,8 +2445,6 @@ thrown
 This code works in a way similar to the code presented earlier for
 reference types. Casting derivedObject to Currency works fine because
 derivedObject actually refers to a boxed Currency instance——the cast is
-
-
 performed by copying the fields out of the boxed Currency object into a
 new Currency struct. The second cast fails because baseObject does not
 refer to a boxed Currency object.
@@ -2514,8 +2478,6 @@ explicitly:
 var balance = new Currency(10,50);
 long amount = (long)(float)balance;
 double amountD = (double)(float)balance;
-
-
 However, in most cases, this would be seen as needlessly complicating
 your code. The following code, by contrast, produces a compilation
 error:
@@ -2550,8 +2512,6 @@ Currency balance = bal;
 uint bal2 = (uint)balance;
 The answer is not 350 but 3 ! Moreover, it all follows logically. You
 convert 350 implicitly to a Currency , giving the result balance.Dollars
-
-
 = 3 , balance.Cents = 50 .
 Then the compiler does its usual figuring out
 of the best path for the conversion back. Balance ends up being
@@ -2588,8 +2548,6 @@ case here.
 A good test of whether your casts are compatible is to ask whether a
 conversion will give the same results (other than perhaps a loss of
 accuracy as in float -to- int conversions) regardless of which path it
-
-
 takes. The Currency class provides a good example of this. Consider
 this code:
 var balance = new Currency(50, 35);
@@ -2626,8 +2584,6 @@ try
 var balance = new Currency(50,35);
 Console.WriteLine(balance);
 Console.WriteLine($"balance is {balance}");
-
-
 uint balance3 = (uint) balance;
 Console.WriteLine($"Converting to uint gives
 {balance3}");
@@ -2638,8 +2594,6 @@ Console.WriteLine($"Exception occurred: {e.Message}");
 }
 }
 Running the sample now gives you these results:
-
-
 balance is $50.35
 Converting to uint gives 50
 The output shows that the conversion to uint has been successful,
@@ -2665,8 +2619,6 @@ order to make it match up with one of the overloads of WriteLine . As it
 happens, one of the WriteLine overloads is designed to display uint s
 quickly and efficiently, and it takes a uint as a parameter——you have
 now supplied a cast that converts Currency implicitly to uint .
-
-
 In fact, WriteLine has another overload that takes a double as a
 parameter and displays the value of that double . If you look closely at
 the output running the example previously where the cast to uint did
@@ -2685,7 +2637,8 @@ conversion, but also which overload, and hence which data conversion,
 to pick. The compiler always works logically and according to strict
 rules, but the results may not be what you expected. If there is any
 doubt, you are better off specifying which cast to use explicitly.
-SUMMARY
+
+## SUMMARY
 This chapter looked at the standard operators provided by C#,
 described the mechanics of object equality, and examined how the
 compiler converts the standard data types from one to another. It also
