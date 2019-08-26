@@ -1,13 +1,12 @@
 
 
-Strings and Regular Expressions
+# Strings and Regular Expressions
 WHAT’S IN THIS CHAPTER?
-Building strings
-Formatting expressions
-Using regular expressions
-Using Span<T> with Strings
-WROX.COM CODE DOWNLOADS
-FOR THIS CHAPTER
+- Building strings
+- Formatting expressions
+- Using regular expressions
+- Using Span<T> with Strings
+WROX.COM CODE DOWNLOADS FOR THIS CHAPTER
 The Wrox.com code downloads for this chapter are found at
 www.wrox.com on the Download Code tab. The source code is also
 available at
@@ -15,14 +14,12 @@ https://github.com/ProfessionalCSharp/ProfessionalCSharp7 in
 the directory StringsAndRegularExpressions .
 The code for this chapter is divided into the following major
 examples:
-StringSample
-StringFormats
-RegularExpressionPlayground
-SpanWithStrings
+- StringSample
+- StringFormats
+- RegularExpressionPlayground
+- SpanWithStrings
 Strings have been used consistently since the beginning of this
 book, as every program needs strings. However, you might not
-
-
 have realized that the stated mapping that the string keyword in
 C# refers to is the System.String .NET base class. String is a very
 powerful and versatile class, but it is by no means the only string-
@@ -31,14 +28,16 @@ the features of String and then looks at some nifty things you can
 do with strings using some of the other .NET classes——in particular
 those in the System.Text and System.Text.RegularExpressions
 namespaces. This chapter covers the following areas:
-Building strings——If you’re performing repeated
+
+- Building strings——If you’re performing repeated
 modifications on a string——for example, to build a lengthy string
 prior to displaying it or passing it to some other method or
 application——the String class can be very inefficient. When you
 find yourself in this kind of situation, another class,
 System.Text.StringBuilder , is more suitable because it has
 been designed exactly for this scenario.
-Formatting expressions——This chapter takes a closer look at
+
+- Formatting expressions——This chapter takes a closer look at
 the formatting expressions that have been used in the
 Console.WriteLine method throughout the past few chapters.
 These formatting expressions are processed using two useful
@@ -47,7 +46,8 @@ these interfaces on your own classes, you can define your own
 formatting sequences so that Console.WriteLine and similar
 classes display the values of your classes in whatever way you
 specify.
-Regular expressions——.NET also offers some very
+
+- Regular expressions——.NET also offers some very
 sophisticated classes that deal with cases in which you need to
 identify or extract substrings that satisfy certain fairly
 sophisticated criteria; for example, finding all occurrences
@@ -59,13 +59,13 @@ methods to perform this kind of processing using the String
 class, writing such methods is cumbersome. Instead, some
 classes, specifically those from
 System.Text.RegularExpressions , are designed to perform this
-
-
 kind of processing.
-Spans——.NET Core offers the generic Span struct, which allows
+
+- Spans——.NET Core offers the generic Span struct, which allows
 fast access to memory. Span<T > allows accessing slices of strings
 without copying the string.
-EXAMINING SYSTEM.STRING
+
+## EXAMINING SYSTEM.STRING
 Before digging into the other string classes, this section briefly reviews
 some of the available methods in the String class itself.
 is a class specifically designed to store a string and
@@ -86,8 +86,7 @@ zero-indexed
 This enables you to perform such common tasks as replacing
 characters, removing whitespace, and changing case. The following
 table introduces the key methods.
-METHOD
-DESCRIPTION
+METHOD | DESCRIPTION
 Compare
 Compares the contents of strings, taking into account
 the culture (locale) in assessing equivalence between
@@ -141,12 +140,12 @@ Converts the string to uppercase.
 Trim
 Removes leading and trailing whitespace.
 Concat
+
 **NOTE**
-
-
 Please **NOTE** that this table is not comprehensive; it is intended to
 give you an idea of the features offered by strings.
-Building Strings
+
+### Building Strings
 As you have seen, String is an extremely powerful class that
 implements a large number of very useful methods. However, the
 String class has a shortcoming that makes it very inefficient for
@@ -177,7 +176,6 @@ updated, so the variable correctly points to the new String object. The
 old String object is now unreferenced——there are no variables that
 refer to it——so it will be removed the next time the garbage collector
 comes along to clean out any unused objects in your application.
-
 
 By itself, that doesn’t look too bad, but suppose you wanted to create a
 very simple encryption scheme by adding 1 to the ASCII value of each
@@ -214,8 +212,6 @@ encoded to [ and {, respectively.
 In this example, the Replace method works in a fairly intelligent way,
 to the extent that it won’t create a new string unless it actually makes
 changes to the old string. The original string contained 23 different
-
-
 lowercase characters and three different uppercase ones. The Replace
 method will therefore have allocated a new string 26 times in total,
 with each new string storing 103 characters. That means because of
@@ -224,12 +220,14 @@ combined total of 2,678 characters now sitting on the heap waiting to
 be garbage collected! Clearly, if you use strings to do text processing
 extensively, your applications will run into severe performance
 problems.
+
 To address this kind of issue, Microsoft supplies the
 System.Text.StringBuilder class. StringBuilder is not as powerful as
 String in terms of the number of methods it supports. The processing
 you can do on a StringBuilder is limited to substitutions and
 appending or removing text from strings. However, it works in a much
 more efficient way.
+
 When you construct a string using the String class, just enough
 memory is allocated to hold the string object. The StringBuilder ,
 however, normally allocates more memory than is needed. You, as a
@@ -253,8 +251,6 @@ string is it necessary to allocate new memory and possibly move the
 entire contained string. In adding extra capacity, based on our
 experiments the StringBuilder appears to double its capacity if it
 detects that the capacity has been exceeded and no new value for
-
-
 capacity has been set.
 For example, if you use a StringBuilder object to construct the original
 greeting string, you might write this code:
@@ -264,6 +260,7 @@ new StringBuilder("Hello from all the people at Wrox Press.
 greetingBuilder.Append("We do hope you enjoy this book as
 much " +
 "as we enjoyed writing it");
+
 **NOTE**
 To use the StringBuilder class, you need a System.Text reference
 in your code.
@@ -287,8 +284,6 @@ var greetingBuilder =
 new StringBuilder("Hello from all the people at Wrox Press.
 ", 150);
 greetingBuilder.AppendFormat("We do hope you enjoy this book
-
-
 as much " +
 "as we enjoyed writing it");
 Console.WriteLine("Not Encoded:\n" + greetingBuilder);
@@ -324,8 +319,6 @@ Apart from the Length and Capacity properties, there is a read-only
 MaxCapacity property that indicates the limit to which a given
 StringBuilder instance is allowed to grow. By default, this is specified
 by int.MaxValue (roughly two billion, as noted earlier), but you can set
-
-
 this value to something lower when you construct the StringBuilder
 object:
 // This will set the initial capacity to 100, but the max
@@ -360,11 +353,10 @@ ToString
 Returns the current string cast to a System.String
 object (overridden from System.Object ).
 Several overloads of many of these methods exist.
+
 **NOTE**
 AppendFormat
 is the method that is ultimately called when you call
-
-
 Console.WriteLine ,
 which is responsible for determining what all
 the format expressions like {0:D} should be replaced with. This
@@ -379,11 +371,13 @@ increased performance you are seeking. Basically, you should use the
 StringBuilder class when you are manipulating multiple strings.
 However, if you are just doing something as simple as concatenating
 two strings, you will find that System.String performs better.
-STRING FORMATS
+
+## STRING FORMATS
 In previous chapters you’ve seen passing variables to strings with the $
 prefix. This chapter examines what’s behind this C# feature and covers
 all the other functionality offered by format strings.
-String Interpolation
+
+### String Interpolation
 C# 6 introduced string interpolation by using the $ prefix for strings.
 The following example creates the string s2 using the $ prefix. This
 prefix allows having placeholders in curly brackets to reference results
@@ -396,8 +390,6 @@ In reality, this is just syntax sugar. From strings with the $ prefix, the
 compiler creates invocations to the String.Format method. So, the
 previous code snippet gets translated to this:
 string s1 = "World";
-
-
 string s2 = String.Format("Hello, {0}", s1);
 The first parameter of the String.Format method that is used accepts a
 format string with placeholders that are numbered starting from 0 ,
@@ -415,7 +407,8 @@ string s3 = $"The result of {x} + {y} is {x + y}";
 which translates to
 string s3 = String.Format("The result of {0} and {1} is {2}",
 x, y, x + y);
-FormattableString
+
+#### FormattableString
 What the interpolated string gets translated to can easily be seen by
 assigning the string to a FormattableString . The interpolated string
 can be directly assigned because the FormattableString is a better
@@ -461,11 +454,10 @@ CultureInfo.InvariantCulture to the IFormatProvider parameter
 changes the string to use the invariant culture:
 private string Invariant(FormattableString s) =>
 s.ToString(CultureInfo.InvariantCulture);
+
 **NOTE**
 Chapter 27, “Localization,” discusses language-specific issues for
 format strings as well as cultures and invariant cultures.
-
-
 In the following code snippet, the Invariant method is used to pass a
 string to the second WriteLine method. The first invocation of
 WriteLine uses the current culture while the second one uses the
@@ -496,8 +488,6 @@ Thus, the output is this:
 You can also escape curly brackets to build a new format string from a
 format string. Let’s have a look at this code snippet:
 string formatString = $"{s}, {{0}}";
-
-
 string s2 = "World";
 Console.WriteLine(formatString, s2);
 With the string variable formatString , the compiler creates a call to
@@ -528,13 +518,12 @@ or lowercase strings used. Depending on the language setting of your
 system, the output might look different. The date and time is language
 specific.
 The DateTime type supports a lot of different standard format strings to
-
-
 have all date and time representations——for example, t for a short time
 format and T for a long time format, g and G to display date and time.
 All the other options are not discussed here, as you can find them in
 the MSDN documentation for the ToString method of the DateTime
 type.
+
 **NOTE**
 One thing that should be mentioned is building a custom format
 string for DateTime . A custom date and time format string can
@@ -558,13 +547,12 @@ The n format string defines a number format to show integral and
 decimal digits with group separators, e using exponential notation, x
 for a conversion to hexadecimal, and c to display a currency:
 2,477.00 2.477000e+003 9ad $2,477.00
-
-
 For numeric representations you can also use custom format strings.
 The # format specifier is a digit placeholder and displays a digit if
 available; otherwise no digit appears. The 0 format specifier is a zero
 placeholder and displays the corresponding digit or zero if a digit is
 not present.
+
 double d = 3.1415;
 Console.WriteLine($"{d:###.###}");
 Console.WriteLine($"{d:000.000}");
@@ -593,8 +581,6 @@ the base class is overridden. This method returns a string consisting of
 FirstName and LastName :
 public override string ToString() => FirstName + " " +
 LastName;
-
-
 Other than a simple string representation, the Person class should also
 support the format strings F to just return the first name, L for the last
 name, and A , which stands for “all” and should give the same string
@@ -635,8 +621,6 @@ case "L":
 return LastName;
 default:
 throw new FormatException($"invalid format string
-
-
 {format}");
 }
 }
@@ -669,9 +653,8 @@ just skim through this section to pick out the references to the .NET
 base classes. You might like to know that the .NET regular expression
 engine is designed to be mostly compatible with Perl 5 regular
 expressions, although it has a few extra features.
-Introduction to Regular Expressions
 
-
+### Introduction to Regular Expressions
 The regular expressions language is designed specifically for string
 processing. It contains two features:
 A set of escape codes for identifying specific types of characters.
@@ -705,8 +688,6 @@ just a couple of lines. Essentially, you instantiate a
 System.Text.RegularExpressions.RegEx object (or, even simpler,
 invoke a static RegEx method), pass it the string to be processed, and
 pass in a regular expression (a string containing the instructions in the
-
-
 regular expressions language), and you’re done.
 A regular expression string looks at first sight rather like a regular
 string, but interspersed with escape sequences and other characters
@@ -720,6 +701,7 @@ sequence t - h -word boundary). However, regular expressions are much
 more sophisticated than that and include, for example, facilities to
 store portions of text that are found in a search operation. This section
 only scratches the surface of the power of regular expressions.
+
 **NOTE**
 For more on regular expressions, please see Andrew Watt’s
 Beginning Regular Expressions (John Wiley & Sons, 2005).
@@ -739,8 +721,7 @@ This section is intended only as a very simple example, so it
 concentrates on searching strings to identify certain substrings, not on
 modifying them.
 
-
-The RegularExpressionsPlayground Example
+### The RegularExpressionsPlayground Example
 The regular expression samples in this chapter make use of the
 following namespaces:
 System
@@ -775,12 +756,12 @@ solid " +
 context of " +
 "the 2015 release, so you can get acclimated quickly and
 get back to work.";
+
 **NOTE**
-
-
 This code nicely illustrates the utility of verbatim strings that are
 prefixed by the @ symbol. This prefix is extremely helpful with
 regular expressions.
+
 This text is referred to as the input string. To get your bearings and get
 used to the regular expressions of .NET classes, you start with a basic
 plain-text search that does not feature any escape sequences or regular
@@ -884,8 +865,6 @@ from that pattern string. The reason is that the pattern string is not
 limited to only plain text. As hinted earlier, it can also contain what are
 known as meta-characters, which are special characters that provide
 commands, as well as escape sequences, which work in much the same
-
-
 way as C# escape sequences. They are characters preceded by a
 backslash ( \ ) and have special meanings.
 For example, suppose you wanted to find words beginning with n . You
@@ -919,13 +898,12 @@ preceding character can be repeated any number of times, including
 zero times. The sequence \S* means any number of characters as long
 as they are not whitespace characters. The preceding pattern,
 therefore, matches any single word that begins with a and ends with
-
-
 ure .
 The following table lists some of the main special characters or escape
 sequences that you can use. It is not comprehensive; a fuller list is
 available in the Microsoft documentation.
-SYMBOL DESCRIPTION
+
+## SYMBOL DESCRIPTION
 ^
 Beginning of input text
 $ End of input text
@@ -1016,8 +994,6 @@ the input string, the string of the match, and a slightly longer string,
 which consists of the match plus up to 10 surrounding characters from
 the input text——up to five characters before the match and up to five
 afterward. (It is fewer than five characters if the match occurred within
-
-
 five characters of the beginning or end of the input text.) In other
 words, a match on the word applications that occurs near the end of
 the input text quoted earlier when starting with the
@@ -1058,8 +1034,6 @@ with names such as Find1 , Find2 , and so on, which perform some of
 the searches based on the examples in this section. For example, Find2
 looks for any string that contains a at the beginning of a word and ure
 at the end:
-
-
 public static void Find2(string text)
 {
 string pattern = @"\ba\S*ure\b";
@@ -1096,8 +1070,6 @@ instead of braces. The resultant sequence is known as a group.
 For example, the pattern (an)+ locates any occurrences of the
 sequence an . The + quantifier applies only to the previous character,
 but because you have grouped the characters together, it now applies
-
-
 to repeats of an treated as a unit. This means that if you apply (an)+ to
 the input text, bananas came to Europe late in the annals of
 history , the anan from bananas is identified; however, if you write an+ ,
@@ -1105,6 +1077,7 @@ the program selects the ann from annals , as well as two separate
 sequences of an from bananas . The expression (an)+ identifies
 occurrences of an , anan , ananan , and so on, whereas the expression an+
 identifies occurrences of an , ann , annn , and so on.
+
 **NOTE**
 You might be wondering why with the preceding example (an)+
 selects anan from the word “banana” but doesn’t identify either of
@@ -1129,8 +1102,6 @@ Here is how this expression works: First, the leading and trailing \b
 sequences ensure that you consider only portions of text that are
 entire words. Within that, the first group, (https?) identifies either the
 http or https protocol. ? after the s character specifies that this
-
-
 character might come 0 or 1 times, thus http and https are allowed.
 The parentheses cause the protocol to be stored as a group.
 The second group is a simple one with (://) . This just specifies the
@@ -1245,7 +1216,8 @@ match for 0: http://www.wrox.com:80
 match for protocol: http
 match for address: www.wrox.com
 match for port: 80
-STRINGS AND SPANS
+
+## STRINGS AND SPANS
 Today’s programming code often deals with long strings that need to
 be manipulated. For example, the Web API returns a long string in
 JSON or XML format. Splitting up such large strings into many
@@ -1279,6 +1251,7 @@ ReadOnlySpan<char> slice = spanToText.Slice(ix, 13);
 string newString = new string(slice.ToArray());
 Console.WriteLine(newString);
 The newly allocated string from the slice contains Visual Studio.
+
 **NOTE**
 Spans with arrays are covered in Chapter 7. Read more about
 spans mapping to native memory and the ref keyword in Chapter

@@ -118,6 +118,7 @@ foreach (var val in myArray)
 {
 Console.WriteLine(val);
 }
+
 **NOTE**
 The foreach statement makes use of the IEnumerable and
 IEnumerator interfaces and traverses through the array from the
@@ -125,7 +126,7 @@ first index to the last. This is discussed in detail later in this
 chapter.
 
 
-Using Reference Types
+### Using Reference Types
 In addition to being able to declare arrays of predefined types, you can
 also declare arrays of custom types. Let’s start with the following
 Person class, the properties FirstName and LastName using auto-
@@ -150,13 +151,12 @@ However, be aware that if the elements in the array are reference
 types, memory must be allocated for every array element. If you use an
 item in the array for which no memory was allocated, a
 NullReferenceException is thrown.
+
 **NOTE**
 For information about errors and exceptions, see Chapter 14,
 “Errors and Exceptions.”
 You can allocate every element of the array by using an indexer
 starting from 0 (code file SimpleArrays/Program.cs ):
-
-
 myPersons[0] = new Person("Ayrton", "Senna");
 myPersons[1] = new Person("Michael", "Schumacher");
 Figure 7-2 shows the objects in the managed heap with the Person
@@ -173,16 +173,16 @@ Person[] myPersons2 =
 new Person("Ayrton", "Senna"),
 new Person("Michael", "Schumacher")
 };
-MULTIDIMENSIONAL ARRAYS
+
+## MULTIDIMENSIONAL ARRAYS
 Ordinary arrays (also known as one-dimensional arrays) are indexed
 by a single integer. A multidimensional array is indexed by two or
 more integers.
 Figure 7-3 shows the mathematical notation for a two-dimensional
 array that has three rows and three columns. The first row has the
 values 1, 2, and 3, and the third row has the values 7, 8, and 9.
-
-
 FIGURE 7-3
+
 To declare this two-dimensional array with C#, you put a comma
 inside the brackets. The array is initialized by specifying the size of
 every dimension (also known as rank). Then the array elements can be
@@ -198,6 +198,7 @@ twodim[1, 2] = 6;
 twodim[2, 0] = 7;
 twodim[2, 1] = 8;
 twodim[2, 2] = 9;
+
 **NOTE**
 After declaring an array, you cannot change the rank.
 You can also initialize the two-dimensional array by using an array
@@ -209,12 +210,12 @@ int[,] twodim = {
 {4, 5, 6},
 {7, 8, 9}
 };
+
 **NOTE**
 When using an array initializer, you must initialize every element
 of the array. It is not possible to defer the initialization of some
-
-
 values until later.
+
 By using two commas inside the brackets, you can declare a three-
 dimensional array:
 int[,,]
@@ -227,7 +228,8 @@ threedim = {
 6 }, { 7, 8 } },
 10 }, { 11, 12 } }
 Console.WriteLine(threedim[0, 1, 1]);
-JAGGED ARRAYS
+
+## JAGGED ARRAYS
 A two-dimensional array has a rectangular size (for example, 3 × 3
 elements). A jagged array provides more flexibility in sizing the array.
 With a jagged array every row can have a different size.
@@ -236,6 +238,7 @@ with a jagged array. The jagged array shown contains three rows, with
 the first row containing two elements, the second row containing six
 elements, and the third row containing three elements.
 FIGURE 7-4
+
 A jagged array is declared by placing one pair of opening and closing
 brackets after another. To initialize the jagged array, only the size that
 defines the number of rows in the first pair of brackets is set. The
@@ -320,27 +323,7 @@ value:
 value:
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ARRAY CLASS
+## ARRAY CLASS
 Declaring an array with brackets is a C# notation using the Array class.
 Using the C# syntax behind the scenes creates a new class that derives
 from the abstract base class Array . This makes it possible to use
@@ -349,13 +332,13 @@ every C# array. For example, you’ve already used the Length property
 or iterated through the array by using the foreach statement. By doing
 this, you are using the GetEnumerator method of the Array class.
 
-
 Other properties implemented by the Array class are LongLength , for
 arrays in which the number of items doesn’t fit within an integer, and
 Rank , to get the number of dimensions.
 Let’s have a look at other members of the Array class by getting into
 various features.
-Creating Arrays
+
+### Creating Arrays
 The Array class is abstract, so you cannot create an array by using a
 constructor. However, instead of using the C# syntax to create array
 instances, it is also possible to create arrays by using the static
@@ -441,6 +424,7 @@ method, which also creates a shallow copy. However, there’s one
 important difference with Clone and Copy : Clone creates a new array;
 with Copy you have to pass an existing array with the same rank and
 enough elements.
+
 **NOTE**
 If you need a deep copy of an array containing reference types,
 
@@ -479,8 +463,6 @@ the parameter; and a value larger than 0 if the instance should go after
 the object from the parameter.
 Change the Person class to implement the interface
 IComparable<Person> . The comparison is first done on the value of the
-
-
 LastName by using the Compare method of the String class. If the
 LastName has the same value, the FirstName is compared (code file
 SortingSample/Person.cs ):
@@ -518,10 +500,9 @@ Damon Hill
 Graham Hill
 Niki Lauda
 Ayrton Senna
+
 If the Person object should be sorted differently, or if you don’t have
 the option to change the class that is used as an element in the array,
-
-
 you can implement the interface IComparer or IComparer<T> . These
 interfaces define the method Compare . One of these interfaces must be
 implemented by the class that should be compared. The IComparer
@@ -529,6 +510,7 @@ interface is independent of the class to compare. That’s why the
 Compare method defines two arguments that should be compared. The
 return value is similar to the CompareTo method of the IComparable
 interface.
+
 The class PersonComparer implements the IComparer<Person> interface
 to sort Person objects either by firstName or by lastName . The
 enumeration PersonCompareType defines the different sorting options
@@ -564,8 +546,6 @@ throw new ArgumentException("unexpected compare
 type");
 }
 }
-
-
 }
 Now you can pass a PersonComparer object to the second argument of
 the Array.Sort method. Here, the people are sorted by first name
@@ -577,17 +557,20 @@ foreach (var p in persons)
 Console.WriteLine(p);
 }
 The persons array is now sorted by first name:
+
 Ayrton Senna
 Damon Hill
 Graham Hill
 Niki Lauda
+
 **NOTE**
 The Array class also offers Sort methods that require a delegate as
 an argument. With this argument you can pass a method to do
 the comparison of two objects rather than relying on the
 IComparable or IComparer interfaces. Chapter 8, “Delegates,
 Lambdas, and Events,” discusses how to use delegates.
-ARRAYS AS PARAMETERS
+
+## ARRAYS AS PARAMETERS
 Arrays can be passed as parameters to methods, and returned from
 methods. Returning an array, you just have to declare the array as the
 return type, as shown with the following method GetPersons :
@@ -606,7 +589,8 @@ static void DisplayPersons(Person[] persons)
 {
 //...
 }
-ARRAY COVARIANCE
+
+## ARRAY COVARIANCE
 With arrays, covariance is supported. This means that an array can be
 declared as a base type and elements of derived types can be assigned
 to the elements.
@@ -616,6 +600,7 @@ static void DisplayArray(object[] data)
 {
 //...
 }
+
 **NOTE**
 Array covariance is only possible with reference types, not with
 value types. In addition, array covariance has an issue that can
@@ -625,10 +610,10 @@ anything that derives from the object. The compiler accepts, for
 example, passing a string to array elements. However, because a
 Person array is referenced by the object array, a runtime
 exception, ArrayTypeMismatchException , occurs.
-ENUMERATORS
+
+
+## ENUMERATORS
 By using the foreach statement you can iterate elements of a collection
-
-
 (see Chapter 10) without needing to know the number of elements
 inside the collection. The foreach statement uses an enumerator.
 Figure 7-7 shows the relationship between the client invoking the
@@ -638,6 +623,7 @@ GetEnumerator method returns an enumerator implementing the
 IEnumerator interface. The interface IEnumerator is then used by the
 foreach statement to iterate through the collection.
 FIGURE 7-7
+
 **NOTE**
 The GetEnumerator method is defined with the interface
 IEnumerable . The foreach statement doesn’t really need this
@@ -646,8 +632,6 @@ method with the name GetEnumerator that returns an object
 implementing the IEnumerator interface.
 IEnumerator Interface
 The foreach statement uses the methods and properties of the
-
-
 interface to iterate all elements in a collection. For this,
 defines the property Current to return the element where
 the cursor is positioned, and the method MoveNext to move to the next
@@ -658,6 +642,7 @@ IEnumerator
 The generic version of this interface IEnumerator<T> derives from the
 interface IDisposable and thus defines a Dispose method to clean up
 resources allocated by the enumerator.
+
 **NOTE**
 The IEnumerator interface also defines the Reset method for COM
 interoperability. Many .NET enumerators implement this by
@@ -709,6 +694,7 @@ yield return "World";
 }
 }
 }
+
 **NOTE**
 A method or property that contains yield statements is also
 known as an iterator block. An iterator block must be declared to
@@ -716,8 +702,6 @@ return an IEnumerator or IEnumerable interface, or the generic
 versions of these interfaces. This block may contain multiple yield
 return or yield break statements; a return statement is not
 allowed.
-
-
 Now it is possible to iterate through the collection using a foreach
 statement:
 public void HelloWorld()
@@ -759,8 +743,6 @@ return true;
 case 1:
 _current = "World";
 _state = 2;
-
-
 return true;
 case 2:
 break;
@@ -776,6 +758,7 @@ object System.Collections.IEnumerator.Current => current;
 void IDisposable.Dispose() { }
 }
 }
+
 **NOTE**
 Remember that the yield statement produces an enumerator, and
 not just a list filled with items. This enumerator is invoked by the
@@ -794,8 +777,6 @@ public class MusicTitles
 {
 string[] names = {"Tubular Bells", "Hergest Ridge",
 "Ommadawn", "Platinum"};
-
-
 public IEnumerator<string> GetEnumerator()
 {
 for (int i = 0; i < 4; i++)
@@ -818,6 +799,7 @@ yield return names[i];
 }
 }
 }
+
 **NOTE**
 The default iteration supported by a class is the GetEnumerator
 method, which is defined to return IEnumerator . Named iterations
@@ -833,8 +815,6 @@ foreach (var title in titles)
 {
 Console.WriteLine(title);
 }
-
-
 Console.WriteLine();
 Console.WriteLine("reverse");
 foreach (var title in titles.Reverse())
@@ -847,7 +827,8 @@ foreach (var title in titles.Subset(2, 2))
 {
 Console.WriteLine(title);
 }
-Returning Enumerators with Yield Return
+
+### Returning Enumerators with Yield Return
 With the yield statement you can also do more complex things, such
 as return an enumerator from yield return . Using the following Tic-
 Tac-Toe game as an example, players alternate putting a cross or a
@@ -936,6 +917,7 @@ implemented explicitly, so it is necessary to cast the arrays and tuples
 to this interface on use. IStructuralEquatable is used to compare
 whether two tuples or arrays have the same content;
 IStructuralComparable is used to sort tuples or arrays.
+
 **NOTE**
 Tuples are discussed in Chapter 13.
 With the sample demonstrating IStructuralEquatable , the Person class
@@ -991,14 +973,13 @@ janet
 };
 Person[] people2 = {
 new Person("Michael", "Jackson")
-
-
 janet
 };
 if (people1 != people2)
 {
 Console.WriteLine("not the same reference");
 }
+
 Invoking the Equals method defined by the IStructuralEquatable
 interface——that is, the method with the first parameter of type object
 and the second parameter of type IEqualityComparer ——you can define
@@ -1017,7 +998,8 @@ EqualityComparer<Person>.Default))
 {
 Console.WriteLine("the same content");
 }
-SPANS
+
+## SPANS
 For a fast way to access managed or unmanaged continuous memory,
 you can use the Span<T> struct. One example where Span<T> can be
 used is an array; the Span<T> struct holds continuous memory behind
@@ -1045,7 +1027,7 @@ Console.WriteLine($"arr1[1] is changed via span1[1]:
 {arr1[1]}");
 return span1;
 }
-Creating Slices
+### Creating Slices
 A powerful feature of Span<T> is that you can use it to access parts, or
 slices, of an array. Using the slices, the array elements are not copied;
 they’re directly accessed from the span.
@@ -1068,18 +1050,18 @@ int[] arr2 = { 3, 5, 7, 9, 11, 13, 15 };
 var span2 = new Span<int>(arr2);
 var span3 = new Span<int>(arr2, start: 3, length: 3);
 var span4 = span1.Slice(start: 2, length: 4);
-
-
 DisplaySpan("content of span3", span3);
 DisplaySpan("content of span4", span4);
 Console.WriteLine();
 return span2;
 }
+
 The DisplaySpan method is used to display the contents of a span. The
 method of the following code snippet makes use of the ReadOnlySpan .
 This span type can be used if you don’t need to change the content that
 the span references, which is the case in the DisplaySpan method.
 ReadOnlySpan<T> is discussed later in this chapter in more detail:
+```c#
 private static void DisplaySpan(string title,
 ReadOnlySpan<int> span)
 {
@@ -1090,21 +1072,22 @@ Console.Write($"{span[i]}.");
 }
 Console.WriteLine();
 }
+```
 When you run the application, the content of span3 and span4 is shown
 ——a subset of the arr2 and arr1:
 content of span3
 9.11.13.
 content of span4
 6.8.10.12.
+
 **NOTE**
 is safe from crossing the boundaries. In cases when you’re
 creating spans that exceed the contained array length, an
 exception of type ArgumentOutOfRangeException is thrown. Read
 Chapter 14 for more information on exception handling.
 Span<T>
-Changing Values Using Spans
 
-
+### Changing Values Using Spans
 You’ve seen how to directly change elements of the array that are
 referenced by the span using the indexer of the Span<T> type. There are
 more options as shown in the following code snippet.
@@ -1144,8 +1127,6 @@ When you run the application, you can see the content of span1 where
 the last two numbers have been cleared using span4 , the content of
 span2 where span5 was used to fill the value 42 with three elements,
 and again the content of span1 where the first three numbers have
-
-
 been copied over from span5 . Copying span1 to span4 was not
 successful because span4 has just a length of 4, whereas span1 has a
 length of 6:
@@ -1157,7 +1138,8 @@ content of span1
 42.42.42.8.0.0.
 Couldn't copy span1 to span4 because span4 is too small
 length of span4: 2, length of span1: 6
-ReadOnly Spans
+
+### ReadOnly Spans
 If you need only read-access to an array segment, you can use
 ReadOnlySpan<T> as was already shown in the DisplaySpan method.
 With ReadOnlySpan<T> , the indexer is read-only, and this type doesn’t
@@ -1168,6 +1150,7 @@ the constructor of ReadOnlySpan<T> . readOnlySpan2 and readOnlySpan3
 are created by direct assignments from Span<int> and int[] . Implicit
 cast operators are available with ReadOnlySpan<T> (code file
 SpanSample/Program.cs ):
+```c#
 private static void ReadonlySpan(Span<int> span1)
 {
 Console.WriteLine(nameof(ReadonlySpan));
@@ -1181,7 +1164,7 @@ ReadOnlySpan<int> readOnlySpan3 = arr;
 DisplaySpan("readOnlySpan3", readOnlySpan3);
 Console.WriteLine();
 }
-
+```
 
 **NOTE**
 How to implement implicit cast operators is discussed in Chapter
@@ -1194,23 +1177,22 @@ a replacement. In case you’re already using ArraySegment<T> , you
 can keep the code and interact with spans. The constructor of
 Span<T> also allows passing an ArraySegment<T> to create a
 Span<T> instance.
-ARRAY POOLS
+
+## ARRAY POOLS
 If you have an application where a lot of arrays are created and
 destroyed, the garbage collector has some work to do. To reduce the
 work of the garbage collector, you can use array pools with the
 ArrayPool class. ArrayPool manages a pool of arrays. Arrays can be
 rented from and returned to the pool. Memory is managed from the
 ArrayPool itself.
-Creating the Array Pool
-You can create an ArrayPool<T> by invoking the static Create method.
+
+### Creating the Array Pool
+You can create an `ArrayPool<T>` by invoking the static Create method.
 For efficiency, the array pool manages memory in multiple buckets for
 arrays of similar sizes. With the Create method, you can define the
 maximum array length and the number of arrays within a bucket
 before another bucket is required:
-ArrayPool<int> customPool = ArrayPool<int>.Create(
-
-
-maxArrayLength: 40000, maxArraysPerBucket: 10);
+`ArrayPool<int> customPool = ArrayPool<int>.Create(maxArrayLength: 40000, maxArraysPerBucket: 10);`
 The default for the maxArrayLength is 1024 * 1024 bytes, and the
 default for maxArraysPerBucket is 50. The array pool uses multiple
 buckets for faster access to arrays when many arrays are used. Arrays
@@ -1314,17 +1296,18 @@ ArrayPool<int>.Shared.Return(arr, clearArray: true);
 Information about the garbage collector and how to get
 information about memory addresses is in Chapter 17, “Managed
 and Unmanaged Memory.”
-SUMMARY
+
+## SUMMARY
 In this chapter, you’ve seen the C# notation to create and use simple,
-
-
 multidimensional, and jagged arrays. The Array class is used behind
 the scenes of C# arrays, enabling you to invoke properties and
 methods of this class with array variables.
+
 You’ve seen how to sort elements in the array by using the IComparable
 and IComparer interfaces; and you’ve learned how to create and use
 enumerators, the interfaces IEnumerable and IEnumerator , and the
 yield statement.
+
 The last sections of this chapter show you how to efficiently use arrays
 with Span<T> and ArrayPool .
 The next chapter gets into details of more important features of C#:
